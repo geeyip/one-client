@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ckeditor图片上传</title>
+    <!--<script src="../../dist/js/base.js"></script>-->
+</head>
+<body>
+<!--top.log(queryParse().src);-->
+</body>
+<script>
+    var queryParse=function (p){
+        var result = location.search.match(new RegExp("[\?\&][^\?\&]+=[^\?\&]*","g"));
+        if(result==null)return false;
+        var j=result.length;
+        var obj={},arr=[];
+        for(var i=0;i<j;i++){
+            arr=result[i].slice(1).split('=');
+            obj[arr[0]]=arr[1];
+        }
+        return p ? obj[p]||'' : obj;
+    }
+//    $(document).ready(function(){
+//        console.log(queryParse().src);
+//        console.log(queryParse().fnID);
+    var imgUrl = queryParse().src;
+    var typeId = queryParse().typeId;
+    var callback  = queryParse().fnID;
+    if(callback == 'undefined'){
+        top.fileTypeId = typeId;
+    }else if(typeof callback != 'undefined' && callback != 'undefined'){
+        window.parent.CKEDITOR.tools.callFunction(callback ,imgUrl);
+    }
+//    });
+</script>
+</html>

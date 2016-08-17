@@ -1,0 +1,71 @@
+    <div id="view-fkxx-block">
+        <p class="mt10">
+            <span class="common-field fl"><span class="orangered"> </span>反馈内容：</span>
+            <textarea id="fknr-view" name="fknr" rows="5" unselectable="on" readonly="true" ></textarea>
+        </p>
+        <div>
+            <span class="common-field fl"><span class="orangered"> </span>图片信息：</span>
+            <table id="view-rights-table" class="fkxx-tabe" cellpadding="3">
+                <thead>
+                <tr id="tr-1-view" class="hide">
+                    <td> <img id="pic-0-view" class="picshow hide"> </td>
+                    <td> <img id="pic-1-view" class="picshow hide">  </td>
+                    <td> <img id="pic-2-view" class="picshow hide"> </td>
+                </tr>
+                <tr id="tr-2-view" class="hide">
+                    <td> <img id="pic-3-view" class="picshow hide"> </td>
+                    <td> <img id="pic-4-view" class="picshow hide"> </td>
+                    <td> <img id="pic-5-view" class="picshow hide"> </td>
+                </tr>
+                <tr id="tr-3-view" class="hide">
+                    <td class="h20"> 无</td>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="mt10">
+            <span class="common-field fl">问题类别：</span>
+            <input id="wtlxdm-view" name="wtlxdm-view" class="common-input" unselectable="on" readonly="true" type="text" />
+        </div>
+        <p class="mt10">
+            <span class="common-field fl">处理反馈：</span>
+            <textarea id="clfk-view" name="clfk" rows="5" unselectable="on" readonly="true" ></textarea>
+        </p>
+        <p class="tcenter mg10">
+            <b id="view-fkxx-view" class="cm-close-btn"></b>
+        </p>
+    </div>
+    <script>
+        $style(top.path+'/dist/css/multiWin.css');
+        var searchPicDateAction = top.path + '/api/0/feedback/userfeed/pic',
+            saveFeedBackAction = top.path + '/api/0/feedback/userfeed/save';
+
+        function intoViewFeedBack(id,viewWin) {
+            $get(searchPicDateAction, {id: id}, function (res) {
+                var resData = res.data,
+                        pictureList = resData.pictureList,
+                        pictureListLen = pictureList.length,
+                        yhfkxx = resData.yhfkxx;
+                for (var i = 0; i < pictureListLen; i++) { //拼接图片展示
+                    $('#pic-' + i + '-view').removeClass("hide");
+                    $('#pic-' + i + '-view').attr("src", "data:image/jpg;base64," + pictureList[i].baseMin64Str);
+                }
+                if (pictureListLen != 0) {
+                    $('#tr-1-view').removeClass("hide");
+                    if (pictureListLen > 3) {
+                        $('#tr-2-view').removeClass("hide");
+                    }
+                } else {
+                    $('#tr-3-view').removeClass("hide");
+                }
+                $('#wtlxdm-view').val(yhfkxx.wtlxdm);
+                $('#fknr-view').val(yhfkxx.fknr);
+                $('#clfk-view').val(yhfkxx.clfknr);
+                $('#view-fkxx-view').on('click',function(){
+                    viewWin.$close()
+                });
+            });
+        }
+
+        $('.picshow').previewBox();
+    </script>

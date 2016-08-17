@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>字典控件demo </title>
+    <link rel="stylesheet" href="../dist/css/base.css"/>
+</head>
+<body>
+<h1>字典控件Demo</h1>
+<hr>
+下拉字典
+<dict dict-type="select" dict-root="xzqhdm" name="fadd" id="fadd"></dict>
+<hr>
+树形字典
+<dict dict-type="tree" dict-root="xzqhdm" name="fadd2" id="fadd2"></dict>
+<hr>
+多选字典
+<dict dict-type="tree" dict-root="xzqhdm" name="fadd3" id="fadd3" dict-multiple="true"></dict>
+<hr>
+多选框字典
+<dict dict-type="checkbox" dict-root="xbdm" name="fadd4" id="fadd4"></dict>
+</body>
+<script src="../dist/js/base.js"></script>
+<script>
+    importing('dict',function() {
+        $('#fadd').dict();
+        $('#fadd2').dict();
+        $('#fadd3').dict();
+        $('#fadd4').dict();
+        $('#fadd4').dictSelect('1,0');
+    });
+
+    function getdictvalue(id){
+        var a = $('#'+id).val();
+        alert(a);
+    }
+
+    function setdictvalue(id, value){
+        $('#'+id).dictSelect(value);
+    }
+
+
+</script>
+
+</html>

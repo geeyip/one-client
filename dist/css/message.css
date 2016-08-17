@@ -1,0 +1,302 @@
+@charset "utf-8";
+/* @group popMsg*/
+.messager-body .msg-title{
+    font-size: 15px;
+    padding-left: 20px;
+    width: 250px;
+}
+.messager-body .msg-content{
+    font-size: 13px;
+    text-indent: 24px;
+    word-break: break-all;
+    line-height: 160%;
+    margin: 10px 20px;
+    color: #444;
+}
+.messager-body .msg-more{
+    bottom: 10px;
+    position: absolute;
+    width: 90%;
+    text-align: right;
+    border-top: 1px dotted #ccc;
+    line-height: 24px;
+    margin: 8px 0 0 0;
+}
+.messager-body .msg-more a{
+    font-size: 13px;
+    color: orangered;
+}
+.messager-body .msg-circle a {
+    margin: 0 6px;
+    width: 15px;
+    height: 40px;
+    border-radius: 50%;
+    background: #F5F5F5;
+}
+.messager-body nav a {
+    position: absolute;
+    top: 50%;
+    display: block;
+    outline: none;
+    text-align: left;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.messager-body nav a.prev {
+    text-align: left;
+    left: 3px;
+}
+
+.messager-body .prev .icon-angle-left:before {
+    font-size: 30px;
+    content: "\f104";
+}
+.messager-body nav a.next {
+    text-align: right;
+    right: 3px;
+}
+
+.messager-body .next .icon-angle-right:before {
+    font-size: 30px;
+    content: "\f105";
+}
+#msg-view-value textarea{
+    width: 635px;
+}
+/* @end popMsg*/
+
+
+/* @group message.html */
+/* scrollbar 滚动条 */
+#msg-left::-webkit-scrollbar,
+#msg-right::-webkit-scrollbar{
+    width: 5px;
+} /* 这是针对缺省样式 (必须的) */
+
+#msg-left::-webkit-scrollbar-thumb,
+#msg-right::-webkit-scrollbar-thumb{
+    background-color: rgba(0, 0, 0, 0.2);
+    -webkit-border-radius: 6px;
+} /* 滑块颜色 */
+#receive-edit-btn.cm-add-btn:before{
+    content: '';
+}
+#receive-edit-btn.cm-add-btn:after{
+    content: ' 设为已读';
+}
+#receive-remove-btn.cm-send-btn:before{
+    content: '\f056';
+}
+#receive-remove-btn.cm-send-btn:after{
+    content: ' 删 除';
+}
+#msg-main-box .new-color-bar{
+    background: #e8e8e8;
+    border-left: 3px solid orange;
+    margin: 0 15px;
+    box-shadow: 0em 0.25em 0.1em -0.1em #ccc;
+}
+#msg-main-box .new-color-bar .title{
+    color: #444444;
+}
+#msg-content{
+    position: absolute;
+    top: 78px;
+    bottom: 0;
+    /*margin: 0 15px;*/
+    right: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+}
+#msg-left{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    overflow: auto;
+    width: 375px;
+    /*border-left: 1px solid #c5c5c5;*/
+    margin: 3px 0 5px 0;
+    /*border-bottom: 1px solid #ccc;*/
+    padding-left: 15px;
+    min-height: 100%;
+}
+#msg-right{
+    margin: 0.25% 15px 0 405px;
+    height: 99%;
+    /*padding: 0 0 0 30px;*/
+    overflow: auto;
+    background: -webkit-linear-gradient(top, rgb(224, 240, 253), #e9f4ff);;
+}
+#msg-left .msg-left-title{
+    height: 25px;
+    background: #ddd;
+    border-radius: 2px;
+    color: #000;
+    border-bottom: 1px solid #c5c5c5;
+    /*border-left: 1px solid #c5c5c5;*/
+}
+#msg-left>div{
+    border-left: 1px solid #c5c5c5;
+    border-bottom: 1px solid #c5c5c5;
+}
+#msg-left .msg-left-title>div{
+    display: inline-block;
+}
+#msg-left .msg-left-title .d1{
+    margin: 5px 14px;
+}
+#msg-left .msg-left-title .d2{
+    font-size: 13px;
+    margin-top: 5px;
+    margin-left: 23px;
+}
+#msg-left .msg-left-title .d3{
+    width: 100px;
+    float: right;
+    font-size: 13px;
+    margin-top: 4px;
+}
+/*#msg-left div#msg-left-content{
+    border-left: 1px solid #c5c5c5;
+}*/
+#msg-left .li{
+    border-top: 1px solid #c5c5c5;
+}
+#msg-left .cir{
+    margin-top: 5px;
+    width: 18px;
+    height: 16px;
+}
+/*#msg-left .Ru{
+    background: url("../img/mail.png") -48px 0 no-repeat;
+}
+#msg-left .Rr{
+    background: url("../img/mail.png") -48px -16px no-repeat;
+}*/
+#msg-left .typical-tb td,
+#msg-left .typical-tb tr{
+    border: none;
+}
+#msg-left .typical-tb tr:hover{
+    background: none;
+}
+#msg-left div.li:not(.selected):hover{
+    background: #ffef85;
+}
+#msg-left .cx, #msg-left .ci{
+    vertical-align: top;
+}
+#msg-left .cx{
+    width: 36px;
+}
+#msg-left .ci{
+    width: 18px;
+}
+/*#msg-left .ci{
+    font-size: 15px;
+    color: orange;
+}*/
+#msg-left .cc{
+    text-align: left;
+    cursor: pointer;
+}
+#msg-left .c-title{
+    height: 28px;
+}
+#msg-left .c-title .sender-name{
+    display: inline-block;
+    width: 145px;
+}
+#msg-left .c-title .msg-time{
+    display: inline-block;
+    width: 100px;
+    /*text-align: right;*/
+    float: right;
+}
+#msg-left .c-content{
+    height: 28px;
+    /*width: 220px;*/
+}
+#msg-left .c-content>div:first-child{
+    display: inline-block;
+    width: 220px;
+}
+#msg-left .c-content .c-remove{
+    display: inline-block;
+    float: right;
+    margin-right: 5px;
+    font-size: 14px;
+    color: orange;
+}
+#msg-left .c-content .c-remove:hover{
+    color: orangered;
+}
+/* 未读 start*/
+#msg-left .unread .cir{
+    background: url("../img/mail.png") -48px 0 no-repeat;
+}
+#msg-left .unread .c-title{
+    font-weight: bold;
+}
+#msg-left .unread .c-content{
+    color: #444444;
+}
+/* 未读 end*/
+/* 已读 start*/
+#msg-left .read .cir{
+    background: url("../img/mail.png") -48px -16px no-repeat;
+}
+#msg-left .read .c-title{
+    font-weight: normal;
+}
+#msg-left .read .c-content{
+    color: #a7a7a7;
+}
+/* 已读 end*/
+#msg-left .selected{
+    background: -webkit-linear-gradient(left, #7ccaee, #e9f4ff);
+}
+#msg-right .un-selected-detail-div{
+    padding-left: 20px;
+}
+#msg-right .un-selected-detail-div>h2{
+    margin: 15px 0 10px 0;
+}
+#msg-right .read-info{
+    /*margin-top: 2px;*/
+    padding: 10px 20px 10px 20px;
+    /*background: #ffeedf;
+    border-bottom: 1px solid #f1a460;*/
+    background: #bee4f9;
+    border-bottom: 1px solid #049cdb;
+    border-radius: 2px;
+}
+#msg-right .read-info>h2{
+    margin-bottom: 10px;
+}
+#msg-right .read-info>div{
+    margin: 3px 0;
+}
+#msg-right .read-info span{
+    font-size: 14px;
+    color: #9E9E9E;
+}
+#msg-right .read-info .tcolor{
+    font-weight: bold;
+    color: #5fa207!important;
+}
+#msg-right .read-content{
+    padding: 15px;
+    font-size: 15px;
+    text-indent: 24px;
+    line-height: 2.5;
+}
+.toast.warning p::before {
+    content: "\f071";
+    font-family: FontAwesome;
+    font-size: 16px;
+    color: orange;
+    margin-right: 10px;
+}
+/* @end message.html */

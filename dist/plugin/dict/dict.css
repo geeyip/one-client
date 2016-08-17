@@ -1,0 +1,7 @@
+.treeButton {
+    margin-left: 2px;
+    cursor: pointer;
+    background-image: url("./img/dictselect.gif");
+    background-repeat: no-repeat;
+}
+

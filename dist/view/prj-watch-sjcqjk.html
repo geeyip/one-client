@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据抽取监控</title>
+    <link rel="stylesheet" href="../css/base.css?version=0.99">
+    <link rel="stylesheet" href="../css/prj-watch.css?version=0.99">
+</head>
+<body>
+
+<div class="query-condition">
+    <div class="query-condition-p">
+        <span class="common-field w65">项目单位：</span><div dict-id="query-xmdwdm" dict-name="xmdwdm" dict-type="tree" return-value="false" class="dict xmdwdm"></div>
+        <span class="common-field w75">项目经理：</span><div dict-id="query-xmjl" dict-name="xmjl" dict-type="select" return-value="false" class="dict xmjl"></div>
+        <span class="common-field w75">实施人员：</span><div dict-id="query-ssry" dict-name="ssry" dict-type="select" return-value="false" class="dict ssry"></div>
+        <p class="query-reset">
+            <b class="cm-query-btn"></b>
+            <b class="cm-reset-btn"></b>
+        </p>
+    </div>
+</div>
+
+<div id="sjcqjk-query-result">
+    <div class="new-color-bar">
+        <span class="title">数据抽取与质量检验结果列表（共找到<span class="total-count"></span>条数据）</span>
+    </div>
+    <table id="sjcqjk-table" class="typical-tb" cellpadding="3">
+        <thead>
+            <th width="5%">序号</th>
+            <th width="15%">项目代码</th>
+            <th width="15%">项目单位</th>
+            <th width="25%">数据抽取情况</th>
+            <th width="25%">数据质量校验</th>
+            <th width="15%" sort-name="createDateStr">监控日期</th>
+        </thead>
+        <tbody tpsource="#sjcqjk-result"></tbody>
+    </table>
+    <div class="paging"></div>
+</div>
+</body>
+<script type="text/template" id="sjcqjk-result">
+    <tr>
+        <td>{rn}</td>
+        <td>{xmdwdm}</td>
+        <td>{xmdwmc}</td>
+        <td>
+            <a class="extract-{extract} a-{extract}" param="{xmdwdm}"><i class="icon-{extract}-sign"></i> {cqResultTxt}</a>
+        </td>
+        <td>
+            <a class="quality-{quality} a-{quality}" param="{xmdwdm}"><i class="icon-{quality}-sign"></i> {zlResulTxt}</a>
+        </td>
+        <td>{createDateStr}</td>
+    </tr>
+</script>
+<script src="../js/base.js?version=0.99"></script>
+<script>
+    importing('dict', function(){
+
+        var xmdwAction =  top.path + '/api/0/basic/project/project_unit',
+            userAction = top.path + '/api/0/basic/project/user_info',
+            firstSearchAction = top.path + '/api/0/xmjk/extract/query',
+            searchAction = top.path + '/api/1/xmjk/extract/query';//列表查询action
+
+        //初始化字典后再进行查询
+        var tryCount = 0;
+        var tryQuery = function() {
+            setTimeout(function () {
+                if ($('#query-xmjl').children().length > 0 && $('#query-ssry').children().length > 0) {
+                    initUserNameAndUserLevel();
+                    queryForSjcqjk(true);
+                } else {
+                    if(tryCount>15){
+                        return false;
+                    }
+                    tryQuery();
+                    tryCount++;
+                }
+            }, 80);
+        };
+
+
+        $('[dict-root]').dict();
+
+        //设定默认ajax开始和结束时的loading遮罩效果($post自带,paginglist没有自带)
+        $.ajaxSetup({
+            beforeSend:showLoading,
+            complete:hideLoading
+        });
+
+        //项目单位
+        function queryForXmdw(){
+            //工作台中存储的项目单位代码和名称
+            var xmdwdm = top.registry.prjWatch.workbenchXmdwdm,
+                    xmdwmc = top.registry.prjWatch.workbenchXmdwmc;
+            $get(xmdwAction,{},function(res){
+                $('.xmdwdm').dict(res.data.unitInfo);
+                //从工作台跳转过来时默认赋值
+                if(xmdwdm){
+                    $('#query-xmdwdm').val(xmdwdm);
+                    $('#query-xmdwdm_displayValue').val(xmdwmc);
+                }
+            });
+        }
+        //项目经理
+        function queryForXmjl(){
+            $get(userAction,{type:'1'},function(res){
+                $('.xmjl').dict(res.data);
+            })
+        }
+        //实施人员
+        function queryForSsry(){
+            $get(userAction,{type:'2'},function(res){
+                $('.ssry').dict(res.data);
+            })
+        }
+
+        //初始化默认进入用户角色  项目经理or实施人员or其他
+        function initUserNameAndUserLevel(){
+            var rolesEn = top.roles.select('item=>item.en');
+            if(rolesEn.indexOf('administrator') > -1){
+                //超级管理员查询全部，故不初始化字典
+            }else if(rolesEn.indexOf('manager') > -1){
+                $('#query-xmjl').dictSelect(localData.get('login-username'));
+            }else if(rolesEn.indexOf('implement') > -1){
+                $('#query-ssry').dictSelect(localData.get('login-username'));
+            }
+        }
+
+        //查询列表
+        function queryForSjcqjk(type){
+            var action;
+            if(type){
+                action = firstSearchAction;
+            }else{
+                action = searchAction;
+            }
+            $('#sjcqjk-query-result').pagingList({
+                action:action,
+                jsonObj:{
+                    xmdwdm:top.registry.prjWatch.workbenchXmdwdm || $('#query-xmdwdm').val(),
+                    xmjl:$('#query-xmjl').val(),
+                    ssry:$('#query-ssry').val()
+                },
+                callback:function(data){
+                    $('#sjcqjk-table tbody').template(data, function(item, i){
+                        if(item.cqResult==null){
+                            item.cqResultTxt = ' 未知';
+                            item.extract = 'question';
+                        }else{
+                            //抽取
+                            item.cqResultTxt = item.cqResult == '1' ? '正常':'异常';
+//                            item.extract = item.cqResult == '1' ? 'ok':'question';
+                            item.extract = item.cqResult == '1' ? 'ok':'exclamation';
+                        }
+                        if(item.zlResult==null){
+                            item.zlResulTxt = ' 未知';
+                            item.quality = 'question';
+                        }else{
+                            //质量
+                            item.zlResulTxt = item.zlResult == '1' ? '正常':'异常';
+//                            item.quality = item.zlResult == '1' ? 'ok':'question';
+                            item.quality = item.zlResult == '1' ? 'ok':'exclamation';
+                        }
+                    });
+                }
+            });
+            top.registry.prjWatch.workbenchXmdwdm = '';
+        }
+
+        //初始化自定义字典
+        queryForXmdw();
+        queryForXmjl();
+        queryForSsry();
+        tryQuery();//进入页面初始化查询
+
+        $('.query-condition').on('click', '.cm-query-btn', function(){
+            if($('.sort-arrow')) $('.sort-arrow').remove();
+            queryForSjcqjk(false);
+        }).on('click', '.cm-reset-btn', function(){
+            $('.query-condition-p select').val('');
+            $('.query-condition-p input').val('');
+        });
+
+        $('#sjcqjk-table').on('click', '.extract-exclamation', function(){
+            var xmdwdm = this.getAttribute('param');
+            var extractWin = $open('prj-watch-sjcqjk-extract.html', {width:760, title:'数据抽取异常'}, true, function(){
+                intoExtractQuestion(xmdwdm, extractWin);
+            });
+        }).on('click', '.quality-exclamation', function(){
+            var xmdwdm = this.getAttribute('param');
+            var qualityWin = $open('prj-watch-sjcqjk-quality.html', {width:760, title:'数据质量异常'}, true, function(){
+                intoQualityQuestion(xmdwdm, qualityWin);
+            });
+        });
+
+    });
+</script>
+</html>

@@ -1,0 +1,91 @@
+<!--异常处理反馈弹窗-->
+<div id="exception-handling-feedback-block">
+    <form id="handling-feedback-form">
+        <input id="feedback-xmdwdm" type="hidden" name="xmdwdm">
+        <div class="mt30">
+            <span class="common-field w65"><span class="orangered">★ </span>处理人：</span>
+            <!--<div dict-type="select" id="feedback-handler" dict-id="createPid" dict-name="createPid" class="validate" data-options="required:true"></div>-->
+            <select name="createPid" id="create-pid" class="common-select validate mr15" data-options="required:true">
+                <option value=""></option>
+            </select>
+            <span class="common-field w65"><span class="orangered">★ </span>处理时间：</span>
+            <input id="handle-time" type="text" class="common-input query-date validate" name="createDate"  data-options="required:true">
+        </div>
+        <div class="mt10">
+            <span class="common-field fl"><span class="orangered">★ </span>处理意见：</span>
+            <textarea name="sloveDesc" class="common-textarea validate" data-options="required:true,validType:'length[1,2000]'"></textarea>
+        </div>
+    </form>
+    <p class="mt20 mb20 tcenter">
+        <b id="feedback-save-btn" class="cm-save-btn mr15"></b>
+        <b id="feedback-close-btn" class="cm-cancel-btn"></b>
+    </p>
+</div>
+<script>
+    $style(top.path+'/dist/css/multiWin.css');
+
+    var addHandleFeedbackAction = top.path + '/api/0/xmjk/server/handle_add',
+            getHandlerAction = top.path + '/api/0/xmjk/server/handle_person';
+
+    var closeWin = function(winId,resetForm) {
+        if(winId){
+            $(winId).$close();
+        }
+        if(resetForm) {
+            $(resetForm)[0].reset();
+        }
+        $('.validate').removeClass('validatebox-invalid');
+    };
+
+    function addHandleFeedBack(xmdwdm,xmId,handleWin) {
+        var handlerArr = [];
+        $('#feedback-xmdwdm').val(xmdwdm);
+        $('#handle-time').val(Date.format('yyyy-mm-dd'));
+        //加载处理人数据
+        if(handlerArr.length<1){
+            $get(getHandlerAction,{'xmId':xmId},function (res) {
+                handlerArr = res.data;
+                createOption(handlerArr,'#create-pid');
+                $('#create-pid').val(top.userName);
+            });
+        }else{
+            createOption(handlerArr,'#create-pid');
+            $('#create-pid').val(top.userName);
+        }
+        //保存异常处理反馈
+        $('#feedback-save-btn').on('click',function () {
+            var handleBlock = $('#exception-handling-feedback-block');
+            if($('#create-pid').val() === null){
+                $('#create-pid').val('');
+            }
+            //验证
+            handleBlock.find('.validate').validatebox();
+            if(handleBlock.find('.validatebox-invalid').length>0){
+                return false;
+            }
+            $post(addHandleFeedbackAction,$('#handling-feedback-form').serializeObject(),function (res) {
+                var msg = res.msg ? res.msg : '保存成功！';
+                toast(msg,600).ok();
+                handleWin.$close();
+            });
+        });
+        //关闭异常处理反馈弹窗
+        $('#feedback-close-btn').on('click',function () {
+            handleWin.$close();
+        });
+    }
+    function createOption(data,selector) {
+        var opt = '<option value="{key}">{value}</option>',
+                i = 0,
+                dataI = {},
+                optVal = '',
+                selectObj = $(selector);
+        selectObj.html('');
+        selectObj.append('<option value=""></option>');
+        for(;i<data.length;i++){
+            dataI = data[i];
+            optVal = opt.replace('{key}',dataI.key).replace('{value}',dataI.value);
+            selectObj.append(optVal);
+        }
+    }
+</script>

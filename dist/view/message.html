@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>收件箱</title>
+    <link rel="stylesheet" href="../css/base.css?version=0.99">
+    <link rel="stylesheet" href="../css/message.css?version=0.99">
+</head>
+<body>
+
+<div class="query-condition">
+    <div class="query-condition-p">
+        <span class="common-field w65">消息状态：</span><dict dict-id="msg-receive-xxzt" dict-name="receiveXxzt" dict-type="select" dict-root="XXZTDM" class="dict"></dict>
+        <span class="common-field w75">消息内容：</span><input id="msg-receive-content" type="text" class="query-input"/>
+        <span class="common-field w75">消息时间：</span><input id="msg-date-begin" type="text" class="query-date"/>~<input id="msg-date-end" type="text" class="query-date mr15"/>
+        <p class="query-reset">
+            <b id="msg-receive-query" class="cm-query-btn"></b>
+            <b id="msg-receive-reset" class="cm-reset-btn"></b>
+        </p>
+    </div>
+</div>
+<div id="msg-main-box">
+    <div class="new-color-bar">
+        <span class="title">收件箱（共 <span class="total-count"></span> 条消息）</span>
+        <div class="bar-btn-div">
+            <b id="receive-edit-btn" class="cm-add-btn"></b>
+            <b id="receive-remove-btn" class="cm-send-btn"></b>
+        </div>
+    </div>
+    <div id="msg-content">
+        <div id="msg-left">
+            <div class="msg-left-title">
+                <div class="d1"><input id="msg-check-all" name="checkAll" type="checkbox"/></div>
+                <div class="d2">主题</div>
+                <div class="d3" sort-name="createDate">时间</div>
+            </div>
+            <div id="msg-left-content" tpsource="#msg-left-list"></div>
+            <div class="paging"></div>
+        </div>
+        <div id="msg-right">
+            <div class="un-selected-detail-div">
+                <h2>未选定查看任何消息</h2>
+                <div>单击任何消息即可在阅读窗格中进行查看</div>
+            </div>
+            <div class="selected-detail-div" tpsource="#msg-right-detail"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/template" id="msg-left-list">
+    <div class="li {readLi}" rownum="{rownum}">
+        <table class="typical-tb" cellpadding="3">
+            <tbody>
+            <tr>
+                <td class="cx">
+                    <input id="{id}" name="checkList" type="checkbox" {_checked} class="check-msg" value="{id}" rownum="{rownum}"/>
+                </td>
+                <td class="ci">
+                    <div class="cir"></div>
+                </td>
+                <td class="cc" paramId="{id}" rownum="{rownum}">
+                    <div class="c-title"><div class="sender-name ellipsis" title="{senderName}">{senderName}</div><div class="msg-time">{msgDateTxt}</div></div>
+                    <div class="c-content"><div class="ellipsis" title="{subject}">{subject}</div><div param="{id}" class="c-remove hideplus" title="删除"><i class="icon-remove"></i></div></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</script>
+<script type="text/template" id="msg-right-detail">
+    <div class="read-info">
+        <h2>{subject}</h2>
+        <div><span>发件人：</span><span class="tcolor">{senderName}</span></div>
+        <div class="hide{senderUnit}"><span>发件人单位：</span><span class="tcolor">{senderUnit}</span></div>
+        <div><span>时间：{msgDetailDate}</span></div>
+    </div>
+    <div class="read-content">
+        <div>
+
+        </div>
+    </div>
+</script>
+<script src="../js/base.js?version=0.99"></script>
+<script>
+    importing('dict', 'datepicker', function(){
+        var searchAction = top.path+'/api/0/system/message/list',
+            setReadAction = top.path+'/api/0/system/message/setRead',
+            deleteAction = top.path+'/api/0/system/message/delete';
+
+        var thisYear = Date.format('YYYY');
+        var weeks = ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+
+        $('.dict').dict();
+        $('.query-date').datepicker();
+
+        //设定默认ajax开始和结束时的loading遮罩效果(#post自带,paginglist没有自带)
+        $.ajaxSetup({
+            beforeSend:showLoading,
+            complete:hideLoading
+        });
+
+        //查询列表
+        function queryForMessage(currentPage){
+            //listData
+            top.registry.global.messageList = [];
+            //checkbox
+            top.registry.global.checkMsgs=[];
+            top.registry.global.checkMsgIds=[];
+            $('#msg-left').pagingList({
+                action:searchAction,
+                currentPage:currentPage,
+                jsonObj:{
+                    msgState:$('#msg-receive-xxzt').val(),
+                    content:$('#msg-receive-content').val().trim(),
+                    msgDateBegin:$('#msg-date-begin').val(),
+                    msgDateEnd:$('#msg-date-end').val()
+                },
+                callback:function(data){
+                    var temp_date, queryData = [];
+                    $('#msg-left-content').template(data, function(item, i){
+                        //checkbox
+                        item._checked=top.registry.global.checkMsgs[item.rownum];
+                        //左边 列表 时间格式
+                        temp_date = new Date(item.createDate);
+                        item.msgDateTxt = thisYear == temp_date.format('YYYY') ? temp_date.format('M月D日 hh:mm') : temp_date.format('YYYY/MM/DD')
+                        //消息已读or未读样式定义 1:未读
+                        item.readLi = item.msgState == '1' ? 'unread' : 'read';
+
+                        //右边 详细 时间格式
+                        item.msgDetailDate = temp_date.format('YYYY年M月D日') + '('+weeks[temp_date.getDay()]+') ' + temp_date.format('hh:mm');
+
+                        queryData.push(item);
+                    });
+
+                    $('.check-msg').on('click',function(i,ele){
+                        var rownum=+(this.getAttribute('rownum'));
+                        var messageId=this.getAttribute('id');
+                        if(this.checked){
+                            top.registry.global.checkMsgs[rownum]='checked';
+                            top.registry.global.checkMsgIds[rownum]=messageId;
+                        }else{
+                            top.registry.global.checkMsgs[rownum]=null;
+                            top.registry.global.checkMsgIds[rownum]=null;
+                        }
+                        judgeCheckAll();
+                    });
+
+                    judgeCheckAll();
+
+                    top.registry.global.messageList = queryData;
+                }
+            });
+            quertForMessageCount();
+            $('.selected-detail-div').hide();
+            $('.un-selected-detail-div').show();
+        }
+        //查询消息数量
+        function quertForMessageCount(){
+            $post(searchAction,
+                    {
+                        msgState:$('#msg-receive-xxzt').val(),
+                        content:$('#msg-receive-content').val(),
+                        msgDateBegin:$('#msg-date-begin').val(),
+                        msgDateEnd:$('#msg-date-end').val()
+                    }, function(res){
+                        $('.total-count').text(res.totalCount);
+                        if(res.totalCount < 16) {$('.paging').hide()}else{$('.paging').show();}
+                    });
+        }
+        //判断该页面是否进行全选
+        function judgeCheckAll(){
+            var checkAll = true;
+            var arryCheck = $('input[name="checkList"]');
+            if(arryCheck.length == 0) {
+                checkAll = false;
+            }else {
+                $(arryCheck).each(function () {
+                    if (!this.checked) {
+                        checkAll = false;
+                    }
+                });
+            }
+            $('input[name="checkAll"]').prop('checked',checkAll);
+        }
+
+        queryForMessage();
+
+        $('#msg-receive-query').on('click',function(){
+            if($('.sort-arrow')) $('.sort-arrow').remove();
+            //时间判断
+            var t_beginDate = $('#msg-date-begin').val();
+            var t_endDate = $('#msg-date-end').val();
+            if(!t_beginDate.isEmpty() && !t_endDate.isEmpty() && t_beginDate > t_endDate){
+                toast('消息开始时间不能大于结束时间！').css('width','300px').err();
+                return false;
+            }
+            //执行查询
+            queryForMessage();
+        });
+
+        $('#msg-receive-reset').on('click',function(){
+            $('.query-condition input').val('');
+            $('.query-condition select').val('');
+        });
+
+        $('#msg-left').on('click', 'div.li .cc:not(.c-remove-hover)', function(){
+
+            //右侧阅读窗口 样式修改
+            $('.un-selected-detail-div').hide();
+            $('.selected-detail-div').show();
+
+            var ids = [];
+            var msg_id = this.getAttribute('paramId');
+            var t_rownum = this.getAttribute('rownum');
+            var thisLi = $(this).parents('.li');
+
+            ids.push(msg_id);
+
+            //样式修改
+            $('#msg-left-content div.li').removeClass('selected');
+            thisLi.addClass('selected');//div .li 添加selected类
+
+            //该div的checkbox值设为已勾选 其余设为不勾选
+            top.registry.global.checkMsgs = [], top.registry.global.checkMsgIds = [];
+            $('#msg-left input[type="checkbox"]').removeAttr('checked');
+            top.registry.global.checkMsgs[t_rownum] = 'checked';
+            top.registry.global.checkMsgIds[t_rownum] = msg_id;
+            $(this).prevAll('.cx').children('input[name="checkList"]').prop('checked','true');
+
+            //消息设置已读，并修改msg-left为已读样式
+            if(thisLi.attr('class').indexOf('unread') > -1){
+                $post(setReadAction, {listId:ids}, function(res){
+                    thisLi.removeClass('unread').addClass('read');
+                    top.unReadMsgCounts();
+                }, true, false);
+            }
+
+            //修改列表显示msgState的值为已读
+            top.registry.global.messageList.each(function(o ,i){
+                var detailObj = $('#msg-right .selected-detail-div');
+                if(msg_id == o.id){
+                    o.msgState = '2';
+                    detailObj.template(o);
+                    detailObj.find('.read-content').html(o.content);
+//                    $('#msg-right .selected-detail-div').template(o);
+//                    $('#msg-right .selected-detail-div .read-content>div').html(o.content);
+                    return false;
+                }
+            });
+        }).on('mouseenter', 'div.li', function(){
+            $(this).find('.c-remove').removeClass('hideplus');
+        }).on('mouseleave', 'div.li', function(){
+            $(this).find('.c-remove').addClass('hideplus');
+        }).on('mouseenter', 'div.li .c-remove', function(){
+            $(this).parents('.cc').addClass('c-remove-hover');
+        }).on('mouseleave', 'div.li .c-remove', function(){
+            $(this).parents('.cc').removeClass('c-remove-hover');
+        }).on('click', 'div.li .c-remove', function(){
+            var ids = [];
+            ids.push(this.getAttribute('param'));
+            $confirm('确定删除消息吗？', function(bol){
+                if(bol){
+                    $post(deleteAction, {listId:ids}, function(res){
+                        toast('删除成功！').ok();
+                        queryForMessage($('.paging').data('currentPage'));
+                    }, true);
+                }
+            });
+        });
+        //全选操作
+        $('#msg-check-all').on('click',function(){
+            $('input[name="checkList"]').prop('checked',$(this).prop('checked'));
+            var arryCheck = $('input[name="checkList"]');
+            var t_rownum = '';
+            var t_id = '';
+            $(arryCheck).each(function(){
+                t_rownum = this.getAttribute('rownum');
+                t_id = this.getAttribute('id');
+                top.registry.global.checkMsgs[t_rownum] = this.checked?'checked':null;
+                top.registry.global.checkMsgIds[t_rownum] = this.checked?t_id:null;
+            });
+        });
+        //删除
+        $('#receive-remove-btn').on('click',function(){
+            var t_ids = top.registry.global.checkMsgIds.where('item=>item!=null').join();
+            if(t_ids.isEmpty()){
+                toast('请选择需要删除的消息').addClass('warning');
+                return false;
+            }
+            $confirm('确定删除消息吗？',function(bol){
+                if(bol){
+                    $post(deleteAction,{listId:top.registry.global.checkMsgIds.where('item=>item!=null')},function(res){
+                        toast('删除成功！').ok();
+                        queryForMessage($('.paging').data('currentPage'));
+                    }, true);
+                }
+            });
+        });
+        //设为已读
+        $('#receive-edit-btn').on('click',function(){
+            var selectIdArray = top.registry.global.checkMsgIds.where('item=>item!=null'); //选中的消息id
+
+            if(selectIdArray.length == 0){
+                toast('请选择需要设为已读的消息').addClass('warning');
+                return false;
+            }
+            $post(searchAction, {msgState: '2'}, function(res){
+                res.data.each(function(o, i){  //o.msgId 已读消息id
+                    if($.inArray(o.msgId, selectIdArray) > -1){
+                        selectIdArray.splice($.inArray(o.msgId, selectIdArray), 1);//如果消息已读，则将消息从数组中移除
+                    }
+                });
+                if(selectIdArray.length == 0){
+                    toast('没有未读消息').addClass('warning');
+                    return false;
+                }else{
+                    $post(setReadAction,{listId:selectIdArray},function(res){
+                        top.unReadMsgCounts();
+                        toast('已将'+selectIdArray.length+'条消息标记为已读').ok();
+                        queryForMessage();
+                    }, true, false);
+                }
+            }, false ,false);
+        });
+    });
+</script>
+</html>

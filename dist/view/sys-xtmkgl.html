@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>系统模块管理</title>
+    <link rel="stylesheet" href="../../dist/css/base.css">
+    <link rel="stylesheet" href="../../dist/css/sys.css">
+</head>
+<body>
+    <ul id="module-tree" class="ztree"></ul>
+    <div id="module-tip">
+        <div class="module-default">
+        </div>
+        <p>该模块暂无数据</p>
+    </div>
+    <div id="module-content" class="module-content hide">
+        <form id="add-form">
+            <div id="main-rights">
+                <div class="new-color-bar">
+                    <span class="title"><span class="add-module hide">新增</span><span class="edit-module hide">修改</span>系统模块信息</span>
+                    <div class="load-module bar-btn-div">
+                        <!--<a class="s-orange-btn hide0 inline-block{parentId}" id="add-same-btn"><i class="icon-plus-sign"></i> 新增同级节点</a>-->
+                        <b class="cm-add-btn hide0 inline-block{parentId}" id="add-same-btn"></b>
+                        <b class="cm-add-btn" id="add-lower-btn"></b>
+                        <b class="cm-edit-btn" id="edit-btn"></b>
+                        <b class="cm-remove-btn" id="delete-btn"></b>
+                    </div>
+                    <div class="add-module edit-module bar-btn-div hide">
+                        <b class="cm-save-btn" id="save-add-btn"></b>
+                        <b class="cm-save-btn" id="save-save-btn"></b>
+                        <b class="cm-close-btn" id="save-return-btn"></b>
+                    </div>
+                </div>
+                <table id="sys-module-table" class="typical-tb" cellpadding="3">
+                    <tr>
+                        <td><span class="add-module edit-module orangered">★ </span><u class="p-mod">模块</u><u class="c-mod">页面</u>标题：</td><td><input id="title" name="title" value="{title}" type="text" class="common-input validate" placeholder="请输入中文（后面可以包含英文或数字）" data-options="required:true,validType:'chEnName'"/></td>
+                        <td>启用标志：</td>
+                        <td>
+                            <dict dict-type="select" dict-root="sfdm" id="open-flag" dict-name="openFlag" empty="false"></dict>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="add-module edit-module orangered">★ </span><u class="p-mod">模块</u><u class="c-mod">页面</u>描述：</td>
+                        <td colspan="3">
+                            <input name="description" value="{description}" class="common-input mol-des validate" placeholder="请输入中文（后面可以包含英文或数字）" data-options="required:true,validType:'chEnName'"/>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td><span class="add-module edit-module orangered">★ </span><u class="p-mod">模块</u><u class="c-mod">页面</u>代号：</td><td><input id="moduleNo" name="moduleNo" class="p-mod common-input validate" type="text" value="{moduleNo}" placeholder="只能输入字母、数字、中划线及下划线" data-options="required:true,validType:'letter'"/><input id="resourceStr" name="resourceStr" value="{operateNo}" type="text" class="c-mod common-input validate" placeholder="只能输入字母、数字、中划线及下划线" data-options="required:true,validType:'letter'"></td>
+                        <td>顺序：</td><td><input name="sort" value="{sort}" type="text" class="common-input"></td>
+                    </tr>
+                    <!--<tr id="default-into">-->
+                        <!--<td></span>默认进入：</td>-->
+                        <!--<td colspan="3"><input name="defaultInto" type="text" class="common-input" value="{defaultInto}"></td>-->
+                    <!--</tr>-->
+                    <tr>
+                        <td>超链接：</td><td id="url-col"><input name="url" value="{url}" type="text" class="common-input"></td>
+                        <td class="default-into"></span>默认进入：</td>
+                        <td class="default-into"><input name="defaultInto" type="text" class="common-input" value="{defaultInto}"></td>
+                    </tr>
+                    <!--<tr class="load-module">-->
+                        <!--<td>创建时间：</td><td class="pd8">{createDatetime}</td><td>修改时间：</td><td class="pd8">{updateDatetime}</td>-->
+                    <!--</tr>-->
+                    <tr class="hide" >
+                        <td>父模块主键ID：</td><td colspan="3"><input name="parentId" value="{moduleId}" type="text" class="common-input" id="parent-id"></td>
+                    </tr>
+                    <tr class="hide">
+                        <td>ID</td><td colspan="3"><input name="permissionId" value="{permissionId}" type="text" class="common-input"></td>
+                        <td>ID</td><td colspan="3"><input name="permisResId" value="{permisResId}" type="text" class="common-input"></td>
+                        <td>ID</td><td colspan="3"><input name="rootId" value="{rootId}" type="text" class="common-input"></td>
+                        <td>ID</td><td colspan="3"><input name="resourceId" value="{resourceId}" type="text" class="common-input"></td>
+                    </tr>
+                </table>
+            </div>
+            <table id="sub-rights-table" class="typical-tb hide" cellpadding="3">
+                <thead>
+                <tr>
+                    <td colspan="4"><span class="load-module">子权限：</span><span class="add-module edit-module hide">添加子权限<i id="sub-rights-plus" class="icon-plus"></i></span></td>
+                </tr>
+                </thead>
+                <tbody tpsource="#sub-rights"></tbody>
+            </table>
+        </form>
+    </div>
+</body>
+<script type="text/template" id="sub-rights">
+    <tr>
+        <td><span class="add-module edit-module orangered">★ </span>子权限描述：</td><td><input type="text" class="common-input" value="{permissionDescription}" name="descriptionArray"></td><td><span class="add-module edit-module orangered">★ </span>子权限代号：</td><td><input type="text" class="common-input" value="{operateNo}" name="resourceArray"><i class="add-module edit-module icon-remove sub-rights-remove"></i></td>
+    </tr>
+</script>
+<script src="../../dist/js/base.js"></script>
+<script src="../../dist/js/sys.js"></script>
+<script>
+    importing('ztree','dict',function () {
+        var moduleInfo,
+            moduleId,
+            treeObj,
+            moduleAction = top.path+'/api/0/system/module',
+            moduleViewAction = top.path+'/api/0/system/module/view',
+            moduleDelAction = top.path+'/api/1/system/module/delete',
+            moduleEditAction = top.path+'/api/1/system/module/update',
+            moduleAddAction = top.path+'/api/1/system/module/add',
+            setting = {
+            check: {
+                enable: false			//启用复选框
+            },
+            data: {
+                simpleData: {
+                    enable:"pid",		//扁平数据，pid表示父节点的ID
+                    idKey:"id",
+                    pIdKey:"pid"		//默认的pId改为pid，注意默认I为大写
+                }
+            },
+            view:{
+                showTitle: false, 	    //不显示提示信息
+                nameIsHTML: true,		//名字支持html代码
+                selectedMulti:false     //只能选中一个节点
+            },
+            callback:{
+                onClick:function(nodes, treeId, treeNode){
+                    loadModuleInfo(treeNode);
+                }
+            }
+        };
+
+        //初始化页面
+        function initPageData(isFirst,delPid,editName) {
+            $post(moduleAction,{},function (res) {
+                var nodes = [];
+                moduleInfo = res.data,
+                treeNode = {};
+                for (var i = 0; i < moduleInfo.length; i++) {
+                    if(moduleInfo[i].parentId==null){
+                        nodes.push({id:moduleInfo[i].id,pid:0,name:moduleInfo[i].title,sort:i});
+                    }else{
+                        nodes.push({id:moduleInfo[i].id,pid:moduleInfo[i].parentId,name:moduleInfo[i].title,sort:i});
+                    }
+                }
+                //$.ztree.init($('#module-tree'), setting, nodes);
+                //treeObj = $.ztree.getZTreeObj('module-tree');
+
+                //新api, 发动和获得树对象一步完成,调用逻辑更清晰
+                treeObj =$('#module-tree').ztree( setting, nodes);
+                //treeObj.expandAll(true);//默认展开全部节点
+                if(isFirst){
+                    loadModuleInfo(treeObj.getNodes()[0]);
+                }
+                if(delPid){
+                    treeNode = treeObj.getNodeByParam('id',delPid);
+                    loadModuleInfo(treeNode);
+                    treeObj.selectNode(treeNode);
+                    treeObj.expandNode(treeNode);
+                }
+                if(editName){
+                    treeNode = treeObj.getNodeByParam('name',editName);
+                    loadModuleInfo(treeNode);
+                    treeObj.selectNode(treeNode);
+                }
+            });
+        }
+        //点击树节点加载数据
+        function loadModuleInfo(treeNode){
+            $get(moduleViewAction,{moduelId:treeNode.id},function(res){
+                var data = res.data,
+                    subRights = [];
+
+                if(data.length<=0){
+                    $('#module-tip').show();
+                    $('#module-content').hide();
+                    return false;
+                }
+                $('#sub-rights-table').hide().find('tbody').html('');
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].permissionFlag == "0") { //主权限
+                        $template('#main-rights', data[i]);
+                        moduleId = data[i].moduleId;
+                        $('#open-flag').dictSelect(data[i].openFlag);
+                        document.getElementById('open-flag').disabled="disabled";
+                    }else if(data[i].permissionFlag == "1"){ //子权限
+                        subRights.push(str2obj('{"permissionDescription":"'+data[i].permissionDescription+'","operateNo":"'+data[i].operateNo+'"}'));
+                    }
+                }
+                //加载子权限数据
+                if(subRights.length>0){
+                    $('#sub-rights-table').show();
+                    $template('#sub-rights-table tbody',subRights);
+                    clickToRemoveSubRights();
+                    subRights = [];
+                }
+                $('#module-content table input,#module-content table select').addClass('no-edit').prop('readonly','readonly');
+
+                //注册新增同级模块事件
+                $('#add-same-btn').on('click',function () {
+                    addModule(true);
+                });
+                //注册新增下级模块事件
+                $('#add-lower-btn').on('click',function () {
+                    addModule(false,treeNode.id);
+                });
+                //保存修改模块事件
+                $('#save-add-btn').on('click',function () {
+                    var paramsObj = {};
+                    trimAll('#module-content');
+                    $('.validate').validatebox();
+                    if($('.validatebox-invalid').length>0){
+                        return false;
+                    }
+                    paramsObj=$('#add-form').serializeObject();
+                    if(treeNode.id === 'EBCDEFGHABCDEFGHABCDEFGH22222201'){
+                        paramsObj = $.extend(paramsObj,{openFlag:'1'});
+                    }
+                    $post(moduleEditAction,paramsObj,function (res) {
+                        var msg = res.msg?res.msg:'保存成功！';
+                        toast(msg,600).ok();
+                        initPageData(false,false,$('#title').val());
+//                        loadModuleInfo(treeNode);
+                    });
+
+                });
+
+                //保存新增模块事件
+                $('#save-save-btn').on('click',function () {
+                    var resourceStrVal,moduleNoVal;
+
+                    trimAll('#module-content');
+
+                    resourceStrVal = $('#resourceStr').val();
+                    moduleNoVal = $('#moduleNo').val();
+                    //模块代号或页面代号为空时，将另一个有值的代号赋值给它
+                    if(moduleNoVal === ''){
+                        $('#moduleNo').val(resourceStrVal);
+                    }
+                    if(resourceStrVal === ''){
+                        $('#resourceStr').val(moduleNoVal);
+                    }
+
+                    $('.validate').validatebox();
+                    if($('.validatebox-invalid').length>0){
+                        return false;
+                    }
+                    $post(moduleAddAction,$('#add-form').serializeObject(),function (res) {
+                        var msg = res.msg?res.msg:'保存成功！';
+                        toast(msg,600).ok();
+//                        loadModuleInfo(treeNode);
+//                        treeObj.updateNode(treeNode);
+                        initPageData(false,false,$('#title').val());
+                    },true);
+                });
+                //绑定修改节点事件
+                $('#edit-btn').on('click',function () {
+                    var selector = '';
+                    //首页的启用标志不可编辑
+                    if(treeNode.id === 'EBCDEFGHABCDEFGHABCDEFGH22222201'){
+                        selector = '[name!="openFlag"]';
+                    }else{
+                        $('#open-flag').removeAttr("disabled");
+                    }
+                    $('#module-content table input[name!="moduleNo"],#module-content table select'+selector).removeClass('no-edit').removeAttr('readonly');//input加上边框
+                    $('.load-module,.add-module').hide();
+                    $('#sub-rights-table').show();
+                    $('.edit-module').show();
+                    //根节点模块代号可编辑
+                    if(!treeNode.getParentNode()){
+                        $('#moduleNo').removeClass('no-edit').removeAttr('readonly');//input加上边框
+                    }
+                });
+                //注册返回事件
+                $('#save-return-btn').on('click',function () {
+                    loadModuleInfo(treeNode);
+                });
+
+                $('#module-tip').hide();
+                $('#module-content').show();
+                $('.edit-module,.add-module').hide();
+                $('.load-module').show();
+
+                if(treeNode.isParent){
+                    $('#delete-btn,.c-mod').hide();//有子节点的节点隐藏“删除节点”按钮
+                    if(treeNode.children.length>1){//有一个以上子节点的显示默认进入
+                        $('.default-into').show();
+                        $('#url-col').removeAttr('colspan');
+                    }else{
+                        $('.default-into').hide();
+                        $('#url-col').attr('colspan','3');
+                    }
+                    $('.p-mod').show();
+                }else{
+                    $('#delete-btn').show().on('click',function(){
+                        deleteModuleInfo(moduleId,treeNode);
+                    });
+                    $('.c-mod').show();
+                    $('.default-into,.p-mod').hide();
+                    $('#url-col').attr('colspan','3');
+                }
+                $('#save-save-btn').hide();
+            });
+        }
+
+        //删除节点
+        function deleteModuleInfo(id,treeNode){
+            $confirm('确认删除【'+treeNode.name+'】节点？',function(bol) {
+                if (bol) {console.log(obj2str({moduleId:id}))
+                    $get(moduleDelAction,{moduleId:id},function (res) {
+                        var msg = res.msg?res.msg:'删除成功！';
+                        toast(msg,600).ok();
+                        initPageData(false,treeNode.pid);
+                        if(!treeNode.pid){
+                            loadModuleInfo(treeObj.getNodes()[0]);
+                        }
+                    },true);
+                }
+            });
+        }
+        //点击删除一行子权限
+        function clickToRemoveSubRights() {
+            $('.sub-rights-remove').one('click',function () {
+                $(this).parent().parent().remove();
+            });
+        }
+        //新增同级或下级模块
+        function addModule(sameLevel,pid) {
+            $('#open-flag').removeAttr("disabled");
+            $('.load-module,.edit-module').hide();
+            $('.add-module').show();
+            $('#module-content table input[name!="moduleNo"],#module-content table select').removeClass('no-edit').removeAttr('readonly').val('');//input加上边框，内容置空
+            $('#sub-rights-table tbody').html('');//新增时移除子权限table里面的内容
+            $('#sub-rights-table').show();
+
+            if(!sameLevel){//新增下级模块时
+                $('#parent-id').val(moduleId).attr("readonly","true").addClass('no-edit');
+                $('#parent-id').parent().parent().show();
+//                $('#moduleNo').addClass('no-edit').prop('readonly','readonly');
+                $('.p-mod').hide();
+                $('.c-mod').show();
+            }else{//新增同级模块时
+                $('#moduleNo').removeClass('no-edit').removeAttr('readonly').val('');
+            }
+            $('#save-add-btn').hide();
+            $('#save-save-btn').show();
+            $('#open-flag').dictSelect(1);
+        }
+        //扩展验证
+        $.extend($.fn.validatebox.defaults.rules, {
+            letter: {
+                validator: function (val) {
+                    return /^[\w|-]+$/.test(val);
+                },
+                message: '请输入字母、数字、中划线及下划线'
+            },
+            //验证汉字、英文、数字
+            chEnName: {
+                validator: function (value) {
+                    return /^[\u0391-\uFFE5]+[a-z|A-Z|\d]*$/.test(value);
+                },
+                message: '请输入中文（后面可以包含英文或数字）'
+            }
+        });
+
+        initPageData(true);
+        $('#open-flag').dict();
+
+        //注册点击添加子权限事件
+        $('#sub-rights-plus').on('click',function () {
+            $('#sub-rights-table tbody').append('<tr><td><span class="add-module edit-module orangered">★ </span>子权限描述：</td><td><input name="descriptionArray" type="text" class="common-input validate" data-options="required:true"></td><td><span class="add-module edit-module orangered">★ </span>子权限代号：</td><td><input name="resourceArray" type="text" class="common-input validate" data-options="required:true"><i class="icon-remove sub-rights-remove"></i></td></tr>');
+            //绑定点击删除子权限事件
+            clickToRemoveSubRights();
+        });
+    });
+</script>
+</html>

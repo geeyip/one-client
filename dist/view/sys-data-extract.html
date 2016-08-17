@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据抽取对象维护</title>
+    <link rel="stylesheet" href="../css/base.css?version=0.99">
+    <link rel="stylesheet" href="../css/sys.css?version=0.99">
+</head>
+<body>
+
+<div id="data-extract-query" class="query-condition">
+    <div class="query-condition-p">
+        <span class="common-field w65">项目单位：</span><dict dict-id="query-xmdwdm" dict-name="xmdwdm" dict-type="tree" dict-root="custom" class="xmdwdm dict"></dict>
+        <span class="common-field w100">监控类别：</span><dict id="queryjk" dict-id="query-jk" dict-name="queryJk" dict-type="select" dict-root="JKLBDM" class="dict"></dict>
+        <span class="common-field w100">数据类别：</span><dict id="querysj" dict-id="query-sj" dict-name="querySj" dict-type="select" dict-root="custom" class="dict"></dict>
+        <p class="query-reset">
+            <b class="cm-query-btn"></b>
+            <b class="cm-reset-btn"></b>
+        </p>
+    </div>
+</div>
+<div id="data-extract-query-result">
+    <div class="new-color-bar">
+        <span class="title">数据抽取对象维护列表（共找到<span class="total-count"></span>条数据）</span>
+        <div class="bar-btn-div">
+            <b id="into-data-extract-add" class="cm-add-btn hideplus"></b>
+        </div>
+    </div>
+    <table id="data-extract-table" class="typical-tb" cellpadding="3">
+        <thead>
+            <th width="5%">序号</th>
+            <th width="10%">项目代码</th>
+            <th width="10%">项目单位</th>
+            <th width="15%">监控类别</th>
+            <th width="15%">数据类别</th>
+            <th width="35%">校验对象</th>
+            <th width="10%">操作</th>
+        </thead>
+        <tbody tpsource="#data-extract-list"></tbody>
+    </table>
+    <div class="paging"></div>
+</div>
+<div id="data-extract-add-div" class="hide">
+    <div>
+        <div class="stick-title-bar">所属类别</div>
+        <div>
+            <span class="item-span"><span class="orangered">★ </span>是否通用：</span>
+            <dict id="addty" dict-id="add-ty" dict-name="ty" dict-type="select" dict-root="SFDM" return-value="false" class="validate dict" data-options="required:true" empty="false"></dict>
+            <div class="inline-block xmdw-div">
+                <span class="item-span"><span class="orangered">★ </span>项目单位：</span>
+                <dict id="addxmdwdm" dict-id="add-xmdwdm" dict-name="xmdwdm" dict-type="tree" dict-root="custom" return-value="false" class="validate dict xmdwdm" data-options="required:true"></dict>
+            </div>
+            <br/>
+            <span class="item-span mt10"><span class="orangered">★ </span>监控类别：</span>
+            <dict id="addjk" dict-id="data-extract-add-jk" dict-name="addJk" dict-type="select" dict-root="JKLBDM" class="validate dict mt10" data-options="required:true"></dict>
+            <span class="item-span"><span class="orangered">★ </span>数据类别：</span>
+            <dict id="addsj" dict-id="data-extract-add-sj" dict-name="addSj" dict-type="select" dict-root="custom" class="validate dict" data-options="required:true"></dict>
+        </div>
+        <div class="stick-title-bar">新增校验对象</div>
+        <div id="items-add-div">
+            <p>
+                <span class="item-span"><span class="orangered">★ </span>中文名：</span>
+                <input class="validate common-input" data-options="required:true,validType:'length[0,40]'" type="text"/>
+                <span class="item-span"><span class="orangered">★ </span>英文名：</span>
+                <input class="validate common-input inspectE" data-options="required:true,validType:'itemEnglish'" type="text"><i class="icon-plus items-plus"></i>
+            </p>
+        </div>
+        <div class="stick-title-bar">已有校验对象</div>
+        <div id="items-div" tpsource="#inspects"></div>
+    </div>
+    <p class="tcenter mt20">
+        <b id="save-data-extract" class="cm-save-btn mr15"></b>
+        <b id="data-extract-add-cancel" class="cm-cancel-btn"></b>
+    </p>
+</div>
+<div id="data-extract-edit-div" class="hide">
+    <div class="stick-title-bar">所属类别</div>
+    <div id="data-extract-edit-type">
+        <span class="item-span"><span class="orangered">★ </span>是否通用：</span>
+        <dict id="editty" dict-id="edit-ty" dict-name="ty" dict-type="select" dict-root="SFDM" return-value="false" class="validate dict" data-options="required:true" empty="false"></dict>
+        <div class="inline-block xmdw-div">
+            <span class="item-span"><span class="orangered">★ </span>项目单位：</span>
+            <dict id="editxmdwdm" dict-id="edit-xmdwdm" dict-name="xmdwdm" dict-type="tree" dict-root="custom" return-value="false" class="validate dict xmdwdm" data-options="required:true"></dict>
+        </div>
+        <br/>
+        <span class="item-span mt10"><span class="orangered">★ </span>监控类别：</span>
+        <dict id="editjk" dict-id="edit-jk" dict-name="jk" dict-type="select" dict-root="JKLBDM" class="validate dict mt10" data-options="required:true" empty="false"></dict>
+        <span class="item-span"><span class="orangered">★ </span>数据类别：</span>
+        <dict id="editsj" dict-id="edit-sj" dict-name="sj" dict-type="select" dict-root="custom" class="validate dict" data-options="required:true" empty="false"></dict>
+    </div>
+    <div class="stick-title-bar">校验对象</div>
+    <div id="items-edit-div">{{jyzd:#inspects-edit}}</div>
+    <p class="tcenter mt20">
+        <b id="update-data-extract" class="cm-save-btn mr15"></b>
+        <b id="data-extract-edit-cancel" class="cm-cancel-btn"></b>
+    </p>
+</div>
+<div id="data-extract-copy" class="hide">
+    <div class="mt10 mb20">
+        <div class="stick-title-bar">选择项目单位</div>
+        <div class="copy-xmdw">
+            <span class="common-field"><span class="orangered">★ </span>项目单位：</span>
+            <dict dict-id="copy-xmdwdm" dict-name="xmdwdm" dict-type="tree" dict-root="custom" return-value="false" class="validate dict xmdwdm mb20" data-options="required:true"></dict>
+        </div>
+        <div class="stick-title-bar">选择校验对象<span class="copy-inspects-tips hide">（请至少选择一个校验对象）</span></div>
+        <div id="copy-inspects-id" class="copy-inspects">
+            <div><span class="ellipsis">{jyzdmc}：</span><span class="ellipsis">{jyzddm}</span><input paramDm="{jyzddm}" paramMc="{jyzdmc}" name="jyzd" type="checkbox" /> </div>
+        </div>
+    </div>
+    <div class="tcenter mt10">
+        <b class="cm-ok-btn mr15"></b>
+        <b class="cm-cancel-btn"></b>
+    </div>
+</div>
+</body>
+<script type="text/template" id="data-extract-list">
+    <tr>
+        <td>{rn}</td>
+        <td>{xmdwdm}</td>
+        <td>{xmdwmc}</td>
+        <td>{jklb}</td>
+        <td>{sjlb}</td>
+        <td>
+            {{jyzd:#<div class="inspect-div"><div class="inspect-c ellipsis" title="{jyzdmc}">{jyzdmc}</div><div class="colons">：</div><div class="inspect-e ellipsis" title="{jyzddm}">{jyzddm}</div></div>#}}
+        </td>
+        <td>
+            {{this.copyLimit && #<a class="data-extract-copy hidden{copy}" param="{id}" title="复用"><i class="icon-paste"></i></a>#}}
+            {{this.editLimit && #<a class="into-data-extract-edit icon-edit-btn" param="{id}" title="修改"></a>#}}
+            {{this.deleteLimit && #<a class="delete-data-extract icon-remove-btn"  param="{xmdwdm}" param2="{jklbdm}" param3="{sjlbdm}" param4="{xmdwdm}" title="删除"></a>#}}
+        </td>
+    </tr>
+</script>
+<script type="text/template" id="inspects">
+    <p>
+        <span class="item-span">中文名：</span>
+        <input class="common-input" unselectable="on" readonly="true" type="text" value="{jyzdmc}"/>
+        <span class="item-span">英文名：</span>
+        <input class="common-input inspectE" unselectable="on" readonly="true" type="text" value="{jyzddm}"/>
+    </p>
+</script>
+<script type="text/template" id="inspects-edit">
+    <p>
+        <span class="item-span"><span class="orangered">★ </span>中文名：</span>
+        <input class="validate common-input" data-options="required:true,validType:'length[0,40]'" type="text" value="{jyzdmc}" param="{id}"/>
+        <span class="item-span"><span class="orangered">★ </span>英文名：</span>
+        <input class="validate common-input inspectE" data-options="required:true,validType:'itemEnglish'" type="text" value="{jyzddm}"/><i param="{id}" paramDm="{jyzddm}" class="icon-remove items-remove"></i>
+    </p>
+</script>
+<script src="../js/base.js?version=0.99"></script>
+<script>
+    importing('dict', function(){
+
+        var queryPageDateAction = top.path + '/api/0/system/extract/query',
+            queryAddDateAction = top.path + '/api/0/system/extract/list',
+            updateAction = top.path + '/api/1/system/extract/edit',
+            deleteAction = top.path + '/api/1/system/extract/del',
+            saveAction = top.path + '/api/1/system/extract/add',
+            queryForJKDictAction = top.path + '/api/0/system/extract/dict',
+            xmdwAction = top.path + '/api/0/basic/project/project_unit',
+            copyAction = top.path + '/api/0/system/extract/copy';
+
+        var addLimit = top.ops['sys-data-extract-add'], editLimit = top.ops['sys-data-extract-edit'], deleteLimit = top.ops['sys-data-extract-delete'], copyLimit = top.ops['sys-data-extract-copy'];
+
+        var editDeleteIds = [], editDeleteDms = [];
+        var copyId;
+        var oldXmdwmc, oldXmdwdm, oldTy, oldSjlb;
+
+        var editsjObj = $('#editsj');
+
+        $('#queryjk').dict();
+        $('#addty').dict();
+        $('#addjk').dict();
+        $('#editty').dict();
+        $('#editjk').dict();
+
+
+        //设定默认ajax开始和结束时的loading遮罩效果($post自带,paginglist没有自带)
+        $.ajaxSetup({
+            beforeSend:showLoading,
+            complete:hideLoading
+        });
+
+        //设置检验英文名填写规范
+        $.extend($.fn.validatebox.defaults.rules, {
+            itemEnglish: {
+                validator: function(val) {
+                    return /^[a-zA-Z][a-zA-Z0-9_]{0,40}$/.test(val);
+                },
+                message: '请以字母开头，只能包含字母、数字和下划线，长度小于40'
+            }
+        });
+
+        //项目单位
+        function queryForXmdw(){
+            $get(xmdwAction,{},function(res){
+                $('.xmdwdm').dict(res.data.unitInfo);
+            });
+        }
+        //字典联动
+        function queryForJKDict(obj, value){
+            if(value==null){
+                obj.dict(null);
+            }else{
+                $get(queryForJKDictAction,{jklb:value},function(res){
+                    obj.dict(res.data.unitInfo);
+                },false,false);
+            }
+        }
+        //查询列表
+        function queryForDataExtract(currentPage){
+            $('#data-extract-query-result').pagingList({
+                action: queryPageDateAction,
+                currentPage: currentPage,
+                jsonObj: {
+                    xmdwdm:$('#query-xmdwdm').val(),
+                    sjlb:$('#query-sj').val(),
+                    jklb:$('#query-jk').val()
+                },
+                callback:function(data){
+                    var queryData = [];
+                    $('#data-extract-table tbody').fixData({editLimit:editLimit, deleteLimit:deleteLimit, copyLimit:copyLimit}).template(data, function(item, i){
+                        item.xmdwmc == '通用' ? item.copy = null : item.copy = '1';//通用不可以进行检验字段复用
+                        queryData.push(item);
+                    });
+                    top.registry.sys.dataExtractData = queryData;
+                    //isShowMore();
+                }
+            });
+        }
+        //进入新增页面
+        function intoDataExtractAdd(){
+            $('#data-extract-add-div .xmdw-div').removeClass('hideplus');
+            $('#data-extract-add-div .xmdw-div input').addClass('validate');
+            $('.validate').removeClass('validatebox-invalid');//必填项，移除上一次必填项未填提醒样式
+
+            if($('.other-p')) {$('.other-p').remove();}
+            if($('#items-div p')){$('#items-div p').remove();}
+
+            $('#data-extract-add-div input').val('');
+            $('#data-extract-add-div select').val('');
+
+            $('#addty').dictSelect('0');
+            $open('#data-extract-add-div',{width:800, title:'新增'});
+
+            queryForJKDict($('#addsj'),$('#data-extract-add-jk').val());
+        }
+        //新增页面执行的查询
+        function queryForAdd(){
+            //判断是否需要执行查询
+            var ty = $('#add-ty').val();
+            var xmdw = $('#add-xmdwdm').val();
+            var jklb = $('#data-extract-add-jk').val();
+            var sjlb = $('#data-extract-add-sj').val();
+            //当所属类别中的值都存在时，才能执行查询条件
+            if(ty == '0'){//否
+                if(!xmdw.isEmpty() && !jklb.isEmpty() && !sjlb.isEmpty()){
+                    $get(queryAddDateAction,{ty:ty, xmdwdm:xmdw, jklb:jklb, sjlb:sjlb}, function(res){
+                        $('#items-div').template(res.data);
+                    },true);
+                }
+            }else if(ty == '1'){//是 不需要判断项目单位是否有值
+                if(!jklb.isEmpty() && !sjlb.isEmpty()){
+                    $get(queryAddDateAction,{ty:ty, xmdwdm:xmdw, jklb:jklb, sjlb:sjlb}, function(res){
+                        $('#items-div').template(res.data);
+                    },true);
+                }
+            }
+
+            //$('#items-div').template(inspectsData);//测试数据 remove
+        }
+        //新增保存
+        function saveDataExtract(){
+            //必填项判断
+            if($('#data-extract-add-sj').val() == null || $('#data-extract-add-sj').val() == ''){
+                $('#data-extract-add-sj').addClass('validate').attr('data-options', 'required:true');
+            }  //联动字典重定义后会把验证必填项的属性移除，故保存时需要加判断
+            $('#data-extract-add-div .validate').validatebox();
+            if($('#data-extract-add-div .validatebox-invalid').length > 0){
+                return false;
+            }
+
+            //验证通过后 处理需要传入后台的数据
+            var p = $('#items-add-div p');
+            var itemsArray = [];//存放新增的校验对象
+            var inputs;
+            p.each(function(i,e){
+                itemsArray[i] = {};
+                inputs = e.getElementsByTagName('input');
+                for(var j=0;j<inputs.length;j=j+2){
+                    itemsArray[i].jyzdmc = inputs[j].value;//存放统计项中文
+                    itemsArray[i].jyzddm = inputs[j+1].value;//存放统计项英文
+                }
+            });
+            //定义新增传入后台的数据对象
+            var saveObj = {
+                ty:$('#add-ty').val(),
+                xmdwmc:$('#add-xmdwdm_displayValue').val(),
+                xmdwdm:$('#add-xmdwdm').val(),
+                jklb:$('#data-extract-add-jk').val(),
+                sjlb:$('#data-extract-add-sj').val(),
+                inspects:itemsArray
+            };
+            console.log(saveObj);
+            $post(saveAction,saveObj,function(res){
+                toast('保存成功！').ok();
+                dataExtractCloseWin('data-extract-add-div');
+                queryForDataExtract();
+            },true);
+        }
+        //进入修改页面
+        function intoDataExtractEdit(id){
+            $('.validate').removeClass('validatebox-invalid');//必填项，移除上一次必填项未填提醒样式
+            top.registry.sys.dataExtractData.each(function(e, i){
+                if(id == e.id){
+                    $('#edit-ty-span').remove();
+                    $open('#data-extract-edit-div',{width:800, title:'修改'});
+
+                    //通用、项目单位字典 赋值
+                    if(e.xmdwmc == '通用'){
+                        oldTy = '1';
+                        $('#edit-ty').dictSelect('1');
+                        $('#data-extract-edit-type span:first-child .orangered').hide();
+                        $('#edit-ty').hide();
+                        $('#data-extract-edit-type').children('span:first-child').after('<span id="edit-ty-span">是</span>');
+                        //$('#edit-ty').attr('disabled',true);
+                        $('#data-extract-edit-div .xmdw-div').addClass('hideplus');
+                        $('#data-extract-edit-div .xmdw-div input').removeClass('validate').val('');
+                    }else{
+                        oldTy = '0';
+                        $('#data-extract-edit-div .xmdw-div').removeClass('hideplus');
+                        $('#data-extract-edit-type span:first-child .orangered').show();
+                        $('#edit-ty').show();
+                        //$('#edit-ty').removeAttr('disabled');
+
+                        //字典赋值
+                        $('#edit-ty').dictSelect('0');
+                        $('#edit-xmdwdm').val(e.xmdwdm);
+                        $('#edit-xmdwdm_displayValue').val(e.xmdwmc);
+                    }
+                    oldXmdwmc = e.xmdwmc;
+                    oldXmdwdm = e.xmdwdm;
+                    //监控类别、数据类别字典 赋值
+                    $('#editjk').dictSelect(e.jklbdm);
+                    $get(queryForJKDictAction,{jklb:$('#edit-jk').val()},function(res){
+                        editsjObj.dict(res.data.unitInfo);
+                        editsjObj.dictSelect(e.sjlbdm);
+                        oldSjlb = e.sjlbdm;
+                    },false,false);
+                    //校验对象 赋值
+                    $('#items-edit-div').template(e);
+                }
+            });
+        }
+        //修改保存
+        function updateDataExtract(){
+            //必填项判断
+            $('#data-extract-edit-div .validate').validatebox();
+            if($('#data-extract-edit-div .validatebox-invalid').length > 0){
+                return false;
+            }
+
+            //通过验证后 处理需要传入后台的数据
+            var p = $('#items-edit-div p');
+            var itemsArray = [];//存放统计项
+            var inputs;
+            p.each(function(i,e){
+                itemsArray[i] = {};
+                inputs = e.getElementsByTagName('input');
+                for(var j=0;j<inputs.length;j=j+2){
+                    itemsArray[i].id = inputs[j].getAttribute('param');
+                    itemsArray[i].jyzdmc = inputs[j].value;//存放统计项中文
+                    itemsArray[i].jyzddm = inputs[j+1].value;//存放统计项英文
+                }
+            });
+            //定义修改传入后台的数据对象
+            var updateObj = {
+                oldTy:oldTy,
+                ty:$('#edit-ty').val(),
+                xmdwmc:$('#edit-xmdwdm_displayValue').val(),
+                xmdwdm:$('#edit-xmdwdm').val(),
+                jklb:$('#edit-jk').val(),
+                sjlb:$('#edit-sj').val(),
+                inspects:itemsArray,
+                oldXmdwmc:oldXmdwmc,
+                oldXmdwdm:oldXmdwdm,
+                oldSjlb:oldSjlb,
+                editDeleteId:editDeleteIds,
+                editDeleteDms:editDeleteDms
+            };
+
+            if(itemsArray.length == 0){
+                $confirm('校验对象个数小于1，该操作会导致当前类别被删除，确定要进行保存吗？', function(bol){
+                    if(bol){
+                        $post(updateAction,updateObj,function(res){
+                            toast('保存成功！').ok();
+                            dataExtractCloseWin('data-extract-edit-div');
+                            queryForDataExtract($('.paging').data('currentPage'));
+                        },true);
+                    }
+                });
+            }else{
+                $post(updateAction,updateObj,function(res){
+                    toast('保存成功！').ok();
+                    dataExtractCloseWin('data-extract-edit-div');
+                    queryForDataExtract($('.paging').data('currentPage'));
+                },true);
+            }
+
+        }
+        //进入复用页面
+        function intoDataExtractCopy(){
+            $('#data-extract-copy input').val('');
+            $('.copy-inspects-tips').hide();
+            $open('#data-extract-copy',{width:420, title:'复用'});
+
+            var id = copyId;
+            top.registry.sys.dataExtractData.each(function(e, i){
+                if(id == e.id){
+                    $('#copy-inspects-id').template(e.jyzd);
+                    return false;
+                }
+            });
+        }
+        //复用
+        function copyDataExtract(){
+
+            //必填项
+            $('#data-extract-copy .validate').validatebox();
+            if($('#data-extract-copy .validatebox-invalid').length > 0){
+                return false;
+            }
+
+
+            var id = copyId;
+            var copy_dm = $('#copy-xmdwdm').val();
+            var copy_mc = $('#copy-xmdwdm_displayValue').val();
+            var t_jyzd = [];
+            var copyObj = {};
+            var checkInputs = $('#copy-inspects-id input[name="jyzd"]:checked');
+            if(checkInputs.length == 0){
+                $('.copy-inspects-tips').fadeIn();
+                return false;
+            }
+            checkInputs.each(function(i){
+                    t_jyzd[i] = {};
+                    t_jyzd[i].jyzddm = this.getAttribute('paramDm');
+                    t_jyzd[i].jyzdmc = this.getAttribute('paramMc');
+            });
+
+
+            top.registry.sys.dataExtractData.each(function(e, i){
+                if(id == e.id){
+                    copyObj = {
+                        ty: '0',
+                        xmdwdm: copy_dm,
+                        xmdwmc: copy_mc,
+                        jklb: e.jklbdm,
+                        sjlb: e.sjlbdm,
+                        jyzd: t_jyzd
+                    };
+                    return false;
+                }
+            });
+
+
+            $post(copyAction, copyObj, function(res){
+                toast('复用成功！').ok();
+                $('#data-extract-copy').$close();
+                $('#data-extract-copy .validate').removeClass('validatebox-invalid');
+                queryForDataExtract($('.paging').data('currentPage'));
+            },true);
+        }
+        //删除
+        function deleteDataExtract(xmdwdm,jklb,sjlb,xmdwdm){
+            var ty = '0';
+            if(xmdwdm=='000000'){
+                ty = '1';
+            }
+            $confirm('确定删除该类别吗？', function(del){
+                if(del){
+                    $post(deleteAction,{xmdwdm:xmdwdm,jklb:jklb,sjlb:sjlb,ty:ty},function(res){
+                        toast('删除成功！').ok();
+                        queryForDataExtract($('.paging').data('currentPage'));
+                    });
+                }
+            });
+        }
+        //英文名重复判断
+        function judgeReportInsepectE(thisObj, type){
+            $('.inspectE').removeClass('input-inspectE');
+            thisObj.removeAttr('placeholder');
+            thisObj.addClass('input-inspectE');
+            var allObj = type == 'add'?$('#data-extract-add-div .inspectE:not(.input-inspectE)'):$('#data-extract-edit-div .inspectE:not(.input-inspectE)');
+            allObj.each(function(){
+                if(this.value.trim()!='' && this.value.toUpperCase() == thisObj.val().trim().toUpperCase()){
+                    thisObj.val('');
+                    thisObj.focus();
+                    thisObj.attr('placeholder','英文名已存在，请重新输入');
+                    return false;
+                }
+            });
+        }
+        //关闭窗口
+        function dataExtractCloseWin(id){
+            $('#'+id).$close();
+            $('.validate').removeClass('validatebox-invalid');
+        }
+
+        if(addLimit) {$('#into-data-extract-add').removeClass('hideplus');}
+        //项目单位自定义字典
+        queryForXmdw();
+        //定义数据类别字典
+        queryForJKDict($('#querysj'),$('#query-jk').val());
+
+        queryForDataExtract();
+
+        $('.cm-query-btn').on('click', function(){
+            queryForDataExtract();
+        });
+        $('.cm-reset-btn').on('click', function(){
+            $('#data-extract-query input').val('');
+            $('#data-extract-query select').val('');
+        });
+        $('#data-extract-table tbody').on('click','.into-data-extract-edit',function(){
+            intoDataExtractEdit(this.getAttribute('param'));
+        }).on('click', '.delete-data-extract', function(){
+            deleteDataExtract(this.getAttribute('param'),this.getAttribute('param2'),this.getAttribute('param3'),this.getAttribute('param4'));
+        }).on('click', '.data-extract-copy', function(){
+            copyId = this.getAttribute('param');
+            intoDataExtractCopy();
+        });
+        $('#into-data-extract-add').on('click',function(){
+            intoDataExtractAdd();
+        });
+        $('.items-plus').on('click', function(){
+            var addItemsHtml = '<p class="other-p">'+
+                    '<span class="item-span"><span class="orangered">★ </span>中文名：</span> <input class="validate common-input" data-options="required:true" type="text"/> '+
+                    '<span class="item-span"><span class="orangered">★ </span>英文名：</span> <input class="validate common-input inspectE" data-options="required:true,validType:\'itemEnglish\'" type="text"/><i class="icon-remove items-remove"></i>'+
+                    '</p>';
+            $('#items-add-div').append(addItemsHtml);
+        });
+        $('#data-extract-add-div').on('click','.items-remove',function(){
+            $(this).parent().remove();
+        });
+        $('#save-data-extract').on('click', function(){
+            saveDataExtract();
+        });
+        $('#data-extract-add-cancel').on('click',function(){
+            dataExtractCloseWin('data-extract-add-div');
+        });
+
+        $('#update-data-extract').on('click',function(){
+            updateDataExtract();
+        });
+        $('#data-extract-edit-cancel').on('click',function(){
+            dataExtractCloseWin('data-extract-edit-div');
+        });
+        $('#query-jk').on('change',function(){
+            queryForJKDict($('#querysj'),$('#query-jk').val());
+        });
+
+        //新增页面注册change查询事件
+        $('#data-extract-add-div').on('change', '#add-ty', function(){
+            if($(this).val()=='0') {
+                $('#data-extract-add-div .xmdw-div').removeClass('hideplus');
+                $('#data-extract-add-div .xmdw-div input').addClass('validate');
+            }else{
+                $('#data-extract-add-div .xmdw-div').addClass('hideplus');
+                $('#data-extract-add-div .xmdw-div input').removeClass('validate').removeClass('validatebox-invalid').val('');
+            }
+            queryForAdd();
+        }).on('ex-change', '#add-xmdwdm', function(){
+            queryForAdd();
+        }).on('change', '#data-extract-add-sj', function(){
+            queryForAdd();
+        }).on('change', '#data-extract-add-jk', function(){
+            $get(queryForJKDictAction,{jklb:$('#data-extract-add-jk').val()},function(res){
+                if($('#data-extract-add-jk').val().isEmpty()){
+                    $('#addsj').dict(null);
+                }else {
+                    $('#addsj').dict(res.data.unitInfo);
+                }
+                $('#data-extract-add-sj').addClass('validate');
+                queryForAdd();
+            },false,false);
+        }).on('blur', '.inspectE', function(){
+            judgeReportInsepectE($(this), 'add');//判断输入的英文名是否重复
+        });
+
+        //修改页面注册change事件
+        $('#data-extract-edit-div').on('change', '#edit-ty', function(){
+            if($(this).val() == '0'){//否
+                $('#data-extract-edit-div .xmdw-div').removeClass('hideplus');
+                $('#data-extract-edit-div .xmdw-div input').addClass('validate');
+            }else{
+                $('#data-extract-edit-div .xmdw-div').addClass('hideplus');
+                $('#data-extract-edit-div .xmdw-div input').removeClass('validate').removeClass('validatebox-invalid').val('');
+            }
+        }).on('change', '#edit-jk', function(){
+            queryForJKDict(editsjObj, $('#edit-jk').val());
+        }).on('click', '.items-remove', function(){
+            editDeleteIds.push(this.getAttribute('param'));
+            editDeleteDms.push(this.getAttribute('paramDm'));
+            $(this).parent().remove();
+        }).on('blur', '.inspectE', function(){
+            judgeReportInsepectE($(this), 'edit');//判断输入的英文名是否重复
+        });
+
+        //复用页面注册事件
+        $('#data-extract-copy').on('click', '.cm-ok-btn', function(){
+            copyDataExtract(this.getAttribute('param'));
+        }).on('click', '.cm-cancel-btn', function(){
+            $('#data-extract-copy').$close();
+            $('#data-extract-copy .validate').removeClass('validatebox-invalid');
+        }).on('click', 'input[name="jyzd"]', function(){
+            if($(this).is(':checked')){
+                $('.copy-inspects-tips').fadeOut();
+            }
+        });
+    });
+</script>
+</html>

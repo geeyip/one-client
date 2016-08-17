@@ -1,0 +1,18 @@
+{
+    "version":"0.99",
+    "maxTabCount":9,
+    "tabLength":null,
+    "plugins":{
+        "autocomplete":"autocomplete/autocomplete.js",
+        "datepicker":"my97/datepicker.js",
+        "ztree":"ztree/ztree.js",
+        "echarts":"echarts/echarts317.js",
+        "echarts2":"echarts/echarts225.js",
+        "echarts3":"echarts/echarts3110.js",
+        "china":"echarts/china.js",
+       "jqgrid":"jqgrid/jquery.jqGrid.min.js",
+        "dict":"dict/dict.js",
+        "socket":"socket/socket.io.js",
+        "ckeditor":"ckeditor/ckeditor.js"
+    }
+}

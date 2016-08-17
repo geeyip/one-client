@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>evan's simple-template </title>
+    <link rel="stylesheet" href="../dist/css/base.css"/>
+    <link rel="stylesheet" href="../dist/css/feed-back.css"/>
+</head>
+<body class="pd10">
+
+
+<h2>用户反馈管理</h2>
+<!--<input type="text" id="addr" value="./ptcg-sys-use.html"/>-->
+<button class="button" onclick="window.newwin=$open('./reports-sys-use.html',{width:860,height:500});setTimeout(function(){window.newwin.$close()},3000)">新窗口 内部模态</button>&
+<button class="button" onclick="window.newwin2=top.$open('./view/reports-sys-use.html',{width:860,height:500});setTimeout(function(){window.newwin2.$close()},3000)">新窗口 外部模态</button>&
+<button class="button" onclick="window.newtab=$open('./view/reports-sys-use.html','统计报告');setTimeout(function(){window.$select()},500)">新窗口 独立页签</button>
+<br><br>
+<button class="button" onclick="window.newwin.$close()">关闭 内部模态</button>&
+<button class="button" onclick="window.newwin2.$close()">关闭 外部模态</button>&
+<button class="button" onclick="window.newtab.$close()">关闭 由此打开的页签</button>
+<hr>
+<pre>$open('http://baidu.com',{width:900,height:500})</pre>
+<button id="btn-open"  class="easyui-linkbutton" data-options="iconCls:'icon-add'">用模态窗打开页面</button>
+<hr>
+<pre>top.$open('http://baidu.com',{width:1120,height:640})</pre>
+<button id="btn-open2" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">在顶层用模态窗打开页面</button>
+<hr>
+<pre>$append('http://126.com','邮箱')</pre>
+<button id="btn-open3" class="easyui-linkbutton" data-options="iconCls:'icon-tip'">打开一个新页签窗口</button>
+<hr>
+<pre>$open('#myform',{width:640,height:320})</pre>
+<button id="btn-open4" class="easyui-linkbutton" data-options="iconCls:'icon-pencil'">打开内部form弹窗</button>
+<hr>
+<pre>
+    内部事件关闭1
+    先在顶层打开新窗口: top.$open('./reports-sys-use.html',{width:960,height:640})
+    然后在reports-sys-use.html页面中关闭自身窗口: $close()
+</pre>
+<button id="btn-open5" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">打开窗口</button>
+<hr>
+<pre>
+    内部事件关闭2
+    先在选项卡打开新窗口: $append('./reports-sys-use.html','取个名字')
+    然后在reports-sys-use.html页面中关闭自身选项卡: $close(true)
+</pre>
+<button id="btn-open6" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">打开窗口</button>
+<hr>
+<pre>
+    内部事件关闭3:将隐藏div以模态窗形式显示:
+    先打开,由于是内部直接保存句柄 var mywin=$open('#myform',{width:640,height:320})
+    然后关闭时,直接调用 mywin.window('close');
+    (这个不创建新的window对象,是以内部层模拟的,非常适合一些中小内容的交互)
+
+</pre>
+<button id="btn-open7" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">打开窗口</button>
+<br><br>
+<a href="javascript:;" class="ui-btn" onclick="localParams.set('indexAnimation','')">关闭开场动画</a>
+
+
+<a href="javascript:;" class="ui-btn" onclick="localParams.set('indexAnimation','1')">开启开场动画</a>
+<!--<button id="btn-open5">顶层打开form弹窗</button>-->
+<hr>
+<h3>本地数据存储</h3>
+<pre>
+    可以如下设置
+    localData.set('myday',new Date())
+    localData.set('updated',false)
+    localData.set('loginCount',8)
+    localData.set('friends',[{name:'李小璐',age:27},{name:'马化腾',age:48},{name:'奥朗德',age:59,lover:['allin','sara','lisa']}])
+    localData.set('memory','这是一条备忘录')
+
+    关机再打开,可以如下获取
+    localData.get('myday')
+    localData.get('updated')
+    localData.get('loginCount')
+    localData.get('memory')
+    localData.get('friends')
+</pre>
+
+<h3>本地参数管理</h3>
+<pre>
+    localParams也是一样,区别有二,参数值只存为字符串,参数带命名空间,不带为全局,互不干扰
+    可以如下设置
+
+    localParams.feedBack.set('title','用户反馈')
+    localParams.sys.set('title','系统管理')
+    localParams.set('title','毛大帅的实施管理平台')
+
+    关机再打开,可以如下获取
+    localParams.sys.get('title')
+    localParams.feedBack.get('title')
+    localParams.get('title')
+</pre>
+<form action="" id="myform" class="hidden" target="upframe" action="./fst-page.html">
+    <input type="file" name="up-avatar" id="up-avatar">
+    姓名:<input type="text"/><br>
+    年龄:<input type="text"/><br>
+    电话:<input type="text"/><br>
+    地址:<input type="text"/><br>
+    工作:<input type="text"/><br>
+    性别:<input type="text"/><br>
+    <input type="submit" value="提交"/><br>
+</form>
+
+<iframe src="" frameborder="0" id="uploadframe" name="uploadframe" class="hidePlus"></iframe>
+<table >
+    <thead>  <th></th> <th></th> <th></th> </thead>
+    <tbody  class="search-result">
+    <tr tpsource="#search-result-tp">
+    </tbody>
+</table>
+
+<div class="mask"></div>
+<script type="text/template" id="search-result-tp">
+
+</script>
+
+</body>
+<script src="../dist/js/base.js"></script>
+<!--<script src="../dist/js/feed-back.js"></script>-->
+<style>
+    #myform{
+        padding: 10px;
+        height:320px;
+        text-align: center;
+    }
+    #myform input{
+        width:180px;
+        height:22px;
+        margin: 5px;
+    }
+    .mask{
+        width:100vw;
+        height:100vh;
+    }
+    pre{
+        font-size: 14px;
+        font-style: italic;
+    }
+</style>
+<script>
+    log(this.iframe.parentNode.id)
+    var xxx=1
+    $('#test').linkbutton({
+        iconCls:'icon-remove'
+    })
+    $('#btn-open4').click(function(){
+        $open('#myform',{width:640,height:320,top:24});
+        //$('#myform').window({width:640,height:320})
+    });
+//    $('#btn-open5').click(function(){
+//        var win=$open('#myform',{width:640,height:320,top:-100});
+//        $('.mask').show();
+//        win.find('a.panel-tool-close').click(function(){$('.mask').hide();})
+//    });
+    $('#btn-open').click(function(){
+        $open('http://baidu.com',{width:900,height:500});
+    });
+    $('#btn-open2').click(function(){
+        top.$open('http://baidu.com',{width:1120,height:640});
+    });
+    var index=0;
+    var urls=['http://baidu.com','http://126.com','http://taobao.com','http://120.24.167.44/bbs/forum.php','http://bing.com'];
+    var names=['百度','邮箱','淘宝','论坛','bing']
+    $('#btn-open3').click(function(){
+        index++;
+        $append(urls[index%5],index+names[index%5]);//byid('addr').value||
+    })
+
+</script>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="-1"/>
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta name="author" content="Xiong Ying" />
+    <meta name="date" content="2016-07-05 10:41:44" />
+    <title>应用服务监控</title>
+    <link rel="stylesheet" href="../css/base.css?version=0.99">
+    <link rel="stylesheet" href="../css/prj-watch.css?version=0.99">
+</head>
+<body>
+    <div id="query-result">
+        <div class="new-color-bar">
+            <span class="title">应用服务器监控信息（共找到<span class="total-count"></span>条数据）</span>
+            <!--<div class="letter-nav">-->
+                <!--<span>按照项目单位首字母查找：</span>-->
+                <!--<span id="first-letters"><a class="first-letter" href="#letter{valueOf}">{valueOf}</a></span>-->
+            <!--</div>-->
+            <div class="bar-btn-div">
+                <b id="get-monitor-btn" class="cm-save-btn"><i class="icon-refresh"></i></b>
+            </div>
+        </div>
+        <div id="app-service-table" tpsource="#app-service-list"></div>
+    </div>
+</body>
+<script type="text/template" id="app-service-list">
+    <!--<a href="" name="letter{firstPy}"></a>-->
+    <div class="monitor-msg-div">
+        <img src="../img/{picName}">
+        <div class="monitor-msg">
+            <h2>{xmdwmc}</h2>
+            <p>应用服务器IP地址：<a href="javascript:void(0);" class="remote-desktop" yczmzhmm="{yczmzhmm}">{yyfwqip}</a></p>
+            <p>实施负责人：{sswhry}</p>
+            <a href="###" class="icon-time fs16 linkblue mr15" title="历史异常处理" xmdwdm="{xmdwdm}"></a>
+            <a href="###" class="icon-info-sign fs16 linkblue hideplus{showFeedBack}" title="异常处理反馈" xmdwdm="{xmdwdm}" xmId = {xmId}></a>
+        </div>
+    </div>
+</script>
+<script src="../js/base.js?version=0.99"></script>
+<script src="../js/prj-watch.js?version=0.99"></script>
+<script>
+    (function(fn){
+        fn && typeof window[fn]=='function' && window[fn]();
+    })('@@pageFn');
+    importing('dict','datepicker',function () {
+        var appServiceListAction = top.path + '/api/0/xmjk/server/list',
+                latestMonitorAction = top.path + '/api/0/xmjk/server/monitor',
+                monitorStateAction = top.path + '/api/0/xmjk/server/monitor_state',
+                alreadyClicked = false;
+
+        var closeWin = function(winId,resetForm) {
+            if(winId){
+                $(winId).$close();
+            }
+            if(resetForm) {
+                $(resetForm)[0].reset();
+            }
+            $('.validate').removeClass('validatebox-invalid');
+        }
+
+        function init() {
+            $get(monitorStateAction,{},function (res) {
+                if(res.data === '1'){
+                    alreadyClicked  = true;
+                    $('#get-monitor-btn').addClass('disabled-btn');
+                }
+            });
+//            var alreadyClicked = localParams.prjWatch.get('alreadyClicked');
+//            alreadyClicked = alreadyClicked ? alreadyClicked : false;
+//            if(alreadyClicked){
+//                $('#get-monitor-btn').addClass('disabled-btn');
+//            }
+//            $('#monitor-wrap').template([].push(alreadyClicked));
+            //获取应用服务器监控信息
+            $get(appServiceListAction,{},function (res) {
+                var listData = res.data;
+                //生成去重后的首字母数组
+//                var firstLetterArr = listData.select('o=>o.firstPy').distinct();
+                //加载首字母数据
+//                $('#first-letters').template(firstLetterArr);
+                $('#app-service-table').template(listData,function (item) {
+                    var appResult = item.appResult;
+                    if(appResult === '0'){//异常
+                        item.picName = 'server_notok.png';
+                        item.showFeedBack = 1;
+                    }else if(appResult === '1'){//正常
+                        item.picName = 'server_ok.png';
+                        item.showFeedBack = 0;
+                    }else if(appResult === '2'){//未监控
+                        item.picName = 'server_unkown.png';
+                        item.showFeedBack = 0;
+                    }
+                });
+                $('#query-result').find('.total-count').html(res.totalCount);
+            });
+        }
+
+        $('#app-service-table').on('click','.icon-time',function () {//打开历史异常处理弹窗
+            var xmdwdm = $(this).attr('xmdwdm');
+            var historyWin = $open('prj-watch-yyfwjk-history.html',{width:780,title:'历史异常处理'},true,function () {
+                intoHandleHistory(xmdwdm,historyWin);
+            });
+        }).on('click','.icon-info-sign',function () {//打开异常处理反馈弹窗
+            var xmdwdm = $(this).attr('xmdwdm'),
+                    xmId = $(this).attr('xmId');
+            var handleWin = $open('prj-watch-yyfwjk-add.html',{width:820,title:'异常处理反馈'},true,function () {
+                addHandleFeedBack(xmdwdm,xmId,handleWin);
+            });
+        }).on('click','.remote-desktop',function () {//打开远程桌面
+            var that = $(this),
+                    yczmzhmmArr = that.attr('yczmzhmm').split(/\/|<br>|<br\/>/),
+                    yyfwqip = that.html();
+            if(yczmzhmmArr.length<2){
+                yczmzhmmArr[1] = '';
+            }
+            if(!top.openRemoteDesktop){return false;}
+            top.openRemoteDesktop(yyfwqip,yczmzhmmArr[0],yczmzhmmArr[1]);
+        });
+
+        //获取最新监控结果
+        $('#get-monitor-btn').on('click',function () {
+//            var alreadyClicked = localParams.prjWatch.get('alreadyClicked');
+//            info('click before:'+alreadyClicked);
+//            alreadyClicked = alreadyClicked ? alreadyClicked : false;
+//            info('click after:'+alreadyClicked);
+            if(alreadyClicked){
+                return false;
+            }
+//            localParams.prjWatch.set('alreadyClicked',true);
+            alreadyClicked = true;
+            $('#get-monitor-btn').addClass('disabled-btn');
+            $get(latestMonitorAction,{},function (res) {
+                var msg = res.msg ? res.msg : '更新成功！';
+                toast(msg,600).ok();
+                $('#get-monitor-btn').removeClass('disabled-btn');
+                alreadyClicked = false;
+//                localParams.prjWatch.set('alreadyClicked',false);
+            },false,false);
+        });
+        //首字母定位
+//        $('#first-letters').on('click','.first-letter',function () {
+//            var aName = $(this).attr('href').slice(1);
+//            $('.monitor-msg-div').removeClass('anchor-to');
+//            $('a[name="'+aName+'"]+div').addClass('anchor-to');
+//        });
+
+        init();
+        $('.query-date').datepicker();
+    });
+</script>
+</html>

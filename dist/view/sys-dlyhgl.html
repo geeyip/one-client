@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="-1"/>
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta name="author" content="zhang meng jia" />
+    <meta name="date" content="2016-06-12 14:15:08" />
+    <title>登录用户管理</title>
+    <link rel="stylesheet" href="../css/base.css?version=0.99">
+    <link rel="stylesheet" href="../css/sys.css?version=0.99">
+</head>
+<body>
+
+
+<div id="user-query-condition" class="query-condition">
+    <div class="query-condition-p">
+        <span class="common-field w65">用户姓名：</span><input id="trueName" type="text" class="common-input"/>
+        <span class="common-field w100">用户账号：</span><input id="userName" type="text" class="common-input"/>
+        <span class="common-field w100">角色：</span><dict id="dict-query-role" dict-id="query-role" dict-name="queryRole" dict-type="select" dict-root="custom" return-value="true"></dict>
+        <p class="query-reset">
+            <b id="user-query-btn" class="cm-query-btn"></b>
+            <b id="user-reset-btn" class="cm-reset-btn"></b>
+        </p>
+    </div>
+</div>
+<div id="user-query-result">
+    <div class="new-color-bar">
+        <span class="title">用户信息列表（共找到<span class="total-count"></span>条数据）</span>
+        <div class="bar-btn-div">
+            <b id="user-add" class="cm-add-btn"></b>
+        </div>
+    </div>
+    <table id="user-table" class="typical-tb" cellpadding="3">
+        <thead>
+        <th width="5%">序号</th>
+        <th width="10%" sort-name="truename">用户姓名</th>
+        <th width="10%" sort-name="username">用户账号</th>
+        <th width="10%">状态</th>
+        <th width="55%">所属角色</th>
+        <th width="10%">操作</th>
+        </thead>
+        <tbody tpsource="#user-list"></tbody>
+    </table>
+    <div class="paging"></div>
+</div>
+<div id="user-add-div" class="hide">
+    <form id="user-add-form">
+        <p class="mt10">
+            <span class="common-field"><span class="orangered">★ </span>用户账号：</span>
+            <input name="userName" class="user-add-valid common-input" type="text" data-options="required:true,validType:'username'" placeholder="0~50个字符，包含字母、数字和下划线"/>
+            <span class="common-field"><span class="orangered">★ </span>用户姓名：</span>
+            <input name="trueName" class="user-add-valid common-input" type="text" data-options="required:true,validType:'length[0,50]'" placeholder="小于等于50个字"/>
+        </p>
+        <p class="mt10">
+            <span class="common-field"><span class="orangered">★ </span>密码：</span>
+            <input name="password" class="user-add-valid common-input" type="password" data-options="required:true,validType:'length[3,20]'" placeholder="3~20个字符"/>
+            <span class="common-field">状态：</span>
+            <dict dict-id="add-openFlag" dict-name="openFlag" dict-type="select" dict-root="QYZTDM" class="dict" empty="false"></dict>
+        </p>
+        <p class="mt10">
+            <span class="common-field">联系方式：</span>
+            <input name="userTel" class="user-add-valid common-input" type="text" data-options="validType:'mobile'" placeholder="请输入联系电话"/>
+            <!--<span class="common-field">所属地：</span>-->
+            <!--<dict dict-id="add-userUnit" dict-name="userUnit" dict-type="select" dict-root="GXSDM" class="dict" empty="false"></dict>-->
+        </p>
+        <p class="mt10">
+            <span class="common-field fl">备注：</span><textarea name="remark" rows="5"></textarea>
+        </p>
+    </form>
+    <p class="tcenter mt10">
+        <b id="save-user" class="cm-save-btn mr15"></b>
+        <b id="user-add-cancel" class="cm-cancel-btn"></b>
+    </p>
+</div>
+<div id="user-view-div" class="hide">
+    <div id="user-view-value">
+        <p class="mt10">
+            <span class="common-field">用户账号：</span>
+            <input name="userName" type="text" class="common-input" unselectable="on" readonly="true" value="{userName}"/>
+            <span class="common-field">用户姓名：</span>
+            <input name="trueName" type="text" class="common-input" unselectable="on" readonly="true" value="{trueName}"/>
+        </p>
+        <p class="mt10">
+            <span class="common-field">状态：</span>
+            <input name="openFlag" type="text" class="common-input" unselectable="on" readonly="true" value="{openFlag}"/>
+            <span class="common-field">联系方式：</span>
+            <input name="userTel" type="text" class="common-input" unselectable="on" readonly="true" value="{userTel}"/>
+        </p>
+        <p class="mt10">
+            <span class="common-field fl">备注：</span><textarea unselectable="on" readonly="true" rows="5">{remark}</textarea>
+        </p>
+    </div>
+    <p class="tcenter mt20">
+        <b id="user-view-cancel" class="cm-close-btn"></b>
+    </p>
+</div>
+<div id="user-edit-div" class="hide">
+    <form id="user-edit-form">
+        <input name="userId" value="{id}" type="hidden"/>
+        <input id="sysUserRoleIds" name="sysUserRoleIds" type="hidden" />
+        <p class="mt10">
+            <span class="common-field">用户账号：</span>
+            <input name="userName" type="text" class="common-input" unselectable="on" readonly="true" value="{userName}"/>
+            <span class="common-field"><span class="orangered">★ </span>用户姓名：</span>
+            <input name="trueName" type="text" class="user-edit-valid common-input" data-options="required:true,validType:'length[0,50]'" value="{trueName}" placeholder="小于等于50个字"/>
+        </p>
+        <p class="mt10">
+            <span class="common-field">密码：</span>
+            <input name="newPassword"  type="password" class="user-edit-valid common-input" data-options="validType:'length[3,20]'" placeholder="不输入新密码，原始密码不变"/>
+            <span class="common-field">状态：</span>
+            <dict dict-id="edit-openflag" dict-name="openFlag" dict-type="select" dict-root="QYZTDM" class="dict" empty="false"></dict>
+        </p>
+        <p class="mt10">
+            <span class="common-field">联系方式：</span>
+            <input name="userTel" type="text" class="user-edit-valid common-input" data-options="validType:'mobile'" placeholder="请输入联系电话" value="{userTel}"/>
+        </p>
+        <p class="mt10">
+            <span class="common-field fl">备注：</span><textarea name="remark">{remark}</textarea>
+        </p>
+    </form>
+    <div id="role-result">
+        <div class="stick-title-bar mb0">
+            <span class="title">角色信息列表</span>
+        </div>
+        <!--<div class="win-color-bar mt15">
+            <span class="title">角色信息列表</span>
+        </div>-->
+        <div id="role-div-table">
+            <table id="role-table" class="typical-tb" cellpadding="3">
+                <thead>
+                <th width="10%" sort-name="rownum">序号</th>
+                <th width="27%">角色名</th>
+                <th width="55%">角色描述</th>
+                <!--<th width="50px">状态</th>-->
+                <th width="8%">选择</th>
+                </thead>
+                <tbody tpsource="#role-list"></tbody>
+            </table>
+        </div>
+        <!--<div class="paging"></div>-->
+    </div>
+    <p class="tcenter mt15 mb10">
+        <b id="update-user" class="cm-save-btn mr15"></b>
+        <b id="user-edit-cancel" class="cm-cancel-btn"></b>
+    </p>
+</div>
+<script type="text/template" id="user-list">
+    <tr>
+        <td>{rownum}</td>
+        <td>{trueName}</td>
+        <td>
+            <a class="into-user-view" param="{id}">{userName}</a>
+        </td>
+        <td>{openFlagTxt}</td>
+        <td>{roleNameString}</td>
+        <td>
+            <a class="into-user-edit icon-edit-btn" param="{id}" title="修改"></a>
+            <a class="delete-for-user icon-remove-btn" param="{id}" paramName="{userName}" title="删除"></a><br>
+        </td>
+    </tr>
+</script>
+<script type="text/template" id="role-list">
+    <tr>
+        <td>{rownum}</td>
+        <td>{roleName}</td>
+        <td class="tleft">{description}</td>
+        <!--<td>{openFlag}</td>-->
+        <td>
+            <input id="{id}" name="roleId" type="checkbox" {_checked} value="{id}" class="check-role" rownum="{rownum}"/>
+        </td>
+    </tr>
+</script>
+
+
+</body>
+<script src="../js/base.js?version=0.99"></script>
+<script src="../js/sys.js?version=0.99"></script>
+<script>typeof sysUserMngFn=='function' && sysUserMngFn();</script>
+</html>

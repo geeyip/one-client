@@ -1,0 +1,164 @@
+    /* @group treemenu控件样式 */
+    .toggle-tag{
+        position: fixed;
+        top: 40%;
+        left: -3px;
+        width: 13px;
+        height: 110px;
+        line-height: 110px;
+        font-size: 13px;
+        background-color: #A2A2A2;
+        color: #fff;
+        cursor: pointer;
+        border-radius: 0 5px 5px 0;
+        -webkit-user-select: none;
+        /*animation:fadeInUp 0.5s 1.5s 3;*/
+        animation:fadeInUp 0.5s 0s 3;
+        z-index:9;
+    }
+    .tree-menu-accordion a {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .tree-menu-accordion li.grade-1>a{
+        line-height: 32px;
+        padding-left:20px;
+        border-bottom: 1px solid lightgray;
+        background: linear-gradient(to bottom,#F8F8F8 0,#eeeeee 100%);
+    }
+    .tree-menu-accordion li.grade-1{
+        position:relative;
+        /*transition: 0.5s 0s ease;*/
+    }
+    .tree-menu-accordion li.grade-1.selected{
+        border-bottom: 1px solid lightgray;
+    }
+    .tree-menu-accordion li.grade-1.selected>a{
+        border-bottom: none;
+        background:-webkit-linear-gradient(left , #666,#666 60%, #bbb 85%,#fff);
+        color:gold;
+    }
+    .tree-menu-accordion li.grade-1>b{
+        position: absolute;
+        right:8px;
+        top:8px;
+        width:18px;
+        height:18px;
+        box-sizing: border-box;
+        border:1px solid transparent;
+        cursor:pointer;
+        opacity: 0.5;
+        background: url('../img/eui-gray/accordion_arrows.png') no-repeat -16px 0;
+    }
+    .tree-menu-accordion li.grade-1.expanded>b{
+        background: url('../img/eui-gray/accordion_arrows.png') no-repeat 0 0;
+    }
+    .tree-menu-accordion li.grade-1>b:hover{
+        opacity: 1;
+        border:1px solid #bbb;
+        border-radius:3px;
+    }
+    .tree-menu-accordion li.grade-2>a{
+        color:#555;
+        line-height: 26px;
+        padding-left:35px;
+        border-bottom: 1px solid #ddd;
+    }
+    .tree-menu-accordion li.grade-2.selected>a{
+        color:orange;
+    }
+    /*li.grade-1:last-child>a,*/
+    .tree-menu-accordion li.grade-2:last-child>a{
+        border-bottom: none;
+    }
+    .tree-menu-accordion .grade-1 ul {
+        display: none;
+        overflow: hidden;
+    }
+    .tree-menu-accordion .grade-1 ul.hide{
+        display: none!important;
+    }
+    /* @end */
+
+
+    /* @group easyui overwrite & extend diy plugin*/
+    .e-win-wrap iframe{
+        height:99.5%;
+        width:99.5%;
+        margin:0 auto;
+        border:none;
+    }
+
+    .messager-window .panel-tool{
+        display:none;
+    }
+    .toast{
+        display:none;
+        position:fixed;
+        top:50%;
+        left:50%;
+        width:240px;
+        line-height:1.5;
+        margin:-40px 0 0 -118px;
+        padding:30px 5px;
+        /*border:1px solid #cecede;*/
+        text-align:left;
+        background-color:#555;
+        color:#fff;
+        font-size:14px;
+        word-spacing: 2px;
+        letter-spacing: 1px;
+        word-break: break-all;
+        white-space: pre-wrap;
+        z-index: 99999999;
+        border-radius:5px;
+        background-color:rgba(17,17,17,0.6);
+        /*filter: alpha(opacity = 90);*/
+        /*filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#c5ddf1,endColorstr=#f5f5ff,GradientType=0);*/
+        /*background:#c5ddf1;*/
+        /*color:#225;*/
+        /*box-shadow: 3px 9px 6px #999;*/
+    }
+
+    /*QQ蓝风格*/
+    .toast.qqblue{
+        background: #f1f1f1;
+        border-color: #1280CF #888 #888 #999;
+        border-width: 3px 1px 1px 1px;
+        border-color: steelblue;
+        border-width: 9px 2px 2px 2px;
+        border-style: solid;
+        box-shadow: 4px 8px 4px #aaa;
+        box-shadow: 0 0 32px #666;
+        color: #333;
+        border-radius: 3px;
+    }
+    .toast p{
+        padding-left:12px;
+        padding-right:12px;
+    }
+    .toast.ok p::before{
+        content: "✔ ";
+        font-family: 宋体;
+        font-size: 16px;
+        color:lightgreen;
+    }
+    .toast.err p::before{
+        content: "ㄨ ";
+        font-size: 16px;
+        color:red;
+    }
+    .the-mask{
+        display:none;
+        position:fixed;
+        width:100%;
+        height:100%;
+        top:0;
+        left:0;
+        background:#555;
+        z-index:998;
+        opacity:0.3;
+        filter:alpha(opacity=30)
+    }
+    /* @end */

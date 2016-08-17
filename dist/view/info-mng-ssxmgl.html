@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>实施项目管理</title>
+    <link rel="stylesheet" href="../../dist/css/base.css">
+    <link rel="stylesheet" href="../../dist/css/info-mng.css"/>
+</head>
+<body>
+    <div class="query-condition mt10">
+        <form id="project-query-form">
+            <div class="query-condition-p">
+                <span class="common-field w65">项目单位：</span><div dict-type="tree" id="project-unit" dict-name="xmdwdm"></div>
+                <span class="common-field w75">项目级别：</span><div dict-type="select" dict-root="xmjbdm" id="level" dict-name="xmjb" class="dict mr15"></div>
+                <span class="common-field w65">开展日期：</span><input type="text" name="xmkzsjBegin" class="query-date"/>~<input type="text" name="xmkzsjEnd" class="query-date"/>
+                <p class="query-reset">
+                    <b id="project-query-btn" class="cm-query-btn ml15"></b>
+                    <b class="cm-reset-btn" id="project-reset-btn"></b>
+                </p>
+            </div>
+            <div class="query-condition-p">
+                <span class="common-field w65">项目经理：</span><div dict-type="select" id="project-manager" dict-name="xmjl"></div>
+                <span class="common-field w75">实施负责人：</span><div dict-type="select" id="director" dict-name="sswhry" class="mr15"></div>
+                <span class="common-field w65">系统版本：</span><div dict-type="select" id="version" dict-name="xtbbh"></div>
+            </div>
+        </form>
+    </div>
+    <div id="query-result">
+        <div class="new-color-bar">
+            <span class="title">项目信息列表（共找到<span class="total-count"></span>条数据）</span>
+            <div class="bar-btn-div">
+                <b class="cm-send-btn hideplus" id="push-btn"></b>
+                <b class="cm-add-btn hideplus" id="add-btn"></b>
+            </div>
+        </div>
+        <table id="implement-addr-table" class="typical-tb">
+            <thead tpsource="#implement-addr-thead-tp">
+            </thead>
+            <tbody tpsource="#implement-addr-list"></tbody>
+        </table>
+        <div id="projectList" class="paging"></div>
+    </div>
+    <!--新增、修改、查看弹窗-->
+    <div id="add-project-block">
+        <form id="add-form">
+            <div class="win-color-bar">
+                <span class="title">项目基本信息</span>
+            </div>
+            <input type="hidden" name="xmId" id="xmId">
+            <table id="project-basic-tb" class="typical-tb td-rl">
+                <tr>
+                    <td>
+                        <span class="orangered hidden">★ </span>项目单位：</td><td><div dict-type="tree" dict-name="xmdwdm" dict-id="xmdwdm-h" id="xmdwdm" class="project-dict"></div>
+                        <input type="hidden" id="xmdwmc-h" name="xmdwmc" value="{xmdwmc}">
+                    </td>
+                    <td><span class="orangered hidden">★ </span>开展日期：</td><td><input type="text" id="xmkzsj" name="xmkzsj" class="common-input validate" data-options="required:true" value="{xmkzsj}"></td>
+                </tr>
+                <tr>
+                    <td>项目级别：</td><td><div dict-type="select" dict-root="xmjbdm" dict-name="xmjb" id="xmjb" class="project-dict" empty="false"></div></td>
+                    <td>项目名称：</td><td><input type="text" class="common-input validate" value="{xtmc}" name="xtmc" data-options="validType:'extLength[1,80]'" ></td>
+                </tr>
+                <tr>
+                    <td>用户负责人：</td><td><input type="text" name="yhfzr" class="common-input validate" value="{yhfzr}" data-options="validType:'extLength[1,20]'"></td>
+                    <td>负责人职位：</td><td><input type="text" name="fzrzw" class="common-input validate" value="{fzrzw}" data-options="validType:'extLength[1,20]'"></td>
+                </tr>
+                <tr>
+                    <td>负责人联系方式：</td><td><input type="text" name="yhfzrlxfs" class="common-input validate" value="{yhfzrlxfs}" data-options="validType:'contact'"></td>
+                    <td><span class="orangered hidden">★ </span>是否开放发布式查询：</td><td><div dict-type="select" dict-name="ifFbs" id="ifFbs" dict-root="SFDM" class="project-dict validate" data-options="required:true"></div></td>
+                </tr>
+                <tr>
+                    <td><span class="orangered hidden">★ </span>是否加入考核：</td><td><div dict-type="select" dict-name="ifJrkh" id="ifJrkh" dict-root="SFDM" class="project-dict validate"  data-options="required:true"></div></td>
+                    <td>监控端口号：</td><td><input type="text" id="jmx-port" name="jmxPort" class="common-input validate" value="{jmxPort}" data-options="validType:'port'"></td>
+                </tr>
+                <tr>
+                    <td><span class="orangered hidden">★ </span>应用服务器IP：</td><td><input type="text" class="common-input validate" name="yyfwqip" data-options="required:true,validType:'ip'" value="{yyfwqip}"></td>
+                    <td><span class="orangered hidden">★ </span>端口号：</td><td><input type="text" name="yyfwqdkh" class="common-input validate" value="{yyfwqdkh}" data-options="required:true,validType:'port'"></td>
+                </tr>
+                <tr>
+                    <td><span class="orangered hidden">★ </span>平台账号/密码：</td><td><input type="text" class="common-input validate" name="ptzhmm" data-options="required:true,validType:'noChinese'" value="{ptzhmm}"></td>
+                    <td><span class="orangered hidden">★ </span>远程桌面账号/密码：</td><td><input type="text" class="common-input validate" name="yczmzhmm" data-options="required:true,validType:'noChinese'" value="{yczmzhmm}"></td>
+                </tr>
+                <tr>
+                    <td><span class="orangered hidden">★ </span>数据库服务器信息：</td>
+                    <td colspan="3">
+                        <textarea class="common-textarea validate" name="sjkfwqxx" data-options="required:true,validType:'extLength[1,200]'" >{sjkfwqxx}</textarea><br/>
+                        <p class="eg">示例：192.168.1.168:1521:orcl/yppt/yppt (数据库地址/用户名/密码/备注)</p>
+                    </td>
+                </tr>
+            </table>
+            <div class="win-color-bar mt15">
+                <span class="title">项目成员信息</span>
+            </div>
+            <table id="project-member-tb" class="typical-tb td-rl">
+                <tr>
+                    <td>项目经理：</td>
+                    <td>
+                        <span class="common-field">姓名：</span><div dict-type="select" dict-name="xmjl" id="manager-name" dict-id="manager-name-select"></div>
+                        <span class="common-field">联系方式：</span><input type="text" class="common-input validate" name="xmjllxfs" value="{xmjllxfs}" data-options="validType:'contact'">
+                    </td>
+                </tr>
+                <tr>
+                    <td>实施人员：</td>
+                    <td>
+                        <span class="common-field">姓名：</span><div dict-type="select" dict-name="sswhry" id="implementer-name" dict-id="implementer-name-select" ></div>
+                        <span class="common-field">联系方式：</span><input type="text" class="common-input validate" name="ssrylxfs" value="{ssrylxfs}" data-options="validType:'contact'">
+                    </td>
+                </tr>
+                <tr>
+                    <td>驻地维护：</td>
+                    <td id="zdwh-td">
+                    </td>
+                </tr>
+            </table>
+            <div class="win-color-bar mt15">
+                <span class="title">项目数据来源信息</span>
+            </div>
+            <table id="project-data-tb" class="typical-tb">
+                <thead>
+                    <tr>
+                        <td width="100px"><span class="orangered hidden">★ </span>原始数据类别</td>
+                        <td width="210px"><span class="orangered hidden">★ </span>所属公司名称</td>
+                        <td><span class="orangered hidden">★ </span>数据库信息</td>
+                        <td><i id="add-sjly" class="icon-plus-btn"></i></td>
+                    </tr>
+                </thead>
+                <tbody id="sjly-tbody">
+                </tbody>
+            </table>
+            <div class="win-color-bar mt15">
+                <span class="title">系统对接信息</span>
+            </div>
+            <table id="sys-dj-tb" class="typical-tb">
+                <thead>
+                <tr>
+                    <td>主系统</td>
+                    <td>对接系统</td>
+                    <td>是否对接</td>
+                    <td>对接类型</td>
+                    <td>备注</td>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <!--win-btn-wrap win-btn-helper-->
+            <div class="form-btn-div mt20">
+                <p class="tcenter">
+                    <b id="add-project-save-btn" class="cm-save-btn mr15"></b>
+                    <b id="edit-project-save-btn" class="cm-save-btn mr15 hide"></b>
+                    <b id="add-project-close-btn" class="cm-cancel-btn"></b>
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <!--升级部署信息新增-->
+    <div id="add-deploy-block">
+        <form id="add-edit-deploy-form">
+            <input type="hidden" id="mainId" name="mainId">
+            <input type="hidden" id="ssxmId" name="ssxmId">
+            <div class="mb10">
+                <span class="common-field"><span class="orangered deploy-add">★ </span> 升级版本：</span>
+                <div dict-type="select" id="bsbbh" dict-name="bsbbh" class="deploy-add validate" data-options="required:true" return-value="true"></div>
+                <input id="bsbbh-input" type="text" class="common-input readonly-input" readonly/>
+                <span class="common-field"><span class="orangered">★ </span> 升级时间：</span>
+                <input type="text" id="bssjStr" name="bssjStr" class="common-input query-date validate" data-options="required:true">
+                <input type="hidden" id="bssj" name="bssj">
+            </div>
+            <div class="mb10">
+                <span class="common-field"><span class="orangered">★ </span> 升级负责人：</span>
+                <div dict-type="select" id="bsfzr" dict-name="bsfzr" class="validate" data-options="required:true"></div>
+            </div>
+            <span class="common-field vat">升级部署说明：</span>
+            <textarea id="bssm" name="bssm" class="bssm-text validate" data-options="validType:'extLength[0,4000]'"></textarea>
+            <div class="tcenter mt15 mb20">
+                <b id="deploy-add-save-btn" class="cm-save-btn mr15"></b>
+                <b id="deploy-edit-save-btn" class="cm-save-btn mr15 hide"></b>
+                <b id="deploy-close-btn" class="cm-cancel-btn"></b>
+            </div>
+        </form>
+        <div id="deploy-history-div" class="hide">
+            <div class="no-back-bar">
+                <span class="title">附：历史升级部署记录</span>
+            </div>
+            <div id="deploy-history-msg">
+                <table id="deploy-history-msg-tb" class="typical-tb" cellpadding="3">
+                    <thead>
+                        <tr>
+                            <td>序号</td>
+                            <td>版本</td>
+                            <td>升级时间</td>
+                            <td>升级负责人</td>
+                            <td>升级部署说明</td>
+                            <td>操作行</td>
+                        </tr>
+                    </thead>
+                    <tbody tpsource="#deploy-history"></tbody>
+                </table>
+                <div class="paging" id="deployList"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/template" id="implement-addr-thead-tp">
+    <tr>
+        <th>序号</th>
+        <th>项目单位</th>
+        <th>负责人员信息</th>
+        <th sort-name="xmkzsj">开展日期<br/>当前版本</th>
+        {{serverLimit && #<th>应用服务器信息</th>#}}
+        {{accountLimit && #<th>登录帐号<br/>密码</th>#}}
+        {{dbLimit && #<th>数据库服务器信息</th>#}}
+        {{connectLimit && #<th >系统对接情况</th>#}}
+        <th>操作</th>
+    </tr>
+</script>
+
+<script type="text/template" id="basicDatas">
+    <tr>
+        <td><div dict-type="select" dict-root="CQSJLBDM" dict-name="yssjlb" class="dict"></div></td>
+        <td><input type="text" name="ssgsmc" class="common-input" value="{ssgsmc}"></td>
+        <td><textarea type="text" name="sjkxx" class="common-textarea">{sjkxx}</textarea></td>
+        <td><i id="sjly-remove-{$index}" class="icon-remove-btn"></i></td>
+    </tr>
+</script>
+<script type="text/template" id="localPersons">
+    <div>
+        <span class="common-field">姓名：</span><div dict-type="select" dict-root="" dict-name="zdwh-name" id="zdwh-name-{$index}"></div>
+        <span class="common-field">联系方式：</span><input type="text" class="common-input mr15" value="{zdrylxfs}">
+        <i class="icon-remove-btn"></i>
+    </div>
+</script>
+<script type="text/template" id="implement-addr-list">
+    <tr class="{$nth2}">
+        <td>{rownum}</td>
+        <td>{xmdwdm}|{xmdwmc}({xmjb}级)</td>
+        <td class="members">
+            <table>
+                <tr>
+                    <td class="position">项目经理：</td>
+                    <td>{xmjlZw}</td>
+                </tr>
+                <tr>
+                    <td class="position">实施人员：</td>
+                    <td>{sswhryZw}</td>
+                </tr>
+                <tr>
+                    <td class="position">驻地运维：</td>
+                    <td>{{localPersons:#<b class="hide{$index}">,</b>{zdryxmZw}#}}</td>
+                </tr>
+            </table>
+        </td>
+        <td class="time-version-td">{xmkzsj}<br/>{xtbbh}</td>
+        <td class="server-td hideplus{this.serverLimit}">
+            <p>ip:{yyfwqip}</p>
+            <p>端口：{yyfwqdkh}</p>
+            <p>账号/密码：{ptzhmm}</p>
+            <p><a href="javascript:void(0);" class="icon-link linkblue mr15" title="访问平台" addr="http://{yyfwqip}:{yyfwqdkh}/xjpt"></a><a class="icon-desktop" title="访问远程桌面" yczmzhmm="{yczmzhmm}" yyfwqip="{yyfwqip}"></a></p>
+        </td>
+        <td class="account-pwd-td hideplus{this.accountLimit}">{yczmzhmm}</td>
+        <td class="db-info-td hideplus{this.dbLimit}">{sjkfwqxx}</td>
+        <td class="ssxmgl-w hideplus{this.connectLimit}">{{connectInfos:#connectInfos}}</td>
+        <td width="36px">
+            <a href="###" class="icon-show-btn search-project" title="查看" xmId="{xmId}"></a><br>
+            <a href="###" class="icon-edit-btn modify-project hideplus{this.editLimit}" title="修改" xmId="{xmId}"></a><br>
+            <a href="###" class="icon-plus-btn add-project hideplus{this.upgradeLimit}" title="新增升级部署信息" xmId="{xmId}"></a><br>
+            <a href="###" class="icon-remove-btn delete-project hideplus{this.deleteLimit}" title="删除" delId="{xmId}" xmdwdm="{xmdwdm}" xmdwmc = "{xmdwmc}"></a>
+        </td>
+    </tr>
+</script>
+<script type="text/template" id="connectInfos">
+    <div class="xtdj-div" title="{djDesc}">
+        <span class="xtlb">{zxtZw}</span><div class="ifdj-dot"><img class="ifdj" src="../img/islinked{sfdj}.png"/></div><span class="xtbdj">{djxtZw}</span>
+    </div>
+</script>
+<script type="text/template" id="deploy-history">
+    <tr>
+        <td>{rownum}</td>
+        <td class="bsbbh">{bsbbh}</td>
+        <td class="bssjStr">{bssjStr}</td>
+        <td class="bsfzr">{bsfzrZw}</td>
+        <td class="bssm">{bssm}</td>
+        <td>
+            <i class="icon-edit-btn deploy-history-edit{rownum} hidden" title="修改" editId="{id}" ssxmId="{ssxmId}" bsfzr="{bsfzr}"></i>
+            <i class="icon-remove-btn deploy-history-remove" title="删除" delId = "{id}" ssxmId="{ssxmId}"></i>
+        </td>
+    </tr>
+</script>
+<script src="../../dist/js/base.js"></script>
+<script>
+    importing('datepicker','dict',function(){
+        //var dt=new Date().getTime()
+        var pushMsgAction = top.path+'/api/0/basic/project/push',//推送
+            deleteProjectAction = top.path+'/api/0/basic/project/delete',
+            addProjectAction = top.path+'/api/0/basic/project/add',
+            editProjectAction = top.path+'/api/0/basic/project/edit',
+            showListAction = top.path+'/api/0/basic/project/list',//项目信息列表
+            intoDeployAction = top.path+'/api/0/basic/project/into_deploy',//升级部署列表
+            editDeployAction = top.path+'/api/0/basic/project/edit_deploy',//升级部署修改
+            addDeployAction = top.path+'/api/0/basic/project/add_deploy',//升级部署新增
+            deleteDeployAction = top.path+'/api/0/basic/project/delete_deploy',
+            getPersonMsgAction = top.path+'/api/0/basic/project/user_info',//type=1：项目经理 type=2：实施人员 type=3:驻地维护
+            projectUnitAction = top.path+'/api/0/basic/project/project_unit',//项目单位
+            projectDictAction = top.path+'/api/0/basic/project/project_dict',
+            versionInfoAction = top.path+'/api/0/basic/version/version_info',//版本信息
+            xmdwCountAction = top.path+'/api/0/basic/project/count',//判断项目单位是否已存在
+            countTimes = 1,//项目数据信息计数
+            zdwhCountTimes = 1,//驻地维护计数
+            managerData,//项目经理数据
+            projectDictData,
+            implementerData,//实施人员数据
+            zdwhData,//驻地维护人员数据
+            pageData=[],userroles = top.roles.select('o=>o.cn'),
+            deleteLimit = top.ops['info-mng-ssxmgl-delete'],
+            addLimit = top.ops['info-mng-ssxmgl-add'],
+            connectLimit = top.ops['info-mng-ssxmgl-connect'],
+            serverLimit = top.ops['info-mng-ssxmgl-server'],
+            pushLimit = top.ops['info-mng-ssxmgl-push'],
+            editLimit = top.ops['info-mng-ssxmgl-edit'],
+            upgradeLimit = top.ops['info-mng-ssxmgl-upgrade'],
+            accountLimit = top.ops['info-mng-ssxmgl-account'],
+            dbLimit = top.ops['info-mng-ssxmgl-db'],
+            addBlock = $('#add-project-block'),
+            deployHistoryTb = $('#deploy-history-msg-tb'),
+            implementTb = $('#implement-addr-table'),
+            addClose = $('#add-project-close-btn'),
+            sjlyTbody = $('#sjly-tbody'),
+            sysDjTb = $('#sys-dj-tb'),
+            addBtn = $('#add-btn'),
+            pushBtn = $('#push-btn'),
+            sjFirstHtml = '<tr> <td><div dict-type="select" dict-root="CQSJLBDM" dict-name="yssjlb" class="yssjlb dict validate" id="sjly-yssjlb-0" data-options="required:true"></div></td> <td><input type="text" name="ssgsmc" class="ssgsmc common-input validate" data-options="required:true,validType:\'extLength[1,100]\'"></td> <td> <textarea type="text" name="sjkxx" class="sjkxx common-textarea validate" data-options="required:true,validType:\'extLength[1,1000]\'"></textarea> </td> <td><i id="sjly-remove-0" class="icon-remove-btn"></i></td> </tr>',
+            zdwhFirstHtml = '<div class="zdwh-div"> <span class="common-field">姓名：</span><div dict-type="select" dict-name="zdwh-name" id="zdwh-name-0" class="zdwh-name"></div> <span class="common-field">联系方式：</span><input type="text" class="zdwh-lxfs common-input mr15 validate" name="zdwh-mobile" data-options="validType:\'contact\'"> <i id="add-zdwh" class="icon-plus"></i> </div>';
+//        addLimit:addLimit,connectLimit:connectLimit,serverLimit:serverLimit,pushLimit:pushLimit,deleteLimit:deleteLimit,editLimit:editLimit,accountLimit:accountLimit,dbLimit:dbLimit
+        implementTb.find('thead').template({connectLimit:connectLimit,serverLimit:serverLimit,accountLimit:accountLimit,dbLimit:dbLimit});
+        //项目单位数据
+        $get(projectUnitAction,{},function (res) {
+            $('#project-unit').dict(res.data.unitInfo);
+        });
+        //新增项目单位数据
+        $get(projectDictAction,{},function (res) {
+//            info('新增项目单位：'+obj2str(res.data));
+            projectDictData = res.data;
+        });
+        //项目经理数据
+        $get(getPersonMsgAction,{type:1},function (res) {
+            managerData = res.data;
+            $('#project-manager,#manager-name').dict(managerData);
+            //实施人员数据
+            $get(getPersonMsgAction,{type:2},function (res) {
+                implementerData = res.data;
+                $('#director,#implementer-name').dict(implementerData);
+                if(userroles.toString().indexOf('项目经理')>-1){
+                    $('#project-manager').dictSelect(top.userName);
+                }else if(userroles.toString().indexOf('实施人员')>-1){
+                    $('#director').dictSelect(top.userName);
+                }
+                loadListData();
+            });
+        });
+        //驻地维护数据
+        $get(getPersonMsgAction,{type:3},function (res) {
+            zdwhData = res.data;
+        });
+        //版本信息
+        $get(versionInfoAction,{type:1,xmId:null},function(res){
+            $('#version').dict(res.data);
+        });
+
+        var closeWin = function(winId,resetForm) {
+            if(winId){
+                $(winId).$close();
+            }
+            if(resetForm) {
+                $(resetForm)[0].reset();
+            }
+            $('.validate').removeClass('validatebox-invalid');
+        };
+        function loadListData(currentPage) {
+            var queryFormObj = $('#project-query-form').serializeObject(),
+                xmjlObj = $('#project-manager')[0],
+                yhfzrObj = $('#director')[0];
+            //项目经理和实施负责人传中文参数
+            if(xmjlObj.selectedIndex > -1){
+                queryFormObj.xmjl = xmjlObj.options[xmjlObj.selectedIndex].text;
+            }
+            if(yhfzrObj.selectedIndex > -1){
+                queryFormObj.sswhry = yhfzrObj.options[yhfzrObj.selectedIndex].text;
+            }
+            //var dt3=new Date().getTime();
+            //加载实施地信息列表数据
+            $('#query-result').pagingList({
+                action:showListAction,
+                currentPage:currentPage,
+//                method:'get',
+                jsonObj:queryFormObj,
+                callback:function (data) {
+                    //alert("数据拿到")
+                    pageData = data;
+                    //var dt2=new Date().getTime();
+                    implementTb.find('tbody').fixData({connectLimit:connectLimit,serverLimit:serverLimit,accountLimit:accountLimit,dbLimit:dbLimit,deleteLimit:deleteLimit,editLimit:editLimit,upgradeLimit:upgradeLimit}).template(data,function (item) {
+                        item.xmkzsj = item.xmkzsj.slice(0,10);
+                        item.yczmzhmm = item.yczmzhmm?item.yczmzhmm.replace(/\/|\s/,'<br>'):'';
+                    },true);
+                    //info(new Date().getTime()-dt2+' 执行stp耗时');
+                    //新增升级部署信息
+                    $('.add-project').on('click',function () {
+                        var xmId = $(this).attr('xmId');
+                        var bsfzrObj = $('#bsfzr');
+                        //版本信息
+                        $get(versionInfoAction,{type:0,xmId:xmId},function(res){
+                            var bsbbhObj = $('#bsbbh');
+                            if(!bsbbhObj.hasClass('validate')){
+                                bsbbhObj.addClass('validate').attr('data-options','required:true');
+                            }
+                            bsbbhObj.dict(res.data);
+                        });
+                        $('#bsbbh-input').hide();
+                        $('.deploy-add').show().find('select').addClass('validate');
+                        $open('#add-deploy-block',{width:795,title:'升级部署信息',onClose:function () {
+                            closeWin('','#add-edit-deploy-form');
+                        }});
+                        $('#ssxmId').val(xmId);
+                        $('#bssjStr').val(Date.format('yyyy-mm-dd'));
+                        if(!bsfzrObj.hasClass('validate')){
+                            bsfzrObj.addClass('validate').attr('data-options','required:true');
+                        }
+                        bsfzrObj.dict(managerData).dictSelect(top.userName);
+                        loadDeployHistoryList(xmId);
+                    });
+                    //info(new Date().getTime()-dt);
+                }
+            });
+            //info(new Date().getTime()-dt3+' paginglist执行完毕');
+        }
+        function loadDeployHistoryList(xmId, currentPage) {
+            $('#deploy-history-msg').pagingList({
+                action:intoDeployAction,
+                currentPage:currentPage,
+                jsonObj:{xmId:xmId},
+                callback:function(data){
+                    if(data.length<1){
+                        $('#deploy-history-div').hide();
+                    }else{
+                        $('#deploy-history-div').show();
+                    }
+                    $('#deploy-history-msg-tb').find('tbody').template(data);
+                }
+            });
+        }
+        function saveProject(action) {
+            if(validateBeforeSave('#add-project-block')){
+                return false;
+            }
+            if(action.indexOf('add')>-1){
+                $get(xmdwCountAction,{'xmdwdm':$('#xmdwdm-h').val()},function (res) {
+                    if(res.totalCount>0){
+                        $alert('项目单位已存在！');
+                        $('#xmdwdm').find('input').addClass('back-validatebox-invalid');
+                        return false;
+                    }else{
+                        $('#xmdwdm').find('input').removeClass('back-validatebox-invalid');
+                        saveProjectMsg(action);
+                    }
+                });
+            }else{
+                saveProjectMsg(action);
+            }
+
+        }
+        function saveProjectMsg(action){
+            var params = {},
+                    zdwhArray = [],
+                    xmsjArray = [],
+                    xtdjArray = [],
+                    managerNameObj = $('#manager-name-select'),
+                    implementerNameObj = $('#implementer-name-select');
+            $('#xmdwmc-h').val($('#xmdwdm-h_displayValue').val());
+            //驻地维护数据拼成数组
+            $('.zdwh-div').each(function (i,el) {
+                var zdryxmObj = $(this).find('select[name$="zdwh-name"]');
+                zdwhArray[i] = {};
+//                zdwhArray[i].zdryxm = zdryxmObj.selectedIndex != -1 ? zdryxmObj.options[zdryxmObj.selectedIndex].text : '';
+                zdwhArray[i].zdryxm = zdryxmObj.val() || '';
+                zdwhArray[i].zdrylxfs = $(this).find('input[name="zdwh-mobile"]').val() || '';
+            });
+            //项目数据信息数据拼成数组
+            $('#project-data-tb').find('tbody').find('tr').each(function (i,el) {
+                xmsjArray[i] = {};
+                xmsjArray[i].sjcqlb = $(this).find('select[name="yssjlb"]').val() || '';
+                xmsjArray[i].ssgsmc = $(this).find('input[name="ssgsmc"]').val() || '';
+                xmsjArray[i].sjkxx = $(this).find('textarea[name="sjkxx"]').val() || '';
+            });
+            //系统对接信息数据拼成数组
+            sysDjTb.find('tbody').find('tr').each(function (i,el) {
+                xtdjArray[i] = {};
+                xtdjArray[i].zxt = $(this).find('[name="zxt"]').val() || '';
+                xtdjArray[i].djxt = $(this).find('[name="djxt"]').val() || '';
+                xtdjArray[i].sfdj = $(this).find('input[name="sfdj"]')[0].checked ? '1':'0';
+                xtdjArray[i].djlx = $(this).find('select[name="djlx"]').val() || '';
+                xtdjArray[i].djDesc = $(this).find('textarea[name="djDesc"]').val() || '';
+            });
+            params = $('#add-form').serializeObject();
+//            params.xmjl = managerNameObj.selectedIndex != -1 ? managerNameObj.options[managerNameObj.selectedIndex].text : '';
+            params.xmjl = managerNameObj.val() || '';
+//            params.sswhry = implementerNameObj.selectedIndex != -1 ? implementerNameObj.options[implementerNameObj.selectedIndex].text : '';
+            params.sswhry = implementerNameObj.val() || '';
+            params.localPersons = zdwhArray;
+            params.basicDatas = xmsjArray;
+            params.connectInfos = xtdjArray;
+            $post(action,params,function (res) {
+                var msg = res.msg?res.msg:'保存成功！';
+                toast(msg,600).ok();
+                closeWin('#add-project-block','#add-form');
+                loadListData($('#projectList').data('currentPage'));
+            },true);
+        }
+        function addZdwh() {
+            var zdHtml = '<div class="zdwh-div"><span class="common-field">姓名：</span><div dict-type="select" dict-name="zdwh-name" id="zdwh-name-'+zdwhCountTimes+'" class="zdwh-name-plus"></div><span class="common-field">联系方式：</span><input type="text" class="common-input zdwh-lxfs-plus validate" name="zdwh-mobile" data-options="validType:\'contact\'"><i class="icon-remove-btn"></i></div>';
+            $('#zdwh-td').append(zdHtml);
+            $('#zdwh-name-'+zdwhCountTimes).dict(zdwhData);
+            zdwhCountTimes++;
+        }
+        function assignDeployEdit(id) {
+            var obj = $('#'+id),
+                    that = $(this),
+                    value = that.parent().parent().find('.'+id).html();
+            if(obj[0].hasAttribute('dict-type')){
+                if(id === 'bsfzr'){
+                    obj.dictSelect(that.attr('bsfzr'));
+                }else{
+                    obj.dictSelect(value);
+                }
+            }else{
+                obj.val(value);
+            }
+        }
+        function validateBeforeSave(winId) {
+            $(winId+' .validate').validatebox();
+            return $(winId+' .validatebox-invalid').length>0;
+        }
+        //项目数据来源信息和系统对接信息的一些DOM操作
+        function initSjlyAndDjSysService() {
+            var ajxk = '<tr id="yssjlb-ajxk"><td>案件<input type="hidden" name="zxt" value="案件"></td> <td>现勘 <input type="hidden" name="djxt" value="02"> </td> <td> <input type="checkbox" name="sfdj"> </td> <td> <div dict-type="select" dict-root="DJLXDM" dict-name="djlx" class="project-dict" empty="false"></div> </td> <td> <textarea type="text" name="djDesc" class="common-textarea validate" data-options="validType:\'extLength[0,400]\'"></textarea> </td> </tr>',
+                    ajzw = '<tr id="yssjlb-ajzw"> <td>案件<input type="hidden" name="zxt" value="案件"></td> <td>指纹<input type="hidden" name="djxt" value="03"></td> <td><input type="checkbox" name="sfdj"></td> <td><div dict-type="select" dict-root="DJLXDM" dict-name="djlx"  class="project-dict" empty="false"></div></td> <td><textarea type="text" name="djDesc" class="common-textarea validate" data-options="validType:\'extLength[0,400]\'"></textarea></td> </tr>',
+                    ajdna = '<tr id="yssjlb-ajdna"> <td>案件<input type="hidden" name="zxt" value="案件"></td> <td>DNA<input type="hidden" name="djxt" value="04"></td> <td><input type="checkbox" name="sfdj"></td> <td><div dict-type="select" dict-root="DJLXDM" dict-name="djlx"  class="project-dict" empty="false"></div></td> <td><textarea type="text" name="djDesc" class="common-textarea validate" data-options="validType:\'extLength[0,400]\'"></textarea></td> </tr>',
+                    ajzj = '<tr id="yssjlb-ajzj"> <td>案件<input type="hidden" name="zxt" value="案件"></td> <td>足迹<input type="hidden" name="djxt" value="05"></td> <td><input type="checkbox" name="sfdj"></td> <td><div dict-type="select" dict-root="DJLXDM" dict-name="djlx"  class="project-dict" empty="false"></div></td> <td><textarea type="text" name="djDesc" class="common-textarea validate" data-options="validType:\'extLength[0,400]\'"></textarea></td> </tr>',
+                    ajsp = '<tr id="yssjlb-ajsp"> <td>案件<input type="hidden" name="zxt" value="案件"></td> <td>视频<input type="hidden" name="djxt" value="06"></td> <td><input type="checkbox" name="sfdj"></td> <td><div dict-type="select" dict-root="DJLXDM" dict-name="djlx"  class="project-dict" empty="false"></div></td> <td><textarea type="text" name="djDesc" class="common-textarea validate" data-options="validType:\'extLength[0,400]\'"></textarea></td> </tr>',
+                    ryzw = '<tr id="yssjlb-ryzw"> <td>人员<input type="hidden" name="zxt" value="人员"></td> <td>指纹<input type="hidden" name="djxt" value="03"></td> <td><input type="checkbox" name="sfdj"></td> <td><div dict-type="select" dict-root="DJLXDM" dict-name="djlx"  class="project-dict" empty="false"></div></td> <td><textarea type="text" name="djDesc" class="common-textarea validate" data-options="validType:\'extLength[0,400]\'"></textarea></td> </tr>',
+                    rydna = '<tr id="yssjlb-rydna"> <td>人员<input type="hidden" name="zxt" value="人员"></td> <td>DNA<input type="hidden" name="djxt" value="04"></td> <td><input type="checkbox" name="sfdj"></td> <td><div dict-type="select" dict-root="DJLXDM" dict-name="djlx"  class="project-dict" empty="false"></div></td> <td><textarea type="text" name="djDesc" class="common-textarea validate" data-options="validType:\'extLength[0,400]\'"></textarea></td> </tr>',
+                    jxzw = '<tr id="yssjlb-jxzw"> <td><div dict-type="select" dict-root="XTLBDM" dict-name="zxt" class="project-dict" empty="false"></div></td> <td>指纹<input type="hidden" name="djxt" value="03"></td> <td><input type="checkbox" name="sfdj"></td> <td><div dict-type="select" dict-root="DJLXDM" dict-name="djlx"  class="project-dict" empty="false"></div></td> <td><textarea type="text" name="djDesc" class="common-textarea validate" data-options="validType:\'extLength[0,400]\'"></textarea></td> </tr>',
+                    jxzj = '<tr id="yssjlb-jxzj"> <td><div dict-type="select" dict-root="XTLBDM" dict-name="zxt" class="project-dict" empty="false"></div></td> <td>足迹<input type="hidden" name="djxt" value="05"></td> <td><input type="checkbox" name="sfdj"></td> <td><div dict-type="select" dict-root="DJLXDM" dict-name="djlx"  class="project-dict" empty="false"></div></td> <td><textarea type="text" name="djDesc" class="common-textarea validate" data-options="validType:\'extLength[0,400]\'"></textarea></td> </tr>',
+                    jxdna = '<tr id="yssjlb-jxdna"> <td><div dict-type="select" dict-root="XTLBDM" dict-name="zxt" class="project-dict" empty="false"></div></td> <td>DNA<input type="hidden" name="djxt" value="04"></td> <td><input type="checkbox" name="sfdj"></td> <td><div dict-type="select" dict-root="DJLXDM" dict-name="djlx"  class="project-dict" empty="false"></div></td> <td><textarea type="text" name="djDesc" class="common-textarea validate" data-options="validType:\'extLength[0,400]\'"></textarea></td> </tr>',
+                    jxsp = '<tr id="yssjlb-jxsp"> <td><div dict-type="select" dict-root="XTLBDM" dict-name="zxt" class="project-dict" empty="false"></div></td> <td>视频<input type="hidden" name="djxt" value="06"></td> <td><input type="checkbox" name="sfdj"></td> <td><div dict-type="select" dict-root="DJLXDM" dict-name="djlx"  class="project-dict" empty="false"></div></td> <td><textarea type="text" name="djDesc" class="common-textarea validate" data-options="validType:\'extLength[0,400]\'"></textarea></td> </tr>',
+                    xkzw = '<tr id="yssjlb-xkzw"> <td>勘<input type="hidden" name="zxt" value="勘"></td> <td>指纹<input type="hidden" name="djxt" value="03"></td> <td><input type="checkbox" name="sfdj"></td> <td><div dict-type="select" dict-root="DJLXDM" dict-name="djlx"  class="project-dict" empty="false"></div></td> <td><textarea type="text" name="djDesc" class="common-textarea validate" data-options="validType:\'extLength[0,400]\'"></textarea></td> </tr>',
+                    xkdna = '<tr id="yssjlb-xkdna"> <td>勘<input type="hidden" name="zxt" value="勘"></td> <td>DNA<input type="hidden" name="djxt" value="04"></td> <td><input type="checkbox" name="sfdj"></td> <td><div dict-type="select" dict-root="DJLXDM" dict-name="djlx"  class="project-dict" empty="false"></div></td> <td><textarea type="text" name="djDesc" class="common-textarea validate" data-options="validType:\'extLength[0,400]\'"></textarea></td> </tr>',
+                    xkzj = '<tr id="yssjlb-xkzj"> <td>勘<input type="hidden" name="zxt" value="勘"></td> <td>足迹<input type="hidden" name="djxt" value="05"></td> <td><input type="checkbox" name="sfdj"></td> <td><div dict-type="select" dict-root="DJLXDM" dict-name="djlx"  class="project-dict" empty="false"></div></td> <td><textarea type="text" name="djDesc" class="common-textarea validate" data-options="validType:\'extLength[0,400]\'"></textarea></td> </tr>',
+                    xksp = '<tr id="yssjlb-xksp"> <td>勘<input type="hidden" name="zxt" value="勘"></td> <td>视频<input type="hidden" name="djxt" value="06"></td> <td><input type="checkbox" name="sfdj"></td> <td><div dict-type="select" dict-root="DJLXDM" dict-name="djlx"  class="project-dict" empty="false"></div></td> <td><textarea type="text" name="djDesc" class="common-textarea validate" data-options="validType:\'extLength[0,400]\'"></textarea></td> </tr>',
+                    selectedBeforeStr = '',
+                    logicArr = [
+                        {'hasKeys':'0102','nozxt':'00','djxt':'00','trHtml':[ajxk],'trId':['#yssjlb-ajxk']},//警综 现勘
+                        {'hasKeys':'0103','nozxt':'02','djxt':'03','trHtml':[ajzw,ryzw],'trId':['#yssjlb-ajzw','#yssjlb-ryzw']},//警综 指纹 无现勘
+                        {'hasKeys':'0104','nozxt':'02','djxt':'04','trHtml':[ajdna,rydna],'trId':['#yssjlb-ajdna','#yssjlb-rydna']},//警综 DNA 无现勘
+                        {'hasKeys':'010203','nozxt':'00','djxt':'03','trHtml':[jxzw,ryzw],'trId':['#yssjlb-jxzw','#yssjlb-ryzw']},//警综 指纹 现勘
+                        {'hasKeys':'010204','nozxt':'00','djxt':'04','trHtml':[jxdna,rydna],'trId':['#yssjlb-jxdna','#yssjlb-rydna']},//警综 DNA 现勘
+                        {'hasKeys':'0105','nozxt':'02','djxt':'05','trHtml':[ajzj],'trId':['#yssjlb-ajzj']},//警综 足迹 无现勘
+                        {'hasKeys':'0106','nozxt':'02','djxt':'06','trHtml':[ajsp],'trId':['#yssjlb-ajsp']},//警综 视频 无现勘
+                        {'hasKeys':'010205','nozxt':'00','djxt':'05','trHtml':[jxzj],'trId':['#yssjlb-jxzj']},//警综 足迹 现勘
+                        {'hasKeys':'010206','nozxt':'00','djxt':'06','trHtml':[jxsp],'trId':['#yssjlb-jxsp']},//警综 视频 现勘
+                        {'hasKeys':'0203','nozxt':'01','djxt':'03','trHtml':[xkzw],'trId':['#yssjlb-xkzw']},//现勘 指纹
+                        {'hasKeys':'0204','nozxt':'01','djxt':'04','trHtml':[xkdna],'trId':['#yssjlb-xkdna']},//现勘 DNA
+                        {'hasKeys':'0205','nozxt':'01','djxt':'05','trHtml':[xkzj],'trId':['#yssjlb-xkzj']},//现勘 足迹
+                        {'hasKeys':'0206','nozxt':'01','djxt':'06','trHtml':[xksp],'trId':['#yssjlb-xksp']}//现勘 视频
+                    ];
+            function removeDjSys(thisSelObjVal) {
+                var i=0,count=0,k=0,l=0,logicArrK,hasKeys,hasKeysLen,djxt,djTbodyObj = sysDjTb.find('tbody'),trIdL;
+                thisSelObjVal = thisSelObjVal.split(',').join('');
+//                log('thisSelObjVal:'+thisSelObjVal);
+                for(;i<$('.yssjlb').length;i++){
+                    var yssjlbSelObjI = $('.yssjlb select')[i];
+                    if(yssjlbSelObjI.value.indexOf(thisSelObjVal)>-1){
+                        count++;
+                    }
+                }
+//                log('count:'+count);
+                if(count<2){
+                    for(;k<logicArr.length;k++){
+                        logicArrK = logicArr[k];
+                        hasKeys = logicArrK.hasKeys;
+                        hasKeysLen = hasKeys.length;
+                        djxt = logicArrK.djxt;
+                        if(hasKeys.indexOf(thisSelObjVal)>-1){
+                            for(l=0;l<logicArrK.trId.length;l++){
+                                trIdL = logicArrK.trId[l];
+//                                log('logicArr'+k+'.trId['+l+']:'+logicArrK.trId[l]);
+                                if(thisSelObjVal != '01' && thisSelObjVal != '02' || hasKeysLen === 4){//不是警综、现勘主线或者haskey长度为4时可以直接删除
+                                    $(trIdL).remove();
+                                }else if(hasKeysLen === 6 && trIdL.indexOf('#yssjlb-jx')>-1){//haskey长度为6且有主系统是下拉框的都删除但需要单独的案件或者
+//                                    log('trIdL:'+trIdL+' thisSelObjVal:'+thisSelObjVal+' djxt:'+djxt);
+                                    if(thisSelObjVal === '01' && djxt === '03' && $(trIdL).length>0){
+                                        djTbodyObj.append(xkzw);
+                                    }else if(thisSelObjVal === '01' && djxt === '04' && $(trIdL).length>0){
+                                        djTbodyObj.append(xkdna);
+                                    }else if(thisSelObjVal === '01' && djxt === '05' && $(trIdL).length>0){
+                                        djTbodyObj.append(xkzj);
+                                    }else if(thisSelObjVal === '01' && djxt === '06' && $(trIdL).length>0){
+                                        djTbodyObj.append(xksp);
+                                    }else if(thisSelObjVal === '02' && djxt === '03' && $(trIdL).length>0){
+                                        djTbodyObj.append(ajzw);
+                                    }else if(thisSelObjVal === '02' && djxt === '04' && $(trIdL).length>0){
+                                        djTbodyObj.append(ajdna);
+                                    }else if(thisSelObjVal === '02' && djxt === '05' && $(trIdL).length>0){
+                                        djTbodyObj.append(ajzj);
+                                    }else if(thisSelObjVal === '02' && djxt === '06' && $(trIdL).length>0){
+                                        djTbodyObj.append(ajsp);
+                                    }
+                                    $(trIdL).remove();
+                                    sysDjTb.find('tbody').find('.project-dict').dict();
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+            function removeProjDataMsg() {
+                var sjTr = $(this).parent().parent(),thisSelObjVal = sjTr.find('.yssjlb select').val();
+                if(sjTr.parent().children('tr').length<=1){
+                    $alert('请至少输入一个"实施项目数据信息"！');
+                    return false;
+                }
+                removeDjSys(thisSelObjVal);
+                sjTr.remove();
+            }
+            function addSsxmsjxx() {
+                var sjHtml = '<tr><td><div dict-type="select" dict-root="CQSJLBDM" dict-name="yssjlb" class="dict yssjlb validate" data-options="required:true" id="ysssjlb-'+countTimes+'"></div></td><td><input type="text" class="common-input validate" data-options="required:true,validType:\'extLength[1,100]\'" name="ssgsmc"></td><td><textarea type="text" class="common-textarea validate" data-options="required:true,validType:\'extLength[1,1000]\'" name="sjkxx"></textarea></td><td><i class="icon-remove-btn vam" id="sjly-remove-'+countTimes+'"></i></td></tr>';
+                sjlyTbody.append(sjHtml);
+                sjlyTbody.find('.icon-remove-btn').show();
+                $('#ysssjlb-'+countTimes).dict();
+                countTimes++;
+            }
+            function showProjectData(dataI,type) {
+                var j = 0,k = 0,l = 0,m=0,
+                        localPersons = dataI.localPersons,
+                        basicDatas = dataI.basicDatas,
+                        connectInfos = dataI.connectInfos,
+                        zdwhTd = $('#zdwh-td'),
+                        xmdwdm = $('#xmdwdm'),
+                        zdHtml = '<div class="zdwh-div"><span class="common-field">姓名：</span><div dict-type="select" dict-name="zdwh-name" class="zdwh-name zdwh-name-plus"></div><span class="common-field">联系方式：</span><input type="text" class="zdwh-lxfs zdwh-lxfs-plus common-input validate" name="zdwh-mobile" data-options="validType:\'contact\'"><i class="icon-remove-btn"></i></div>',
+                        sjHtml = '<tr><td><div dict-type="select" dict-root="CQSJLBDM" dict-name="yssjlb" class="yssjlb dict validate" data-options="required:true"></div></td><td><input type="text" class="ssgsmc common-input validate" data-options="required:true,validType:\'extLength[1,100]\'" name="ssgsmc"></td><td><textarea type="text" class="sjkxx common-textarea validate" data-options="required:true,validType:\'extLength[1,1000]\'" name="sjkxx"></textarea></td><td><i class="icon-remove-btn vam"></i></td></tr>';
+                selectedBeforeStr = '';
+                sjlyTbody = $('#sjly-tbody');
+//            log('newdataI:'+obj2str(dataI));
+//            log('newconnectInfos1:'+obj2str(dataI.connectInfos));
+                $('.project-dict').dict();
+                xmdwdm.dict(projectDictData);
+                $('#xmdwdm_treeButton').hide();
+                zdwhTd.html(zdwhFirstHtml);
+                $('#zdwh-name-0').dict(zdwhData);
+                sjlyTbody.html(sjFirstHtml);
+                $('#sjly-yssjlb-0').dict();
+                //初始化各个字典
+                xmdwdm.find('input[name="xmdwdm_displayValue"]').val(dataI.xmdwmc);
+                $('#xmdwdm-h').val(dataI.xmdwdm);
+                $('#xmjb').dictSelect(dataI.xmjb);
+                $('#ifFbs').dictSelect(dataI.ifFbs);
+                $('#ifJrkh').dictSelect(dataI.ifJrkh);
+//            log('managerDataArr.length:'+managerDataArr.length);
+//                for(;l<managerDataArr.length;l++){
+////                log('managerDataArr[l]:'+obj2str(managerDataArr[l])+' '+dataI.xmjl);
+//                    if(managerDataArr[l].value == dataI.xmjl){
+//                        $('#select_manager-name').dictSelect(managerDataArr[l].key);
+//                    }
+//                }
+                $('#manager-name').dictSelect(dataI.xmjl);
+//                for(;m<implementerDataArr.length;m++){
+//                    if(implementerDataArr[m].value == dataI.sswhry){
+//                        $('#select_implementer-name').dictSelect(implementerDataArr[m].key);
+//                    }
+//                }
+                $('#implementer-name').dictSelect(dataI.sswhry);
+//                $('.djxt').dict(djSysData);
+
+                //驻地维护
+                for(;j<localPersons.length-1;j++){
+                    zdwhTd.append(zdHtml);
+                    $('.zdwh-div:last-child .zdwh-name').dict(zdwhData).dictSelect(localPersons[j].zdryxm);
+                    $('.zdwh-div:last-child .zdwh-lxfs').val(localPersons[j].zdrylxfs);
+                }
+//            log('localPersons.length:'+localPersons.length);
+                $('.zdwh-div').each(function (i,el) {
+//                log('div i:'+i+' localPersons['+i+']:'+localPersons[i].zdryxm);
+                    if(localPersons.length>i){
+//                    log('zdwhDataArr.length:'+zdwhDataArr.length);
+//                        for(var n=0;n<zdwhDataArr.length;n++){
+////                        log('zdwhDataArr[n]:'+obj2str(zdwhDataArr[n])+' '+localPersons[i].zdryxm);
+//                            if(zdwhDataArr[n].value == localPersons[i].zdryxm){
+//                                $(el).find('.zdwh-name').dict(zdwhData).dictSelect(zdwhDataArr[n].key);
+//                            }
+//                        }
+                        $(el).find('.zdwh-name').dict(zdwhData).dictSelect(localPersons[i].zdryxm);
+                        $(el).find('.zdwh-lxfs').val(localPersons[i].zdrylxfs);
+                    }
+                });
+                if(basicDatas.length<1){
+                    sjlyTbody.hide();
+                }else{
+                    //项目数据信息
+                    for(;k<basicDatas.length-1;k++){
+                        sjlyTbody.append(sjHtml);
+                    }
+                    sjlyTbody.find('tr').each(function (i,el) {
+                        if(basicDatas.length>0 && basicDatas.length>i){
+                            $(el).find('.yssjlb').dict().dictSelect(basicDatas[i].sjcqlb);
+                            $(el).find('.ssgsmc').val(basicDatas[i].ssgsmc);
+                            $(el).find('.sjkxx').val(basicDatas[i].sjkxx);
+                        }
+                    });
+                    createDjSysForSjly();
+                }
+                //系统对接信息
+                sysDjTb.find('tbody').find('tr').each(function (i,el) {
+                    if(connectInfos.length>0 && connectInfos.length>i) {
+                        $(el).find('[dict-name = "zxt"]').dictSelect(connectInfos[i].zxt);
+                        $(el).find('[dict-name = "djxt"]').dictSelect(connectInfos[i].djxt);
+                        if(connectInfos[i].sfdj == '1'){
+                            $(el).find('[name="sfdj"]').attr('checked',true);
+                        }
+                        $(el).find('[dict-name = "djlx"]').dictSelect(connectInfos[i].djlx);
+                        $(el).find('[name = "djDesc"]').val(connectInfos[i].djDesc);
+                    }
+                });
+            }
+            function createDjSysForSjly() {
+                sysDjTb = $('#sys-dj-tb');
+                var yssjlbObj = $('.yssjlb'),
+                        yssjlbSelObj = $('.yssjlb').find('select'),
+                        djTbodyObj = sysDjTb.find('tbody'),
+                        yssjlbObjNum = yssjlbObj.length,
+                        selectedStr = '',//存放数据来源信息的key
+                        selectedStrArr = [],selectedBeforeStrArr=[],
+                        i=0,j=0,l=0,m=0;
+
+                //数据源不只一个时才生成对接系统信息
+                if(yssjlbObjNum>1){
+                    for(;i<yssjlbObjNum;i++){
+                        selectedStr += yssjlbSelObj[i].value+',';
+                    }
+//                    log('selectedStr:'+selectedStr+' selectedBeforeStr:'+selectedBeforeStr);
+                    if(selectedBeforeStr && !$(this).find('select').val()){//数据来源下拉列表选择空时
+                        selectedStrArr = selectedStr.split(',');
+                        for(;l<selectedStrArr.length;l++){
+                            selectedBeforeStr=selectedBeforeStr.replace(new RegExp(',?'+selectedStrArr[l]+',?'),'');
+                        }
+//                        log('selectedBeforeStr:'+selectedBeforeStr);
+                        removeDjSys(selectedBeforeStr);
+                    }else if(selectedBeforeStr && $(this).find('select').val()){//替换数据来源信息下拉列表值时
+                        selectedStrArr = selectedStr.split(',');
+                        selectedStrArr.pop();
+                        selectedBeforeStrArr = selectedBeforeStr.split(',');
+                        selectedBeforeStrArr.pop();
+                        if(selectedStrArr.length === selectedBeforeStrArr.length){
+                            for(;m<selectedStrArr.length;m++){
+                                if(selectedStrArr[m]!=selectedBeforeStrArr[m]){
+                                    removeDjSys(selectedBeforeStrArr[m]);
+                                }
+                            }
+                        }
+
+                    }
+                    for(;j<logicArr.length;j++){
+                        var logicArrJ = logicArr[j];
+                        createDjSystem(logicArrJ.nozxt,logicArrJ.djxt,logicArrJ.trHtml,logicArrJ.trId,selectedStr,djTbodyObj)
+                    }
+                }
+                selectedBeforeStr = selectedStr;
+            }
+            //修改
+            implementTb.on('click','.modify-project',function () {
+                var i = 0,
+                        xmId = $(this).attr('xmId');
+                $open('#add-project-block',{width:920,title:'实施项目修改'});
+                for(;i<pageData.length;i++){
+                    var dataI = pageData[i];
+                    if(dataI.xmId === xmId){
+//                            dataI = {"rownum":"1","id":null,"user":null,"del":null,"secrecy":null,"createDate":null,"modifyDate":null,"transferTime":null,"rev1":null,"rev2":null,"rev3":null,"rev4":null,"rev5":null,"rev6":null,"rev7":null,"rev8":null,"begin":0,"end":0,"sortOrder":null,"sortName":null,
+//                            "orderByString":null,"xmId":"E957C41E7AE64CEE898482BC9A2B5559","pid":null,"xmdwdm":"110000","xmdwmc":"北京","xmjb":"A","yhfzr":"楼挺","yhfzrlxfs":"13735487817","xtmc":"刑事技术网上作战平台-北京市公安局现场勘验信息系统综合应用平台","xmjl":"楼挺","xmjllxfs":"13735487817",
+//                            "sswhry":"周凯","ssrylxfs":"13291815853","xmkzsj":"2011-01-01 00:00:00","xmkzsjBegin":null,"xmkzsjEnd":null,"xtbbh":"V2.7.9","yyfwqip":"192.168.1.169","yyfwqdkh":"8081","ptzhmm":"sys/hisign","sjkfwqxx":"10.8.40.223:1521:bjyppt/yppt/yppt/该数据使用10g",
+//                            "yczmzhmm":"administrator/hisign","ifFbs":"1","ifJrkh":"0","fzrzw":null,"localPersons":[{"zdryxm":"hjt","zdrylxfs":"123"},{"zdryxm":"wp","zdrylxfs":"1853"}],"basicDatas":[{"yssjlb":"02","ssgsmc":"fsg","sjkxx":"456"},
+//                                    {"yssjlb":"03","ssgsmc":"fdgh","sjkxx":"fdhh"}],"connectInfos":[{"zxt":"2","djxt":"1","sfdj":"yes","djlx","2","djDesc":"fdsgh"}],"userId":null,"userName":null,"roleName":null,"userTel":null };
+                        var j = 0,k = 0;
+                        addBlock.template(dataI,function (item) {
+                            var accountPwd = item.yczmzhmm;
+                            item.yczmzhmm = accountPwd?accountPwd.replace('<br>','/'):'';
+                        });
+                        $('#zdwh-name-0').dict(zdwhData);
+                        $('#edit-project-save-btn,.eg').show();
+                        $('#add-project-save-btn').hide();
+                        addBlock.find('span.orangered').removeClass('hidden');
+                        $('#add-project-block input[id!="xmdwdm-h_displayValue"],#add-project-block textarea').removeAttr('readonly');
+                        $('#xmId').val(xmId);
+                        showProjectData(dataI,'edit');
+                    }
+                }
+                addClose = $('#add-project-close-btn');
+                if(addClose.hasClass('cm-close-btn')){
+                    addClose.removeClass('cm-close-btn');
+                }
+                $('#xmkzsj').datepicker();
+                sjlyTbody.show();
+            });
+            //查看
+            implementTb.on('click','.search-project',function () {
+                var i = 0,
+                        xmId = $(this).attr('xmId');
+                $open('#add-project-block',{width:920,title:'实施项目查看'});
+                for(;i<pageData.length;i++){
+                    var dataI = pageData[i];
+                    if(dataI.xmId === xmId){
+                        addBlock.template(dataI,function (item) {
+                            var accountPwd = item.yczmzhmm;
+                            item.yczmzhmm = accountPwd?accountPwd.replace('<br>','/'):'';
+                        });
+                        showProjectData(dataI,'check');
+                    }
+                }
+                addClose = $('#add-project-close-btn');
+                if(!addClose.hasClass('cm-close-btn')){
+                    addClose.addClass('cm-close-btn');
+                }
+                $('#xmkzsj').on('click',function () {
+                    this.blur();
+                    return false;
+                });
+                $('#add-project-save-btn,#edit-project-save-btn,.eg,#add-project-block .icon-remove-btn,.icon-plus,#project-data-tb td:last-child').hide();
+                addBlock.find('span.orangered').addClass('hidden');
+                $('#add-project-block input,#add-project-block textarea').attr('readonly','readonly');
+                addBlock.find('div[dict-type]').find('select').attr('disabled',true);
+                addBlock.find('select').addClass('no-appearance');
+            });
+            //新增实施项目数据信息
+            addBlock.on('click','#add-sjly',function () {
+                addSsxmsjxx();
+            }).on('change','.yssjlb',function () {
+                createDjSysForSjly.apply(this);
+            }).on('click','#sjly-tbody .icon-remove-btn',function () {//移除项目数据信息
+                removeProjDataMsg.apply(this);
+            });
+        }
+        /*生成对接系统信息
+        * nozxt：没选择的主系统的key
+        * djxt：对接系统key
+        * trHtml：系统对接信息tr的html内容
+        * trId：系统对接信息tr的id
+        * selectedStr：已选的数据来源的key组成的字符串
+        * djTbodyObj：对接系统的tbody对象
+        */
+        function createDjSystem(nozxt,djxt,trHtml,trId,selectedStr,djTbodyObj) {
+            var i = 0,trObj={};
+            for(;i<trId.length;i++){
+                var trIdI = trId[i],
+                        trHtmlI = trHtml[i];
+                trObj = $(trIdI);
+                if(nozxt === '00' && djxt === '00' && selectedStr.indexOf('01')>-1 && selectedStr.indexOf('02')>-1 && trObj.length<1){
+                    djTbodyObj.append(trHtmlI);
+                    $(trIdI+' .project-dict').dict();
+                }
+                if(nozxt === '02' && selectedStr.indexOf('01')>-1 && !(selectedStr.indexOf('02')>-1) && selectedStr.indexOf(djxt)>-1 && trObj.length<1){
+                    djTbodyObj.append(trHtmlI);
+                    $(trIdI+' .project-dict').dict();
+                }
+                if(nozxt === '01' && !(selectedStr.indexOf('01')>-1) && selectedStr.indexOf('02')>-1 && selectedStr.indexOf(djxt)>-1 && trObj.length<1){
+                    djTbodyObj.append(trHtmlI);
+                    $(trIdI+' .project-dict').dict();
+                }
+                if(nozxt === '00' && selectedStr.indexOf('01')>-1 && selectedStr.indexOf('02')>-1 && selectedStr.indexOf(djxt)>-1 && trObj.length<1){
+                    if(djxt === '03'){
+                        $('#yssjlb-ajzw').remove();
+                        $('#yssjlb-xkzw').remove();
+                    }
+                    if(djxt === '04'){
+                        $('#yssjlb-ajdna').remove();
+                        $('#yssjlb-xkdna').remove();
+                    }
+                    if(djxt === '05'){
+                        $('#yssjlb-ajzj').remove();
+                        $('#yssjlb-xkzj').remove();
+                    }
+                    if(djxt === '06'){
+                        $('#yssjlb-ajsp').remove();
+                        $('#yssjlb-xksp').remove();
+                    }
+                    djTbodyObj.append(trHtmlI);
+                    $(trIdI+' .project-dict').dict();
+                }
+            }
+//            if(selectedStr.indexOf(djSysA)>-1 && selectedStr.indexOf(djSysB)>-1&& trObj.length<1){
+//                djTbodyObj.append(trHtml);
+//                $(trId+' .project-dict').dict();
+//            }
+        }
+        function addValidateClass(addId) {
+            var addIdArr = addId.split(','),
+                    addIdArrLen = addIdArr.length,
+                    addIdArrI = '',
+                    i = 0;
+            for(;i<addIdArrLen;i++){
+                addIdArrI = addIdArr[i];
+                if(!$(addIdArrI).hasClass('validate')){
+                    $(addIdArrI).addClass('validate').attr('data-options','required:true');
+                }
+            }
+        }
+        //项目成员与联系方式联动
+        function showMobileWithName(dataArr) {
+            var i = 0,
+                    that = $(this),
+                    mobileObj = that.parent().siblings('input');
+            for(;i<dataArr.length;i++){
+                if(dataArr[i].key === that.val()){
+                    mobileObj.val(dataArr[i].tel);
+//                    $('input[name="xmjllxfs"]').val(dataArr[i].tel);
+                }else if(!that.val()){
+                    mobileObj.val('');
+                }
+            }
+        }
+
+        //推送
+        pushBtn.on('click',function () {
+            $confirm('确定要推送信息到XJPT吗？',function (bol) {
+                if(bol){
+                    $post(pushMsgAction,{},function (res) {
+                        var msg = res.msg?res.msg:'推送成功！';
+                        toast(msg,600).ok();
+                    });
+                }
+            });
+        });
+        //新增
+        addBtn.on('click',function () {
+            if(addClose.hasClass('cm-close-btn')){addClose.removeClass('cm-close-btn');}
+//            var width = document.body.clientWidth || document.documentElement.clientWidth,
+//                height = document.documentElement.clientHeight;
+            $open('#add-project-block',{width:920,title:'实施项目新增',onClose:function () {
+                closeWin('','#add-form');
+            }});
+            $('#add-form input,#add-form textarea').val('');
+            $('#zdwh-td').html(zdwhFirstHtml);
+            $('#zdwh-name-0').dict(zdwhData);
+            sjlyTbody.html(sjFirstHtml);
+            $('#sjly-yssjlb-0').dict();
+            sysDjTb.find('tbody').html('');
+            $('#manager-name').dict(managerData).dictSelect('');
+            $('#xmdwdm').dict(projectDictData);
+            $('#implementer-name').dict(implementerData).dictSelect('');
+            $('#jmx-port').val('8081');
+            $('#add-project-save-btn,.eg,#tree_xmdwdm_treeButton,#add-project-block .icon-remove-btn,.icon-plus,#project-data-tb td:last-child').show();
+            $('#edit-project-save-btn').hide();
+            $('#add-project-block input[id!="xmdwdm_displayValue"],#add-project-block textarea').removeAttr('readonly');
+            //字典添加validate类方便验证
+            addValidateClass('#xmdwdm input[name="xmdwdm_displayValue"],#ifFbs,#ifJrkh');
+            $('.project-dict').dict();
+//            $('.djxt').dict(djSysData);
+            sjlyTbody.show();
+            addBlock.find('span.orangered').removeClass('hidden');
+            $('#xmkzsj').datepicker();
+            addBlock.find('div[dict-type]').find('select').removeAttr('disabled');
+        });
+        addBlock.on('click','#add-project-save-btn',function () {//新增保存
+            saveProject(addProjectAction);
+        }).on('click','#add-project-close-btn',function(){//关闭查看弹窗
+            closeWin('#add-project-block','#add-form');
+            addBlock.find('select').removeClass('no-appearance');
+        }).on('change','#manager-name-select',function () {//项目经理与联系方式联动
+            showMobileWithName.call(this,managerData);
+        }).on('change','#implementer-name-select',function () {//实施人员与联系方式联动
+            showMobileWithName.call(this,implementerData);
+        }).on('change','select[name="zdwh-name"]',function () {//驻地维护与联系方式联动
+            showMobileWithName.call(this,zdwhData);
+        });
+
+        //关闭新增弹窗
+        addClose.on('click',function(){
+            closeWin('#add-project-block','#add-form');
+        });
+        //查询
+        $('#project-query-btn').on('click',function () {
+            if($('.sort-arrow')) $('.sort-arrow').remove();
+            loadListData();
+        });
+        //重置
+        $('#project-reset-btn').on('click',function () {
+            var queryForm = $('#project-query-form');
+            queryForm[0].reset();
+            queryForm.find('input').val('');
+        });
+        //关闭升级部署弹窗
+        $('#deploy-close-btn').on('click',function(){
+            closeWin('#add-deploy-block','#add-edit-deploy-form');
+            $('#deploy-add-save-btn').show();
+            $('#deploy-edit-save-btn').addClass('hide');
+            $('#mainId').val('');
+        });
+        //保存升级部署修改
+        $('#deploy-edit-save-btn').on('click',function () {
+            var formObj = {};
+            $('#bssj').val($('#bssjStr').val());
+            //验证
+            if(validateBeforeSave('#add-deploy-block')){
+                return false;
+            }
+            formObj = $('#add-edit-deploy-form').serializeObject();
+            formObj.bsbbh = $('#bsbbh-input').val();
+            $post(editDeployAction,formObj,function (res) {
+                $('#add-edit-deploy-form')[0].reset();
+                $('#bsbbh-input').hide();
+                $('.deploy-add').show().find('select').addClass('validate');
+                toast('保存成功！').ok();
+                loadDeployHistoryList($('#ssxmId').val(), $('#deployList').data('currentPage'));
+                $('#deploy-edit-save-btn').addClass('hide');
+                $('#deploy-add-save-btn').show();
+            });
+        });
+        //保存升级部署新增
+        $('#deploy-add-save-btn').on('click',function () {
+            $('#bssj').val($('#bssjStr').val());
+            //验证
+            if(validateBeforeSave('#add-deploy-block')){
+                return false;
+            }
+            $post(addDeployAction,$('#add-edit-deploy-form').serializeObject(),function (res) {
+                $('#add-edit-deploy-form')[0].reset();
+                toast('保存成功！').ok();
+                loadDeployHistoryList($('#ssxmId').val(), $('#deployList').data('currentPage'));
+            });
+        });
+        //删除
+        implementTb.find('tbody').on('click','.delete-project',function () {
+            var delId = $(this).attr('delId'),
+                    xmdwdm = $(this).attr('xmdwdm'),
+                    xmdwmc = $(this).attr('xmdwmc');
+            $confirm('确定要删除'+xmdwmc+'项目吗？',function (bol) {
+                if(bol){
+                    $post(deleteProjectAction,{xmId:delId,xmdwdm:xmdwdm},function (res) {
+                        var msg = res.msg?res.msg:'删除成功！';
+                        toast(msg,600).ok();
+                        loadListData($('#projectList').data('currentPage'));
+                    });
+                }
+            });
+        }).on('click','.icon-desktop',function () {//打开远程桌面
+            var that = $(this),
+                    yczmzhmmArr = that.attr('yczmzhmm').split(/\/|<br>|<br\/>/),
+                    yyfwqip = that.attr('yyfwqip');
+            if(yczmzhmmArr.length<2){
+                yczmzhmmArr[1] = '';
+            }
+            if(!top.openRemoteDesktop){return false;}
+            top.openRemoteDesktop(yyfwqip,yczmzhmmArr[0],yczmzhmmArr[1]);
+        }).on('click','.icon-link',function () {
+            var addr = $(this).attr('addr');
+            if(!top.openIE){return false;}
+            top.openIE(addr);
+        });
+        //新增驻地人员
+        addBlock.on('click','#add-zdwh',function () {
+            addZdwh();
+        }).on('click','#edit-project-save-btn',function () {//修改保存
+            saveProject(editProjectAction);
+        }).on('click','#add-project-close-btn',function(){//关闭修改弹窗
+            closeWin('#add-project-block','#add-form');
+        }).on('click','#zdwh-td .icon-remove-btn',function () {//移除驻地人员
+            $(this).parent().remove();
+        }).on('ex-change','#xmdwdm-h',function () {
+            $get(xmdwCountAction,{'xmdwdm':$('#xmdwdm-h').val()},function (res) {
+                if(res.totalCount>0){
+                    $alert('项目单位已存在！');
+                    $('#xmdwdm').find('input').addClass('back-validatebox-invalid');
+                    return false;
+                }else{
+                    $('#xmdwdm').find('input').removeClass('back-validatebox-invalid');
+
+                }
+            });
+        });
+        //升级部署修改
+        deployHistoryTb.on('click','.deploy-history-edit1',function () {
+            var i=0,idArr = ['bssjStr','bsfzr','bssm'];
+            var that = $(this);
+            for(;i<idArr.length;i++){
+                assignDeployEdit.call(this,idArr[i]);
+            }
+            $('#bsbbh-input').val(that.parent().siblings('.bsbbh').html()).show();
+            $('.deploy-add').hide().find('select').removeClass('validate');
+            $('#mainId').val(that.attr('editId'));
+            $('#deploy-edit-save-btn').removeClass('hide');
+            $('#deploy-add-save-btn').hide();
+        });
+        //升级部署删除
+        deployHistoryTb.on('click','.deploy-history-remove',function () {
+            var delId = $(this).attr('delId'),
+                    ssxmId = $(this).attr('ssxmId');
+            $confirm('确定要删除这条记录吗？',function (bol) {
+                if(bol){
+                    $post(deleteDeployAction,{'id':delId},function (res) {
+                        toast('删除成功！',600).ok();
+                        loadDeployHistoryList(ssxmId, $('#deployList').data('currentPage'));
+                    },true);
+                }
+            })
+        });
+
+        initSjlyAndDjSysService();
+        if(addLimit){
+            addBtn.removeClass('hideplus');
+        }
+        if(pushLimit){
+            pushBtn.removeClass('hideplus');
+        }
+        $('.dict').dict();
+        $('.query-date').datepicker();
+        //info(new Date().getTime()-dt+' 代码走完,只剩异步')
+    });
+</script>
+</html>

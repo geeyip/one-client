@@ -1,0 +1,62 @@
+.hide {display:none;}
+html,body,div{margin:0;}
+body{
+    background:url("../img/mozbg.png") repeat;
+}
+table{
+    border-collapse: collapse;
+    margin-top:30px;
+    box-shadow: 3px 5px 3px #aaa;
+}
+tr:hover{
+    background: oldlace;
+}
+td,th{
+    min-width: 70px;
+    padding:10px;
+    border: 1px solid #999;
+}
+th{
+    background:#777;
+    color:#fff;
+}
+button{
+    height:26px;
+    width:60px;
+    border:none;
+    background: orange;
+    color:#fff;
+    border-radius: 3px;
+    cursor: pointer;
+}
+button:hover{
+    background: orangered;
+}
+#info tr td:nth-child(odd),
+.someone tr td:nth-child(odd){
+    color:#888;
+}
+[type="button"]{
+    width:70px;
+    line-height:36px;
+}
+[limitid]{
+    color:#eee;
+}
+[haslimit="1"]{
+    color:black;
+}
+.stp-cell{
+    overflow: hidden;
+    border: 6px groove skyblue;
+    padding: 5px;
+}
+.stp-label{
+    float: left;
+    min-width:5em;
+}
+.stp-val{
+    float:left;
+    padding-left: 10px;
+    border-left: 1px dashed #aaa;
+}

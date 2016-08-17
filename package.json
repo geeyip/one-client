@@ -1,0 +1,32 @@
+{
+  "name": "one",
+  "cname": "一体化",
+  "description": "",
+  "author": {
+    "name": "北京海鑫科金高科技股份有限公司",
+    "email": "",
+    "url": ""
+  },
+  "main": "dist/login.html",
+  "version": "1.0.0",
+  "updateServer": "http://localhost:3000",
+  "serverPath": "http://localhost:8090/",
+  "webkit": {
+    "page-cache": true
+  },
+  "window": {},
+  "devDependencies": {
+    "gulp": "*",
+    "gulp-clean": "^0.3.2",
+    "gulp-shell": "^0.5.2",
+    "run-sequence": "^1.2.2"
+  },
+  "scripts": {
+    "start": "gulp"
+  },
+  "dependencies": {
+    "hnotify": "^0.2.3",
+    "hupdater": "^1.4.1",
+    "regedit": "2.2.6"
+  }
+}

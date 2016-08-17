@@ -1,0 +1,93 @@
+<div id="quality-question">
+    <div class="center-menu tcenter">
+        <ul>
+            <li param="base" class="current-tab">基础数据</li>
+            <li param="hjwz">痕迹物证</li>
+            <li param="cba">串并案</li>
+            <li param="yct">一查通</li>
+        </ul>
+    </div>
+    <div class="quality-question-result" tpsource="#quality-question-result"></div>
+    <div class="tcenter mb10 mt10">
+        <b class="cm-close-btn"></b>
+    </div>
+</div>
+
+<script type="text/template" id="quality-question-result">
+    <div id="{sjlbdm}" class="sjlb-div hide">
+        <div class="child-title">{sjlb}</div>
+        <div>{{jyzd:#<span class="common-field ellipsis" title="{sjzdmc}">{sjzdmc}</span><div class="colon">：</div><div class="result-txt-{quality}"><i class="icon-{quality}-sign"></i> <span>{zlResultTxt}</span></div><br class="hide{br}"/>#}}</div>
+    </div>
+</script>
+
+<script>
+    $style(top.path + '/dist/css/multiWin.css');
+
+    var qualityAction = top.path + '/api/0/xmjk/extract/quality';//进入数据质量校验异常页面action
+
+    var qualityTab = [
+        {name:'base',sjlbdm:[{key:'0201'},{key:'0202'},{key:'0203'},{key:'0204'},{key:'0205'},{key:'0206'},{key:'0207'},{key:'0208'}]},
+        {name:'hjwz',sjlbdm:[{key:'0209'}]},
+        {name:'cba',sjlbdm:[{key:'0210'}]},
+        {name:'yct',sjlbdm:[{key:'0211'}]}
+    ];
+
+    //进入数据质量异常页面
+    function intoQualityQuestion(xmdwdm, win){
+        $('.center-menu>ul>li').removeClass('current-tab');
+        $('.center-menu ul>li:first-child').addClass('current-tab');
+//        $open('#quality-question',{width:760, title:'数据质量异常'});
+        $get(qualityAction, {xmdwdm:xmdwdm}, function(res){
+            $('#quality-question .quality-question-result').template(res.data, function(item, i){
+                item.jyzd.each(function(e, i){
+                    if(e.zlResult == null || e.zlResult.isEmpty()){
+                        e.zlResultTxt = '未知';
+                        e.quality = 'question';
+                    }else {
+                        e.zlResultTxt = e.zlResult == '1' ? '正常' : '异常';
+//                            e.quality = e.zlResult == '1' ? 'ok' : 'question';
+                        e.quality = e.zlResult == '1' ? 'ok' : 'exclamation';
+                    }
+                    if((i+1)%4==0){
+                        e.br = '1';
+                    }
+                });
+            });
+            switchTab(null, 'base');
+        },true);
+
+        $('#quality-question').on('click', '.cm-close-btn', function(){
+            win.$close();
+        }).on('click', '.center-menu>ul>li', function(){
+            switchTab($(this), this.getAttribute('param'));
+        });
+    }
+    //数据质量异常页面  tab切换
+    function switchTab(obj, name){
+        //menu样式修改
+        if(obj) {
+            $('.center-menu>ul>li').removeClass('current-tab');
+            obj.addClass('current-tab');
+        }
+
+        var tabName = name;
+        var tabSjlbs = [], sjlbArr = [];
+        qualityTab.each(function(e, i){
+            if(tabName == e.name){
+                tabSjlbs = tabSjlbs.concat(e.sjlbdm);
+                return false;
+            }
+        });
+        tabSjlbs.each(function(e){
+            sjlbArr.push(e.key);
+        });
+        var divs = $('.sjlb-div');
+        divs.each(function(i){
+            if($.inArray(this.getAttribute('id'), sjlbArr) > -1){
+                $(this).removeClass('hide');
+            }else{
+                $(this).addClass('hide');
+            }
+        });
+    }
+</script>

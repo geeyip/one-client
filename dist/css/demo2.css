@@ -1,0 +1,19 @@
+body{
+    width: 720px;
+    height:auto;
+    padding: 20px;
+    margin: 20px auto;
+    background-color: #f1f1f1;
+    border: 1px solid gray;
+}
+
+input{
+    line-height: 30px;
+    width:120px;
+    padding-left:5px;
+    border-radius: 5px;
+}
+[class*="icon"]{
+    font-size: 20px;
+    color:#7C7BC1;
+}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>系统参数管理</title>
+    <link rel="stylesheet" href="../../dist/css/base.css">
+    <link rel="stylesheet" href="../../dist/css/sys.css"/>
+</head>
+<body>
+<div id="query-result">
+    <div class="new-color-bar">
+        <span class="title">系统参数列表</span>
+        <div class="bar-btn-div">
+            <!--<button class="s-dark-btn" id="add-btn">新 增</button>-->
+            <!--<button class="s-orange-btn" id="save-btn">保 存</button>-->
+            <b class="cm-add-btn" id="add-btn"></b>
+            <b class="cm-save-btn" id="save-btn"></b>
+        </div>
+    </div>
+    <form id="param-form">
+        <table id="param-list-table" class="typical-tb">
+            <thead>
+            <th>序号</th>
+            <th>参数名</th>
+            <th>参数值</th>
+            </thead>
+            <tbody tpsource="#param-list"></tbody>
+        </table>
+    </form>
+    <div class="paging"></div>
+</div>
+<div id="add-param-block" class="hide pd5">
+    <form id="add-param-form">
+        <div class="add-content">
+            <p>
+                <span class="common-field"><span class="orangered">★ </span>参数中文名称：</span><input id="param-chineseName" type="text" class="common-input param-name" name="chineseName" data-options="required:true,validType:'extLength[0,75]'"/>
+                <span class="common-field"><span class="orangered">★ </span>参数英文名称：</span><input id="param-englishName" type="text" class="common-input param-name" name="englishName" data-options="required:true,validType:'english',validType:'extLength[0,50]'"/>
+            </p>
+            <p>
+                <span class="common-field">参数值：</span><input id="param-value" type="text" class="common-input param-name" name="value" data-options="validType:'extLength[0,4000]'"/>
+                <span class="common-field">参数默认值：</span><input id="param-default" type="text" class="common-input param-name" name="defaultValue" data-options="validType:'extLength[0,75]'"/>
+            </p>
+            <p>
+                <span class="common-field fl">备注：</span><textarea id="param-remark" name="remark" class="param-name" data-options="validType:'extLength[0,150]'"></textarea>
+            </p>
+        </div>
+    </form>
+    <div class="btn-div">
+        <b id="save-add-param" class="cm-save-btn"></b>
+        <b id="close-add-param" class="cm-close-btn ml15"></b>
+    </div>
+</div>
+</body>
+<script type="text/template" id="param-list">
+    <tr class="{$nth2}">
+        <td>{rownum}</td>
+        <td>{chineseName}</td>
+        <td class="tleft pl30">
+            <input type="text" value="{value}" name="{englishName}" class="common-input param-name-edit" data-options="validType:'extLength[0,4000]'"/>
+            <span class="pl5 hide{remark}">{remark}</span>
+        </td>
+    </tr>
+</script>
+<script src="../../dist/js/base.js"></script>
+<script src="../../dist/js/sys.js"></script>
+<script>
+    importing('dict',function () {
+
+        var intoParamAction = top.path+'/api/0/system/param',
+            editParamAction = top.path+'/api/1/system/param/edit',
+            addParamAction = top.path+'/api/1/system/param/add';
+
+        var closeWin = function(winId,resetForm) {
+            if(winId){
+                $(winId).$close();
+            }
+            if(resetForm) {
+                $(resetForm)[0].reset();
+            }
+            $('.param-name').removeClass('validatebox-invalid');
+        }
+
+        function initPageData(){
+            $('#query-result').pagingList({
+                action:intoParamAction,
+                callback:function(paramData){
+                    var initSel = '0',
+                        enName = '';
+                    $template('#param-list-table tbody',paramData,function (item,index) {
+                        if(item.chineseName==='本地部署级别'){
+                            initSel = item.value;
+                            enName = item.englishName;
+                        }
+                    }).find('td').each(function (index,el) {
+                        if($(el).html().trim()==='本地部署级别'){
+                            $(el).next().prepend('<dict dict-type="select" dict-root="XTBSJBDM"  id="bdbsjb" dict-id="bdbsjb-dict"></dict>');
+                            $(el).next().find('input').remove();
+                        }
+                    });
+                    $('#bdbsjb').attr('dict-name',enName);
+                    $('#bdbsjb').dict(function (){$('#bdbsjb').dictSelect(initSel)}).dictSelect(initSel);
+                }
+            });
+        }
+
+        $.extend($.fn.validatebox.defaults.rules, {
+            english: {
+                validator: function (val) {
+                    return /^[a-zA-Z]+$/.test(val);
+                },
+                message: '请输入纯英文'
+            }
+        });
+
+        initPageData();
+
+        //打开新增弹窗
+        $('#add-btn').on('click',function () {
+            $("#add-param-form")[0].reset();
+            $open('#add-param-block',{width:800,title:'&nbsp;系统参数新增',onClose:function () {
+                closeWin('','#add-param-form');
+            }});
+        });
+
+        //关闭新增弹窗
+        $('#close-add-param').on('click',function () {
+            closeWin('#add-param-block','#add-param-form');
+        });
+
+        //保存参数列表
+        $('#save-btn').on('click',function () {
+            //console.log(obj2str($('#param-form').serializeArray()));
+            $('.param-name-edit').validatebox();
+            if ($('.validatebox-invalid').length > 0) {
+                return false;
+            }
+            $post(editParamAction,$('#param-form').serializeArray(),function (res) {
+                if(res.msg === 'success'){
+                    toast('保存成功！').ok();
+                    initPageData();
+                }else{
+                    toast('保存失败！').err();
+                }
+            },true);
+        });
+
+        $('#save-add-param').on('click',function () {
+            trimAll('.add-content');
+            $('.param-name').validatebox();
+            if ($('.validatebox-invalid').length > 0) {
+                return false;
+            }
+            $post(addParamAction, $('#add-param-form').serializeObject(), function (res) {
+                    toast('保存成功！', 600, function () {
+                        closeWin('#add-param-block','#add-param-form');
+                    }).ok();
+                    initPageData();
+            },true);
+        });
+    });
+
+
+</script>
+</html>

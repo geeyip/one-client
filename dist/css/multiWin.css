@@ -1,0 +1,203 @@
+/* @group 应用服务监控弹窗*/
+#exception-handling-history-block,#exception-handling-feedback-block{
+    padding: 10px;
+}
+#exception-handling-feedback-block .query-date {
+    width: 260px;
+}
+/* @end*/
+/* @group 实施共享问题弹窗*/
+#share-comment-div {
+    padding: 30px;
+}
+.comment-td{
+    width:124px;
+}
+.image-font {
+    font-size: 124px;
+}
+#share-rq{
+    color: rgb(172, 171, 167);
+}
+.comments-showContent {
+    margin-left: 45px;
+}
+.split-line{
+    border: none;
+    border-top:1px solid #ccc;
+}
+.comments-nav{
+    width: 76px;
+    height: 38px;
+    line-height: 38px;
+    border-bottom: 2px solid orange;
+    font-size: 15px;
+    color: #333;
+    text-align: center;
+}
+textarea#pjnr {
+    width: 99%;
+    height: 4em;
+    border-radius: 3px;
+    background-color: #FEF2DB;
+    border: none;
+    margin-top: 10px;
+    padding: 10px;
+}
+#pjnr:focus{
+    box-shadow: inset 0 0 1px 1px rgba(255, 165, 0, 0.8);
+    background: #fff!important;
+}
+.tj-comment:after{
+    content:' 提 交';
+}
+.comments-pjnr {
+    margin: 5px 0 20px 35px;
+    color: #484744;
+    font-size: 14px;
+}
+dt .icon-user {
+    position: absolute;
+    font-size: 30px;
+    left: 0;
+    top: 0;
+    color: rgb(250, 212, 138);
+}
+.icon-user+p {
+    margin-left: 35px;
+}
+.icon-user+p span:first-child {
+    color: #6f6e6b;
+    font-size: 14px;
+}
+.icon-user+p span:last-child {
+    font-size: 12px;
+    color: #acaba7;
+    margin-left: 14px;
+}
+.image-font+p {
+    margin-left: 0px;
+}
+.comment-title{
+    font-size: 15px;
+}
+#comments-temp-check {
+    padding-left: 30px;
+}
+#check-share-block  .common-textarea{
+    width: 647px;
+    margin-left: 4px;
+}
+.dim {
+    color: #acaba7;
+}
+/* @end*/
+/* @group 用户反馈管理*/
+.fkxx-tabe{
+    width: 630px;
+    border: 1px solid #ccc;
+    border-collapse: separate;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.fkxx-tabe td{
+    width: 210px;
+    height:203px;
+    border-right: 1px solid #ccc;
+}
+.picshow{
+    max-width:203px;
+    max-height:200px;
+    cursor: pointer;
+}
+.h20{
+    height:20px!important;
+}
+#handel-fkxx-block textarea,
+#view-fkxx-block textarea{
+    width: 630px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding-left: 5px;
+    box-sizing: border-box;
+}
+/* @end*/
+
+/* @group prj-watch-sjcqjk-extract.html  prj-watch-sjcqjk-quality.html */
+.child-title{
+    /*height: 20px;
+    font-size: 13px;
+    color: #795548;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-left: 10px;*/
+    font-size: 14px;
+    color: #444;
+    border-left: 3px solid orange;
+    padding: 3px 5px 3px 10px;
+    background: rgb(241, 241, 241);
+    margin: 25px 10px 7px 10px;
+}
+.child-title:first-child{
+    margin-top: 13px;
+}
+.sjlb-div,.jklb-div{
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+#extract-question .common-field,
+#quality-question .common-field{
+    width: 110px;
+    font-weight: normal;
+    display: block;
+    float: left;
+    margin-right: 0;
+}
+#extract-question div[class^="result-txt"],
+#quality-question div[class^="result-txt"]{
+    margin-right: 15px;
+    display: block;
+    float: left;
+    height: 24px;
+    line-height: 24px;
+}
+#extract-question div[class='colon'],
+#quality-question div[class='colon']{
+    margin-right: 5px;
+    display: block;
+    float: left;
+    height: 24px;
+    line-height: 24px;
+}
+#extract-question .result-txt-ok,
+#quality-question .result-txt-ok{
+    color: #00B83F;
+}
+#extract-question .result-txt-question,
+#quality-question .result-txt-question{
+    /*color: rgb(222, 0, 0);*/
+    color: rgb(48, 172, 200);
+}
+#extract-question .result-txt-exclamation,
+#quality-question .result-txt-exclamation{
+    /*color: rgb(48, 172, 200);*/
+    color: rgb(222, 0, 0);
+}
+#quality-question .center-menu>ul>li{
+    display: inline-block;
+    cursor: pointer;
+    font-size: 16px;
+    color: #969696;
+    margin: 10px 20px 10px 0;
+    padding: 0 7px 4px 7px;
+}
+#quality-question .center-menu>ul>li:not(.current-tab):hover{
+    color: #000000;
+    border-bottom: 2px solid #fddda2;
+}
+#quality-question .current-tab{
+    border-bottom: 2px solid orange;
+    color: #000000!important;
+    cursor: default!important;
+}
+/* @end */

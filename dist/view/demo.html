@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="-1"/>
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <title>Demo</title>
+    <script>
+        window.path=location.href.replace(/index2?\.(html|jsp)/,'').replace(/view\/.*/,'').replace(/demo\/.*/,'').replace(/dist\/.*/,'');
+    </script>
+    <script src="../../dist/js/boot.js"></script>
+    <link rel="stylesheet" href="../css/base.css?version=1.0">
+    <link rel="stylesheet" href="../css/demo2.css?version=1.0">
+    <link rel="stylesheet" href="../plugin/jqgrid/jquery-ui-1.10.0.custom.css">
+</head>
+
+<body>
+    <h2>DEMO Classic</h2>
+    <input type="text" id="addr" placeholder="尝试输入1或2或3">
+    <input type="text" class="dates" placeholder="开始日期">
+    <input type="text" class="dates" placeholder="结束日期">
+    <ul id="base-tree" class="ztree"></ul>
+    <div class="easyui-panel" title="Register" style="width:400px;padding:10px 60px 20px 60px">
+        <table cellpadding="10">
+            <tr>
+                <td>User Name:</td>
+                <td><input class="validatebox textbox" data-options="required:true,validType:'length[3,10]'"></td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td><input class="validatebox textbox" data-options="required:true,validType:'email'"></td>
+            </tr>
+            <tr>
+                <td>URL:</td>
+                <td><input class="validatebox textbox" data-options="required:true,validType:'url'"></td>
+            </tr>
+            <tr>
+                <td>Mobile:</td>
+                <td><input class="validatebox textbox" data-options="required:true,validType:'mobile'"></td>
+            </tr>
+            <tr>
+                <td>Length:</td>
+                <td><input class="validatebox" data-options="required:true,validType:'length[2,5]'"></td>
+            </tr>
+            <tr>
+                <td>Chinese:</td>
+                <td><input  class="validatebox" data-options="required:'true',validType:'chinese'"></td>
+
+            </tr>
+
+            <tr>
+                <td>ZipCode:</td>
+                <td><input  class="validatebox" data-options="required:'true',validType:'zipcode'"></td>
+
+            </tr>
+            <tr>
+                <td>Number:</td>
+                <td><input class="validatebox" data-options="validType:'number'"></td>
+
+            </tr>
+
+        </table>
+        <button id="sm-btn" class="ui-button-primary">提交</button>
+        </div>
+    <hr>
+        <table id="list"></table>
+    <div id="pager"></div>
+    <table id="list2"></table>
+    <div id="pager2"></div>
+
+
+</body>
+
+<script src="../../dist/js/base.js?version=1.0"></script>
+<script src="../../dist/js/demo2.js?version=1.0"></script>
+<!--<script src="../dist/plugin/jqgrid/jquery-ui-1.10.0.custom.min.js"></script>-->
+<style>
+    .loading-mask{
+        background: rgba(155,155,155,.2);
+    }
+</style>
+<script>
+
+    $('#sm-btn').click(function(){
+        $('.validatebox').validatebox();
+        $('.tooltip').show();
+    });
+    jsonReader={
+        root: "data",
+        total:"totalPages",
+        page: "currentPage",
+        records: "totalCount",
+        repeatitems: false
+    };
+    var data={
+        page:1,
+        total:2,
+        records:2,
+        rows:[
+            {id:'1',name:'<b class="red">mike</b><br>234234',sex:'man',age:"18"},
+            {id:'2',name:'john',sex:'man',age:"18"},
+            {id:'3',name:'jay',sex:'woman',age:"19"},
+            {id:'4',name:'april',sex:'man',age:"18"},
+            {id:'5',name:'mike',sex:'man',age:"26"},
+            {id:'6',name:'any',sex:'woman',age:"38"},
+            {id:'7',name:'helen',sex:'man',age:"26"},
+            {id:'8',name:'evan',sex:'man',age:"28"}
+        ]
+    };
+    importing('jqgrid',function(){
+        var obj= {
+            //url : ctx+'/JSONData',
+            data:data.rows,
+            datatype: "local",
+            height:120,
+            //data: data.rows,
+            colNames: ['ID','姓名', '性别', '年龄'],
+            colModel: [
+                {name : 'id',index : 'id',width : 55},
+                {name: 'name', index: 'name', width: 90},
+                {name: 'sex', index: 'sex', width: 100},
+                {name: 'age', index: 'age', width: 150, sortable:true}
+            ],
+            rowNum: 3,
+            rowList: [10, 20, 30],
+            pager: '#pager',
+            sortname : 'id',
+             //mtype : "post",
+            viewrecords : true,
+            sortorder : "asc",
+            caption : "JQGRID实例"
+        };
+        $("#list").jqGrid(obj);
+        //$("#list").jqGrid('setGridParam',obj).trigger('reloadGrid');
+        //$("#list2").trigger('reloadGrid');
+//        $('#list').jqGrid('setGridParam',
+//                {  datatype:'local',
+//                    rowNum:data.rows.length,
+//                    data:data.rows
+//                }
+//        ).trigger('reloadGrid', [{page:1}]);
+        demo();
+    });
+var demo=function()
+{
+    $("#list2").jqGrid({
+        datatype: "local",
+        height: 180,
+        colNames:['编号','用户名', '性别', '邮箱', 'QQ','手机号','出生日期'],
+        colModel:[
+            {name:'id',index:'id', width:60, sorttype:"int"},
+            {name:'userName',index:'userName', width:90},
+            {name:'gender',index:'gender', width:90},
+            {name:'email',index:'email',sorttype:"string"},
+            {name:'QQ',index:'QQ', width:100},
+            {name:'mobilePhone',index:'mobilePhone', width:120},
+            {name:'birthday',index:'birthday', width:100, sorttype:"date"}
+        ],
+        sortname:'id',
+        sortorder:'asc',
+        viewrecords:true,
+        rowNum:10,
+        rowList:[10,20,30],
+        pager:"#pager2",
+        caption: "jqGrid例子"
+    }).navGrid('#pager2',{edit:false,add:false,del:false});
+    var mydata = [
+        {id:"1",userName:"polaris",gender:"男",email:"fef@163.com",QQ:"33334444",mobilePhone:"13223423424",birthday:"1985-10-01"},
+        {id:"2",userName:"李四",gender:"女",email:"faf@gmail.com",QQ:"222222222",mobilePhone:"13223423",birthday:"1986-07-01"},
+        {id:"3",userName:"王五",gender:"男",email:"fae@163.com",QQ:"99999999",mobilePhone:"1322342342",birthday:"1985-10-01"},
+        {id:"4",userName:"马六",gender:"女",email:"aaaa@gmail.com",QQ:"23333333",mobilePhone:"132234662",birthday:"1987-05-01"},
+        {id:"5",userName:"赵钱",gender:"男",email:"4fja@gmail.com",QQ:"22222222",mobilePhone:"1343434662",birthday:"1982-10-01"},
+        {id:"6",userName:"小毛",gender:"男",email:"ahfi@yahoo.com",QQ:"4333333",mobilePhone:"1328884662",birthday:"1987-12-01"},
+        {id:"7",userName:"小李",gender:"女",email:"note@sina.com",QQ:"21122323",mobilePhone:"13220046620",birthday:"1985-10-01"},
+        {id:"8",userName:"小三",gender:"男",email:"oefh@sohu.com",QQ:"242424366",mobilePhone:"1327734662",birthday:"1988-12-01"},
+        {id:"9",userName:"孙先",gender:"男",email:"76454533@qq.com",QQ:"76454533",mobilePhone:"132290062",birthday:"1989-11-21"}
+    ];
+//    for(var i=0;i<=mydata.length;i++)jQuery("#list2").jqGrid('addRowData',i+1,mydata[i]);
+    $('#list2').jqGrid('setGridParam',
+            {  datatype:'local',
+                rowNum:mydata.length,
+                data:mydata
+            }
+    ).trigger('reloadGrid', [{page:1}]);
+    }
+</script>
+</html>

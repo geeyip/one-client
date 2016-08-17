@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报表权重维护</title>
+    <link rel="stylesheet" href="../css/base.css?version=0.99">
+    <link rel="stylesheet" href="../css/sys.css?version=0.99">
+</head>
+<body>
+<div id="module-score-div" class="report-weight-div">
+    <div class="new-color-bar">
+        <span class="title">模块总分维护</span>
+    </div>
+    <form id="report-weight-form">
+        <input type="hidden" name="items">
+        <input type="hidden" name="weights">
+        <table class="typical-tb td-rl">
+            <tr>
+                <td>
+                    <span class="common-field">统计模块：</span>
+                </td>
+                <td>
+                    <dict dict-id="query-mk" dict-name="tjmk" dict-type="select" dict-root="KHMKDM" class="dict" empty="false"></dict>
+                </td>
+                <td>
+                    <span class="common-field">总分：</span>
+                </td>
+                <td>
+                    <input id="total-score" name="totalScore" class="number-valid common-input" data-options="validType:'floatNum'" placeholder="请输入数字"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="stat-div" class="report-weight-div">
+    <div class="new-color-bar">
+        <span class="title">统计项设置</span>
+    </div>
+    <table id="stat-set-table" class="typical-tb">
+        <thead>
+        <th>序号</th>
+        <th>统计项名称</th>
+        <th>统计项代码</th>
+        <th>是否显示</th>
+        <th>是否权重</th>
+        <th>顺序</th>
+        </thead>
+        <tbody tpsource="#stat-set-list"></tbody>
+    </table>
+</div>
+<div id="weight-div" class="report-weight-div">
+    <div class="new-color-bar">
+        <span class="title">权重设置</span>
+    </div>
+    <table id="weight-set-table" class="typical-tb">
+        <thead>
+            <th width="60%">区间（比率R）</th>
+            <th width="40%">分数</th>
+        </thead>
+        <tbody tpsource="#weight-set-list"></tbody>
+    </table>
+</div>
+<div class="tcenter mb15 mt20">
+    <b id="save-report-weight" class="cm-save-btn"></b>
+</div>
+</body>
+<script type="text/template" id="stat-set-list">
+    <tr param="{itemId}">
+       <td>{rn}</td>
+       <td>{itemc}</td>
+       <td>{iteme}</td>
+       <td>
+           <input name="ifXs" type="checkbox" {_xsChecked}/>
+       </td>
+       <td>
+           <input name="ifQz" type="checkbox" class="ifWeight" {_qzChecked} param="{itemId}"/>
+       </td>
+       <td>
+           <input name="xsxx" type="text" class="number-valid square-input" value="{xsxx}" data-options="validType:'number'"/>
+       </td>
+    </tr>
+</script>
+<script type="text/template" id="weight-set-list">
+    <tr class="hide{ifQzTxt} {itemId}">
+        <td class="td-bk" colspan="2">{itemc}</td>
+    </tr>
+    <tr class="hide{ifQzTxt} {itemId}">
+        <td>
+            <span class="pr77">第一区间</span>R <= <input name="B1" class="number-valid square-input" value="{b1}" data-options="validType:'floatNum'"/>%
+        </td>
+        <td>
+            <span>分数</span> <input name="score1" class="{itemId} number-valid square-input" value="{score1}" data-options="validType:'floatNum'"/>
+        </td>
+    </tr>
+    <tr class="hide{ifQzTxt} {itemId}">
+        <td>
+            <span>第二区间</span> <input name="A2" class="number-valid square-input" value="{a2}" data-options="validType:'floatNum'"/>% < R <= <input name="B2" class="number-valid square-input" value="{b2}" data-options="validType:'floatNum'"/>%
+        </td>
+        <td>
+            <span>分数</span> <input name="score2" class="{itemId} number-valid square-input" value="{score2}" data-options="validType:'floatNum'"/>
+        </td>
+    </tr>
+    <tr class="hide{ifQzTxt} {itemId}">
+        <td>
+            <span>第三区间</span> <input name="A3" class="number-valid square-input" value="{a3}" data-options="validType:'floatNum'"/>% < R <= <input name="B3" class="number-valid square-input" value="{b3}" data-options="validType:'floatNum'"/>%
+        </td>
+        <td>
+            <span>分数</span> <input name="score3" class="{itemId} number-valid square-input" value="{score3}" data-options="validType:'floatNum'"/>
+        </td>
+    </tr>
+    <tr class="hide{ifQzTxt} {itemId}">
+        <td>
+            <span>第四区间</span> <input name="A4" class="number-valid square-input" value="{a4}" data-options="validType:'floatNum'"/>% < R <= <input name="B4" class="number-valid square-input" value="{b4}" data-options="validType:'floatNum'"/>%
+        </td>
+        <td>
+            <span>分数</span> <input name="score4" class="{itemId} number-valid square-input" value="{score4}" data-options="validType:'floatNum'"/>
+        </td>
+    </tr>
+    <tr class="hide{ifQzTxt} {itemId}">
+        <td>
+            <span>第五区间</span> <input name="A5" class="number-valid square-input" value="{a5}" data-options="validType:'floatNum'"/>% < R <= <input name="B5" class="number-valid square-input" value="{b5}" data-options="validType:'floatNum'"/>%
+        </td>
+        <td>
+            <span>分数</span> <input name="score5" class="{itemId} number-valid square-input" value="{score5}" data-options="validType:'floatNum'"/>
+        </td>
+    </tr>
+    <tr class="hide{ifQzTxt} {itemId}">
+        <td>
+            <span class="ml-84">第六区间</span> <input name="A6" class="number-valid square-input" value="{a6}" data-options="validType:'floatNum'"/>% < R
+        </td>
+        <td>
+            <span>分数</span> <input name="score6" class="{itemId} number-valid square-input" value="{score6}" data-options="validType:'floatNum'"/>
+        </td>
+    </tr>
+</script>
+<script src="../js/base.js?version=0.99"></script>
+<script>
+    importing('dict',function(){
+        var initPageDataAction = top.path + "/api/0/system/report/weight/list",
+            queryPageDataAction = top.path + "/api/1/system/report/weight/list",
+            savePageDataAction = top.path + "/api/1/system/report/weight/save";
+
+        var saveObj;
+        $('.dict').dict(function(){
+            queryReportWeight(true);
+        });
+
+        //分数填写规则  浮点数和整数
+        $.extend($.fn.validatebox.defaults.rules, {
+            floatNum: {
+                validator: function (val) {
+                    return /^[0-9]+(\.[0-9]+)?$/.test(val);
+                },
+                message: '请输入数字'
+            }
+        });
+
+        //查询 type==true表示是不记录日志的查询
+        //后台传给前台的数据格式：
+        // 统计项设置数据：[{rownum:'',itemc:'',iteme:'',xsxx:'',ifQz:'',ifXs:'',itemId:''},{}] itemId:权重字段的id
+        // 权重设置数据：[{itemId:'',itemc:'',ifQz:'',B1:'',A2:'',B2:'',A3:'',B3:'',A4:'',B4:'',A5:'',B5:'',A6:'',score1:'',score2:'',score3:'',score4:'',score5:'',score6:''},{}]
+        function queryReportWeight(type){
+            var action = initPageDataAction;
+            if(!type){
+                action = initPageDataAction;//queryPageDataAction 记录日志查询，存在问题//TODO
+            }
+            $get(action,{tjmk:$('#query-mk').val()},function(res){
+                //统计项设置数据
+                $template('#stat-set-table tbody',res.data.reationListData,function(item,i){
+                    if(item.ifQz=='1'){item._qzChecked = 'checked';}
+                    if(item.ifXs=='1'){item._xsChecked = 'checked';}
+                });
+                //权重设置数据
+                $template('#weight-set-table tbody',res.data.weightListData, function(item, i){
+                    item.ifQzTxt = item.ifQz == '0' ? null : item.ifQz;
+                });
+                $('#total-score').val(res.data.score)
+            });
+        }
+
+        //拼接传入后台的jsonStr
+        function jointJsonStr(){
+            var itemsId = []; //存放当前统计模块下 统计项的id
+            var statTrs = $('#stat-set-table tbody tr');
+            var weightTrs, weightTd;
+            var statArray = []; //{itemId:'',ifXs:'',ifQz:'',xsxx:''}
+            var weightArray = [];//{itemId:'',B1:'',A2:'',B2:'',A3:'',B3:'',A4:'',B4:'',A5:'',B5:'',A6:'',score1:'',score2:'',score3:'',score4:'',score5:'',score6:''}
+            var k = 0;
+
+            statTrs.each(function(i,e){
+                itemsId.push(e.getAttribute('param'));
+
+                //将统计项的值存入statArray中
+                statArray[i] = {};
+                statArray[i].itemId = e.getAttribute('param');
+                statArray[i].ifXs = $(this).children().find('input[name="ifXs"]').is(':checked')?'1':'0';
+                statArray[i].ifQz = $(this).children().find('input[name="ifQz"]').is(':checked')?'1':'0';
+                statArray[i].xsxx = $(this).children().find('input[name="xsxx"]').val();
+
+                //将显示的权重的值存入weightArray中
+                weightTrs = $('#weight-set-table tbody tr:visible.'+e.getAttribute('param'));
+                if(weightTrs.children().length > 0) {
+                    weightTd = weightTrs.children();
+                    weightArray[k] = {};
+                    weightArray[k].itemId = e.getAttribute('param');
+                    weightArray[k].B1 = weightTd.find('input[name="B1"]').val();
+                    weightArray[k].A2 = weightTd.find('input[name="A2"]').val();
+                    weightArray[k].B2 = weightTd.find('input[name="B2"]').val();
+                    weightArray[k].A3 = weightTd.find('input[name="A3"]').val();
+                    weightArray[k].B3 = weightTd.find('input[name="B3"]').val();
+                    weightArray[k].A4 = weightTd.find('input[name="A4"]').val();
+                    weightArray[k].B4 = weightTd.find('input[name="B4"]').val();
+                    weightArray[k].A5 = weightTd.find('input[name="A5"]').val();
+                    weightArray[k].B5 = weightTd.find('input[name="B5"]').val();
+                    weightArray[k].A6 = weightTd.find('input[name="A6"]').val();
+                    weightArray[k].score1 = weightTd.find('input[name="score1"]').val();
+                    weightArray[k].score2 = weightTd.find('input[name="score2"]').val();
+                    weightArray[k].score3 = weightTd.find('input[name="score3"]').val();
+                    weightArray[k].score4 = weightTd.find('input[name="score4"]').val();
+                    weightArray[k].score5 = weightTd.find('input[name="score5"]').val();
+                    weightArray[k].score6 = weightTd.find('input[name="score6"]').val();
+                }
+                if(typeof weightArray[k] != 'undefined') {
+                    k++;
+                }
+            });
+
+            saveObj = {
+                totalScore:$('#total-score').val(),
+                mkdm:$('#query-mk').val(),
+                updateItems:statArray,
+                updateWeights:weightArray
+            };
+            /*$('#report-weight-form input[name="items"]').val(obj2str(statArray));
+            $('#report-weight-form input[name="weights"]').val(obj2str(weightArray));*/
+        }
+
+        //保存报表权重信息
+        function saveReportWeight(){
+            jointJsonStr();
+            //控制台输出传入后台的jsonStr格式
+            $post(savePageDataAction,saveObj,function(res){
+                toast('保存成功！').ok();
+            },true);
+
+        }
+
+        //执行查询方法
+        if ($('.dict').children().length > 0) {
+            queryReportWeight(true);
+        }
+
+        $('#stat-set-table').on('click','.ifWeight',function(){
+            var itemID = this.getAttribute('param');
+            var trObjs = $('tr.'+itemID);
+            if($(this).is(':checked')){
+                trObjs.removeClass('hide');
+            }else{
+                trObjs.addClass('hide');
+                trObjs.find('input').val('');
+            }
+        });
+        //查询
+        $('#report-weight-form').on('change', '#query-mk', function(){
+            queryReportWeight(false)
+        });
+        //保存
+        $('#save-report-weight').on('click',function(){
+            //验证浮点数和整数
+            $('.number-valid:visible').validatebox();
+            if($('.validatebox-invalid').length > 0){
+                return false;
+            }
+
+            //总分判断
+            var inputObjs = $('#stat-set-table input.ifWeight');//获取统计项table下所有input 方便获取所有的统计项代码
+            var tjxDm = [];//存放对应大类模块下的所有统计项代码
+            var scores = [];//存放每个权重的分数总和，用于和统计项总分进行比较
+            var scoreInputs;//存放输入各项分数的input对象
+            inputObjs.each(function(i,e){
+                tjxDm.push(e.getAttribute('param'));
+            });
+            //获取每一个权重的得分，存在scores[]数组中
+            var n=0;
+            for(var j=0;j<tjxDm.length;j++){
+                scoreInputs = $('#weight-set-table input:visible.'+tjxDm[j]);
+                if(scoreInputs.length>0) {
+                    scores[n] = 0;
+                    scoreInputs.each(function (i, e) {
+                        if (e.className.indexOf(tjxDm[j]) > -1) {
+//                            scores[j] += parseFloat(e.value);
+                            if(scores[n]<parseFloat(e.value)){
+                                scores[n] = parseFloat(e.value)
+                            }
+                        }
+                    });
+                    scores[n] = isNaN(scores[n]) ? 0 : scores[n];
+                    n++;
+                }
+            }
+            //模块总分维护中，总分大小的判断，不能小于每一个权重的最大分数之和
+            var totalScore = parseFloat($('#total-score').val());
+            totalScore = isNaN(totalScore)?0:totalScore;
+            var totalCountScore = 0;
+            for(var i=0;i<scores.length;i++){
+                totalCountScore += scores[i]
+            }
+            if(totalCountScore>totalScore){
+                toast('各项分数之和不能大于总分').err();
+                return false;
+            }
+            //保存
+            saveReportWeight();
+        });
+    });
+</script>
+</html>

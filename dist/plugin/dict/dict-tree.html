@@ -1,0 +1,39 @@
+<div id="dictFrame">
+
+<div>
+    <button onclick="treeDictOk()">确     定</button>
+    <button onclick="treeDictEmpty()">选择空值</button>
+    <button onclick="showDictTree()" id="dictTreeBtn" style="display: none">树形展示</button>
+    <button onclick="showDictQuery()" id="dictQueryBtn">字典查询</button>
+</div>
+
+<div id="multipleDiv" style="display: none">
+    <input type="hidden" name="itemskeybox" id="selectedKeys"/>
+    【已选字典】<a href="javascript:clearMultipleDict();">清空</a>
+    <textarea name="itemsvaluebox" id="selectedValues" readonly="readonly"></textarea>
+</div>
+
+<div id="dictTreeDiv">
+    <ul id="baseTree" class="ztree"></ul>
+</div>
+
+<div id="dictQueryDiv" style="display: none;">
+字典查询： <input type="text" name="dictQuery" id="dictQuery" onkeyup="queryDict(this);"/>(可填写字典代码、中文名称、拼音首字母)
+    <table style="border: 1px grey solid" width="100%" >
+        <thead>
+        <tr>
+            <th>选择</th>
+            <th>名称</th>
+            <th>代码</th>
+            <th>拼音</th>
+        </tr>
+        </thead>
+        <tbody tpsource="#tree-query-tp" id="dictQueryTb">
+
+        </tbody>
+    </table>
+</div>
+</div>
+<script type="text/template" id="tree-query-tp">
+    {{dicts:#<tr><td><a href="#" onclick="selectQueryDict('{key}','{value}');">选择</a></td><td>{value}</td><td>{key}</td><td>{py}</td></tr>#}}
+</script>
