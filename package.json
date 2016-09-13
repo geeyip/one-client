@@ -1,25 +1,27 @@
 {
-  "name": "one",
-  "cname": "一体化",
-  "description": "",
-  "author": {
-    "name": "北京海鑫科金高科技股份有限公司",
-    "email": "",
-    "url": ""
-  },
+  "name": "ythpt",
+  "version": "0.9",
   "main": "dist/login.html",
-  "version": "1.0.0",
-  "updateServer": "http://localhost:3000",
-  "serverPath": "http://localhost:8090/",
-  "webkit": {
-    "page-cache": true
+  "serverPath": "http://localhost:8040/",
+  "window": {
+    "show": true,
+    "title": "一体化平台",
+    "debug": 0,
+    "toolbar": true,
+    "width": 1200,
+    "height": 720,
+    "min_width": 800,
+    "min_height": 480,
+    "resizable": false,
+    "position": "center",
+    "frame": true
   },
-  "window": {},
   "devDependencies": {
     "gulp": "*",
     "gulp-clean": "^0.3.2",
     "gulp-shell": "^0.5.2",
-    "run-sequence": "^1.2.2"
+    "run-sequence": "^1.2.2",
+    "gulp-csslint": "^0.3.1"
   },
   "scripts": {
     "start": "gulp"
