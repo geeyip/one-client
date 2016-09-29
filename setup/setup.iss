@@ -1,13 +1,13 @@
 ; 脚本由 Inno Setup 脚本向导 生成！
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
-#define MyAppName "一体化"
+#define MyAppName "刑事技术一体化平台"
 #define MyAppVersion "1.0.0"
 #define MyAppPublisher "北京海鑫科金高科技股份有限公司"
 #define MyAppURL "http://www.hisign.com.cn"
 #define MyAppExeName "HOne.exe"
-#define ExeOutputDir "D:\"
-#define AppDistDir "E:\work\one\tmp"
+#define ExeOutputDir "G:\Ythpt"
+#define AppDistDir "D:\code\one-client\tmp"
 [Setup]
 ; 注: AppId的值为单独标识该应用程序。
 ; 不要为其他安装程序使用相同的AppId值。
@@ -23,7 +23,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\HOne
 DefaultGroupName={#MyAppName}
 OutputDir={#ExeOutputDir}
-OutputBaseFilename=HOne
+OutputBaseFilename=HOneSetup
 SetupIconFile={#AppDistDir}\favicon.ico
 Compression=lzma
 SolidCompression=yes
@@ -74,7 +74,7 @@ var ifRunning:boolean;
 var appWnd: HWND;
 var ifStop:boolean;
 begin
-   ifRunning := IsAppRunning('HClient.exe');
+   ifRunning := IsAppRunning('HOne.exe');
    if ifRunning then
         ifStop := MsgBox('检测到客户端正在运行，卸载前须退出程序，是否继续？', mbConfirmation, MB_YESNO) = idYes;
 
@@ -99,7 +99,7 @@ var ifRunning:boolean;
 var appWnd: HWND;
 var ifStop:boolean;
 begin
- ifRunning := IsAppRunning('HClient.exe');
+ ifRunning := IsAppRunning('HOne.exe');
   if ifRunning then
      ifStop := MsgBox('检测到客户端正在运行，安装前须退出程序，是否继续？', mbConfirmation, MB_YESNO) = idYes;
      if ifStop then

@@ -3,4 +3,5 @@
 /.idea
 *.iml
 /tmp
-/node_webkit
+/data
+/dist

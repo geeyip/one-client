@@ -2,19 +2,20 @@
   "name": "ythpt",
   "version": "0.9",
   "main": "dist/login.html",
-  "serverPath": "http://localhost:8040/",
+  "serverPath": "http://localhost:8040/ythpt",
   "window": {
     "show": true,
-    "title": "一体化平台",
+    "title": "刑事技术一体化平台",
     "debug": 0,
-    "toolbar": true,
+    "toolbar": false,
     "width": 1200,
     "height": 720,
     "min_width": 800,
     "min_height": 480,
     "resizable": false,
     "position": "center",
-    "frame": true
+    "frame": true,
+    "icon": "hisign.png"
   },
   "devDependencies": {
     "gulp": "*",
