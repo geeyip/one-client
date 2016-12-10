@@ -1,11 +1,11 @@
 {
-  "name": "ythpt",
-  "version": "0.9",
+  "name": "xlcb",
+  "version": "1.0.0",
   "main": "dist/login.html",
-  "serverPath": "http://localhost:8040/ythpt",
+  "serverPath": "http://192.168.1.211:57000/xlcb",
   "window": {
     "show": true,
-    "title": "刑事技术一体化平台",
+    "title": "小类串并系统",
     "debug": 0,
     "toolbar": false,
     "width": 1200,
@@ -20,9 +20,10 @@
   "devDependencies": {
     "gulp": "*",
     "gulp-clean": "^0.3.2",
+    "gulp-csslint": "^0.3.1",
     "gulp-shell": "^0.5.2",
-    "run-sequence": "^1.2.2",
-    "gulp-csslint": "^0.3.1"
+    "process.args": "0.0.5",
+    "run-sequence": "^1.2.2"
   },
   "scripts": {
     "start": "gulp"

@@ -9,4 +9,11 @@ exports.InnoSetupPath = "D:\\work\\InnoSetup5\\ISCC.exe";
  * exe打包配置文件绝对路径
  * @type {string}
  */
-exports.InnoSetupConfig = "D:\\code\\one-client\\setup\\setup.iss";
+exports.InnoSetupConfig = "D:\\code\\one-client\\setup\\";
+
+
+exports.exeConfig = {
+    ythpt: "HOne.exe",
+    xlcb: "hisignXlcb.exe",
+    imms: "imms.exe"
+}

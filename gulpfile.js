@@ -4,7 +4,8 @@ var clean = require('gulp-clean');
 var shell = require('gulp-shell');
 var runSequence = require('run-sequence');
 var setup = require('./setup/setup');
-
+var args = require('process.args')();
+var appName = '';
 /**
  * 清理tmp
  */
@@ -43,7 +44,8 @@ gulp.task('copy-node-modules',function() {
   return gulp.src([
     'node_modules/**/*.*',
     '!node_modules/gulp*/**/*.*',
-    '!node_modules/run-sequence/**/*.*'
+    '!node_modules/run-sequence/**/*.*',
+    '!node_modules/process.args/**/*.*'
   ]).pipe(gulp.dest('tmp/node_modules'));
 });
 
@@ -56,16 +58,32 @@ gulp.task('create-package-json',function() {
 
 
 /**
+ * exe重命名
+ */
+gulp.task('exe-rename', function (cb) {
+    return fs.renameSync('tmp/hisign.exe', 'tmp/'+setup.exeConfig[appName]);
+});
+
+/**
  * InnoSetup打包
  */
 gulp.task('exe-package', shell.task([
-  setup.InnoSetupPath + ' "' + setup.InnoSetupConfig + '"'
+  setup.InnoSetupPath + ' "' + setup.InnoSetupConfig + 'setup_' + appName + '.iss"'
 ]));
 
 /**
  * 入口
  */
 gulp.task('default', function(){
+  var i = 0;
+  for(o in args){
+    if(i==1) appName = args[o].name;
+    i++;
+  }
+  if(!appName || !setup.exeConfig[appName]){
+      console.log('未传递工程名称或名称有误');
+      return;
+  }
   runSequence(
       'clean',
         [
@@ -74,8 +92,10 @@ gulp.task('default', function(){
          'copy-node-webkit',
          'copy-data'
        ],
-       'create-package-json',
+      'create-package-json',
+      'exe-rename',
       'exe-package',
       'clean'
   );
 });
+
