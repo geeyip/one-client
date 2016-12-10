@@ -5,7 +5,7 @@ var shell = require('gulp-shell');
 var runSequence = require('run-sequence');
 var setup = require('./setup/setup');
 var args = require('process.args')();
-var appName = '';
+var appName = args['package']==undefined?"":args['package'].name;
 /**
  * 清理tmp
  */
@@ -61,7 +61,9 @@ gulp.task('create-package-json',function() {
  * exe重命名
  */
 gulp.task('exe-rename', function (cb) {
-    return fs.renameSync('tmp/hisign.exe', 'tmp/'+setup.exeConfig[appName]);
+     fs.rename('tmp/hisign.exe', 'tmp/'+setup.exeConfig[appName], function () {
+         cb();
+     });
 });
 
 /**
@@ -74,14 +76,9 @@ gulp.task('exe-package', shell.task([
 /**
  * 入口
  */
-gulp.task('default', function(){
-  var i = 0;
-  for(o in args){
-    if(i==1) appName = args[o].name;
-    i++;
-  }
+gulp.task('package', function(){
   if(!appName || !setup.exeConfig[appName]){
-      console.log('未传递工程名称或名称有误');
+      console.log('未传递工程名称或名称有误(例如gulp package -name=ythpt)');
       return;
   }
   runSequence(
@@ -98,4 +95,13 @@ gulp.task('default', function(){
       'clean'
   );
 });
+
+/**
+ * 入口
+ */
+gulp.task('default', function(){
+   console.log('请运行gulp package -name=工程名称');
+    return;
+});
+
 
