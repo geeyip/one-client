@@ -11,6 +11,10 @@ exports.InnoSetupPath = "D:\\work\\InnoSetup5\\ISCC.exe";
  */
 exports.InnoSetupConfig = "D:\\code\\one-client\\setup\\";
 
+/**
+ * 配置
+ * @type {{ythpt: string, xlcb: string, imms: string}}
+ */
 exports.exeConfig = {
     ythpt: "HOne.exe",
     xlcb: "hisignXlcb.exe",

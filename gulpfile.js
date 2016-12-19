@@ -15,25 +15,25 @@ gulp.task('clean', function(){
 
 
 /**
- * 拷贝App
+ * 拷贝App文件
  */
 gulp.task('copy-app',function() {
-    return gulp.src(['dist/**/*.*']).pipe(gulp.dest('tmp/dist'));
+    gulp.src(['data/*.*']).pipe(gulp.dest('tmp/data'));
+    gulp.src(['dist/**/*.*']).pipe(gulp.dest('tmp/dist'));
+    return true;
 });
-
 
 /**
  * 拷贝nw运行包
  */
 gulp.task('copy-node-webkit',function() {
-  return gulp.src(['node_webkit/*.*']).pipe(gulp.dest('tmp'));
-});
-
-/**
- * 拷贝data
- */
-gulp.task('copy-data',function() {
-    return gulp.src(['data/*.*']).pipe(gulp.dest('tmp/data'));
+    if(appName == 'xlcb'){
+        gulp.src(['node_webkit/xlcb/*.*']).pipe(gulp.dest('tmp'));
+    }else{
+        gulp.src(['node_webkit/common/*.*']).pipe(gulp.dest('tmp'));
+    }
+    gulp.src(['node_webkit/*.*']).pipe(gulp.dest('tmp'));
+    return true;
 });
 
 
@@ -55,7 +55,6 @@ gulp.task('copy-node-modules',function() {
 gulp.task('create-package-json',function() {
     return gulp.src(['package.json']).pipe(gulp.dest('tmp'));
 });
-
 
 /**
  * exe重命名
@@ -86,8 +85,7 @@ gulp.task('package', function(){
         [
          'copy-app',
          'copy-node-modules',
-         'copy-node-webkit',
-         'copy-data'
+         'copy-node-webkit'
        ],
       'create-package-json',
       'exe-rename',
