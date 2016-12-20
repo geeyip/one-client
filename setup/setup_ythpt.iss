@@ -6,8 +6,8 @@
 #define MyAppPublisher "北京海鑫科金高科技股份有限公司"
 #define MyAppURL "http://www.hisign.com.cn"
 #define MyAppExeName "HOne.exe"
-#define ExeOutputDir "G:\Ythpt"
-#define AppDistDir "D:\code\one-client\tmp"
+#define ExeOutputDir "C:\"
+#define AppDistDir "C:\tmp"
 [Setup]
 ; 注: AppId的值为单独标识该应用程序。
 ; 不要为其他安装程序使用相同的AppId值。

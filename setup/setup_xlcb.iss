@@ -8,7 +8,7 @@
 #define MyAppEnName "hisignXlcb"
 #define MyAppExeName "hisignXlcb.exe"
 #define ExeOutputDir "C:\"
-#define AppDistDir "D:\code\one-client\tmp"
+#define AppDistDir "C:\tmp"
 [Setup]
 ; 注: AppId的值为单独标识该应用程序。
 ; 不要为其他安装程序使用相同的AppId值。
