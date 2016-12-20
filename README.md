@@ -44,7 +44,7 @@ exports.InnoSetupConfig = "E:\\work\\one\\setup\\";
 
 将应用代码拷贝到`app`文件夹 下, 需要拷贝`dist`、`data`、`package.json` 。拷贝前最好先删除。
 
-注意确保`package.json`中的配置配置正确，主要是确认`serverPath`
+注意确保`package.json`中的配置正确，主要是确认`serverPath`参数
 
 ### 生成安装包
 
