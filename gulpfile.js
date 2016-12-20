@@ -18,8 +18,8 @@ gulp.task('clean', function(){
  * 拷贝App文件
  */
 gulp.task('copy-app',function() {
-    gulp.src(['data/*.*']).pipe(gulp.dest('tmp/data'));
-    gulp.src(['dist/**/*.*']).pipe(gulp.dest('tmp/dist'));
+    gulp.src(['app/data/*.*']).pipe(gulp.dest('tmp/data'));
+    gulp.src(['app/dist/**/*.*']).pipe(gulp.dest('tmp/dist'));
     return true;
 });
 
@@ -53,7 +53,7 @@ gulp.task('copy-node-modules',function() {
  * 拷贝配置文件
  */
 gulp.task('create-package-json',function() {
-    return gulp.src(['package.json']).pipe(gulp.dest('tmp'));
+    return gulp.src(['app/package.json']).pipe(gulp.dest('tmp'));
 });
 
 /**

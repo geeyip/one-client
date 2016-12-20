@@ -1,28 +1,12 @@
 {
-  "name": "xlcb",
+  "name": "one-package",
   "version": "1.0.0",
-  "main": "dist/login.html",
-  "serverPath": "http://10.118.159.36:9180/xlcb",
-  "window": {
-    "show": true,
-    "title": "小类串并系统",
-    "debug": 0,
-    "toolbar": false,
-    "width": 1200,
-    "height": 720,
-    "min_width": 800,
-    "min_height": 480,
-    "resizable": false,
-    "position": "center",
-    "frame": true,
-    "icon": "hisign.png"
-  },
   "devDependencies": {
     "gulp": "*",
     "gulp-clean": "^0.3.2",
     "gulp-shell": "^0.5.2",
     "run-sequence": "^1.2.2",
-    "gulp-csslint": "^0.3.1"
+    "process.args": "^0.0.5"
   },
   "scripts": {
     "start": "gulp"
